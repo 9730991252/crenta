@@ -1,0 +1,20 @@
+{% extends 'office/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+</div>
+
+
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 ">
+            {% include 'office/office/office_menu.html' %}  
+           </div>
+
+
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,84 @@
+{% extends 'office/base.html' %}
+{% block title %} Admin Dashboard{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class=""><h>Welcome - {{a.admin_name}}</h></div>
+</div>
+
+<div class="container my-3">
+<div class="row">
+    <div class="col-2 ">
+     {% include 'office/admin/admin_menu.html' %}  
+    </div>
+    <div class="col-10 ">
+
+<div class="row">
+    <div class="container">
+
+    <div  class="d-inline-block"> 
+    <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+        <div class="card-header">Employee</div>
+        <div class="card-body">
+           
+                <li>Total Employee - 180 </li>
+            
+        </div>
+      </div>
+    </div>
+          
+       
+    <div  class="d-inline-block"> 
+        <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+            <div class="card-header">Products</div>
+            <div class="card-body">
+               
+                    <li>Total Products - 180 </li>
+                
+            </div>
+          </div>
+        </div>
+ 
+
+        <div  class="d-inline-block"> 
+            <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+                <div class="card-header">Product Category</div>
+                <div class="card-body">
+                   
+                        <li>Product Category - 180 </li>
+                    
+                </div>
+              </div>
+            </div>
+     
+            <div  class="d-inline-block"> 
+                <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+                    <div class="card-header">Dealers</div>
+                    <div class="card-body">
+                       
+                            <li>Total Dealers - 180 </li>
+                        
+                    </div>
+                  </div>
+                </div>
+
+                <div  class="d-inline-block"> 
+                    <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+                        <div class="card-header">Today Sale</div>
+                        <div class="card-body">
+                           
+                                <li>Today Sale - 180 </li>
+                            
+                        </div>
+                      </div>
+                    </div>
+
+
+    </div>
+
+
+</div>
+
+</div>
+</div>
+</div>
+{% endblock content %}

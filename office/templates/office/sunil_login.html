@@ -1,0 +1,44 @@
+{% extends 'office/base.html' %}
+{% block content %}
+
+
+<div class="container  border rounded">
+  {% if messages %}
+  
+  {% for message in messages %}
+  <div class="alert alert-danger text-center mb-3">{{message}}</div>
+  {% endfor %}
+  {% endif %}
+  <div class="">
+<div class="container my-5 jumbotron text-center">
+  
+  <form action="/sunil_login" method="POST">{% csrf_token %}
+    <div class="">
+
+        <input type="password" name="mb" placeholder="Enter Your Mobile" required/><br><br>
+        <input type="password" name="pin" placeholder="Enter Your secret pin " required/><br><br>
+        <button type="submit" class="btn btn-primary" id= "btnadd"> Login </button>
+    </div>
+  </form>
+</div>
+
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

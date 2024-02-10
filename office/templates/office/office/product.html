@@ -1,0 +1,265 @@
+{% extends 'office/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+</div>
+
+
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 ">
+            {% include 'office/office/office_menu.html' %}  
+           </div>
+
+           <div class="col-10">
+            <div class="col-10">
+              <div>
+                  <div class="container mt-1 p-1 border rounded">
+                      {% if messages %}
+                      
+                      {% for message in messages %}
+                      <div class="alert alert-success text-center mb-3">{{message}}</div>
+                      {% endfor %}
+                      {% endif %}
+                      <div class="row">
+                        <div class="col-6"><a href=""  data-bs-toggle="modal" data-bs-target="#Add_Product_Modal" class="btn btn-success " >Add New Product </a></div>
+                      </div>
+
+                      <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Number</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Price</th>
+                              <th scope="col">Added By</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Edit</th>
+                              <th scope="col">Delete</th>
+                            </tr>
+                          </thead>
+                          <tbody>{% for p in p %}
+                            <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{p.product_name}}</td>
+                            <td>{{p.price}}</td>
+                            <td>{{p.added_by}}</td>
+                            
+                            <td><form class="" method="POST">{% csrf_token %}{% if p.status == 1 %}<button class="btn btn-success" type="submit" name="Active">Active<input type="hidden" name="id" value="{{p.id}}"></button>{% else %}<button class="btn btn-danger" type="submit" name="Deactive">Deactive<input type="hidden" name="id" value="{{p.id}}"></button>{% endif %}</form></td>
+                            <td><a href="" class="text-bg-info p-2"data-bs-toggle="modal" data-bs-target="#Edit_Product_Modal_{{p.id}}" >Edit</a></td>
+                            <td><a href="" class="text-bg-danger p-2" data-bs-toggle="modal" data-bs-target="#Delete_Product_Modal_{{p.id}}" >X</a></td>
+                            </tr>
+                          
+                            
+                          <!-- Edit Product Modal -->
+                          <form action="" method="POST">
+                          {% csrf_token %}
+                          <div class="modal fade" id="Edit_Product_Modal_{{p.id}}" tabindex="-1" aria-labelledby="Edit_Product_Modal_{{p.id}}" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="Edit_Product_Modal_{{p.id}}">Edit Employee</h1>
+    
+                              </div>
+                              <div class="modal-body">
+                                <input type="hidden" name="product_id" value="{{p.id}}">
+                                
+                                <div class="mb-3">
+                                  <label for="product_name" class="form-label">product name </label>
+                                  <input type="text" class="form-control" id="product_name" name="product_name" value="{{p.product_name}}">
+                                </div>
+                              
+                          
+                                <div class="mb-3">
+                                  <label for="paking" class="form-label">product paking </label>
+                                  <input type="text" class="form-control" id="paking" name="paking" value="{{p.paking}}">
+                                </div>
+                               
+                          
+                                <div class="mb-3">
+                                  <label for="price" class="form-label">price</label>
+                                  <input type="number" id="price" name="price" class="form-control" value="{{p.price}}">
+                                </div>
+                               
+                                <div class="mb-3">
+                                  <h6 >{{p.category}}</h6>
+                                  <select class="form-control" name="category" required> 
+                                      <option value="">Select Under Group Category</option>
+                                      <option value="FG_Goods">FG Goods</option>
+                                      <option value="Raw_Material" > Raw Material</option>
+                                      <option value="Trading" >Trading</option>
+                                  </select>
+                                </div>
+                             
+                               
+                              
+                              <div class="mb-3">
+                                <h6 >{{p.type}}</h6>
+                                <select class="form-control" name="type" required> 
+                                    <option value="">select Type</option>
+                                    <option value="UQC">UQC</option>
+                                    <option value="BAG-BAGS" > BAG-BAGS</option>
+                                    <option value="BOX-BOX">BOX-BOX</option>
+                                    <option value="BTL-BOTTLES">BTL-BOTTLES</option>
+                                    <option value="CAN-CANS">CAN-CANS</option>
+                                    <option value="DRM-DRUMS">DRM-DRUMS</option>
+                                    <option value="GMS-GRAMMES">GMS-GRAMMES</option>
+                                    <option value="KGS-KILOGRAMS">KGS-KILOGRAMS</option>
+                                    <option value="LTR-LITRES">LTR-LITRES</option>
+                                    <option value="NOS-NUMBERS">NOS-NUMBERS</option>
+                                    <option value="OTH-OTHERS">OTH-OTHERS</option>
+                                    <option value="PAC-PACKS">PAC-PACKS</option>
+                                    <option value="UNT-UNITS">UNT-UNITS</option>
+                            
+                                </select>
+                              </div>
+
+                              <div class="mb-3">
+                                <label for="gst" class="form-label">GST Rate %</label>
+                                <input type="number" id="gst" name="gst" class="form-control" value="{{p.gst}}">
+                              </div>
+                          
+                              <div class="mb-3">
+                                <label for="hsn_code" class="form-label">HSN CODE</label>
+                                <input type="text" id="hsn_code" name="hsn_code" class="form-control" value="{{p.hsn_code}}">
+                              </div>
+                            
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="Edit">Submit</button>
+                              </div>
+                              </div>
+                            </div>
+                            </div>
+                          </form>
+                          
+                          
+                          
+                            
+                          <!-- Delete Product Modal -->
+                          <form action="" method="POST">
+                          {% csrf_token %}
+                          <div class="modal fade" id="Delete_Product_Modal_{{p.id}}" tabindex="-1" aria-labelledby="Delete_Product_Modal_{{p.id}}" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                              <div class="modal-body">
+                              <input type="hidden" name="product_id" value="{{p.id}}">
+                                <p> Are you sure ? You want to Delete</p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="Delete">Delete</button>
+                              </div>
+                              </div>
+                            </div>
+                            </div>
+                          </form>
+                          
+                          
+                            {% endfor %}
+                          </tbody>
+                          
+                          </table>
+                          
+                          
+
+
+              </div>
+
+          </div>
+      </div>
+
+    </div>
+</div>
+
+
+<!-- Add Employee Modal -->
+<form action="" method="POST">
+  {% csrf_token %}
+  <div class="modal fade" id="Add_Product_Modal" tabindex="-1" aria-labelledby="Add_Product_Modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="Add_Product_Modal">Add New Product</h1>
+        
+      </div>
+            
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="product_name" class="form-label">product name </label>
+          <input type="text" class="form-control" id="product_name" name="product_name" required>
+        </div>
+      
+  
+        <div class="mb-3">
+          <label for="paking" class="form-label">product paking </label>
+          <input type="text" class="form-control" id="paking" name="paking" required>
+        </div>
+       
+  
+        <div class="mb-3">
+          <label for="price" class="form-label">price</label>
+          <input type="number" id="price" name="price" class="form-control" required>
+        </div>
+       
+        <div class="mb-3">
+          
+          <select class="form-control" name="category" required> 
+              <option value="">Select Under Group Category</option>
+              <option value="FG_Goods">FG Goods</option>
+              <option value="Raw_Material" > Raw Material</option>
+              <option value="Trading" >Trading</option>
+          </select>
+        </div>
+     
+       
+      
+      <div class="mb-3">
+        
+        <select class="form-control" name="type" required> 
+            <option value="">select Type</option>
+            <option value="UQC">UQC</option>
+            <option value="BAG-BAGS" > BAG-BAGS</option>
+            <option value="BOX-BOX">BOX-BOX</option>
+            <option value="BTL-BOTTLES">BTL-BOTTLES</option>
+            <option value="CAN-CANS">CAN-CANS</option>
+            <option value="DRM-DRUMS">DRM-DRUMS</option>
+            <option value="GMS-GRAMMES">GMS-GRAMMES</option>
+            <option value="KGS-KILOGRAMS">KGS-KILOGRAMS</option>
+            <option value="LTR-LITRES">LTR-LITRES</option>
+            <option value="NOS-NUMBERS">NOS-NUMBERS</option>
+            <option value="OTH-OTHERS">OTH-OTHERS</option>
+            <option value="PAC-PACKS">PAC-PACKS</option>
+            <option value="UNT-UNITS">UNT-UNITS</option>
+    
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="gst" class="form-label">GST Rate %</label>
+        <input type="number" id="gst" name="gst" class="form-control" required>
+      </div>
+  
+      <div class="mb-3">
+        <label for="hsn_code" class="form-label">HSN CODE</label>
+        <input type="text" id="hsn_code" name="hsn_code" class="form-control" required>
+      </div>
+    
+      </div>
+                
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" name="Add">Submit</button>
+      </div>
+      </div>
+    </div>
+    </div>
+  
+  </form>
+  
+  
+
+
+{% endblock content %}
