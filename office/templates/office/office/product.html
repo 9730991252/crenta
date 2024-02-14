@@ -32,7 +32,8 @@
                             <tr>
                               <th scope="col">Number</th>
                               <th scope="col">Name</th>
-                              <th scope="col">Price</th>
+                              <th scope="col">category</th>
+                              <th scope="col">type</th>
                               <th scope="col">Added By</th>
                               <th scope="col">Status</th>
                               <th scope="col">Edit</th>
@@ -43,7 +44,8 @@
                             <tr>
                             <th scope="row">{{forloop.counter}}</th>
                             <td>{{p.product_name}}</td>
-                            <td>{{p.price}}</td>
+                            <td>{{p.category}}</td>
+                            <td>{{p.type}}</td>
                             <td>{{p.added_by}}</td>
                             
                             <td><form class="" method="POST">{% csrf_token %}{% if p.status == 1 %}<button class="btn btn-success" type="submit" name="Active">Active<input type="hidden" name="id" value="{{p.id}}"></button>{% else %}<button class="btn btn-danger" type="submit" name="Deactive">Deactive<input type="hidden" name="id" value="{{p.id}}"></button>{% endif %}</form></td>
@@ -71,16 +73,9 @@
                                 </div>
                               
                           
-                                <div class="mb-3">
-                                  <label for="paking" class="form-label">product paking </label>
-                                  <input type="text" class="form-control" id="paking" name="paking" value="{{p.paking}}">
-                                </div>
-                               
+
                           
-                                <div class="mb-3">
-                                  <label for="price" class="form-label">price</label>
-                                  <input type="number" id="price" name="price" class="form-control" value="{{p.price}}">
-                                </div>
+      
                                
                                 <div class="mb-3">
                                   <h6 >{{p.category}}</h6>
@@ -115,15 +110,9 @@
                                 </select>
                               </div>
 
-                              <div class="mb-3">
-                                <label for="gst" class="form-label">GST Rate %</label>
-                                <input type="number" id="gst" name="gst" class="form-control" value="{{p.gst}}">
-                              </div>
+          
                           
-                              <div class="mb-3">
-                                <label for="hsn_code" class="form-label">HSN CODE</label>
-                                <input type="text" id="hsn_code" name="hsn_code" class="form-control" value="{{p.hsn_code}}">
-                              </div>
+                 
                             
                               </div>
                               <div class="modal-footer">
@@ -193,16 +182,10 @@
         </div>
       
   
-        <div class="mb-3">
-          <label for="paking" class="form-label">product paking </label>
-          <input type="text" class="form-control" id="paking" name="paking" required>
-        </div>
+
        
   
-        <div class="mb-3">
-          <label for="price" class="form-label">price</label>
-          <input type="number" id="price" name="price" class="form-control" required>
-        </div>
+ 
        
         <div class="mb-3">
           
@@ -237,15 +220,9 @@
         </select>
       </div>
 
-      <div class="mb-3">
-        <label for="gst" class="form-label">GST Rate %</label>
-        <input type="number" id="gst" name="gst" class="form-control" required>
-      </div>
+ 
   
-      <div class="mb-3">
-        <label for="hsn_code" class="form-label">HSN CODE</label>
-        <input type="text" id="hsn_code" name="hsn_code" class="form-control" required>
-      </div>
+
     
       </div>
                 

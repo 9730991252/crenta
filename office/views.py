@@ -221,8 +221,7 @@ def product(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']
         e=Employee.objects.get(employee_mobile=office_mobile)
-
-        p=Product.objects.filter().all()
+        p=Product.objects.filter().all().order_by('-category')
         context={
             
             'e':e,
@@ -230,42 +229,25 @@ def product(request):
         }
         if "Add" in request.POST:
             product_name = request.POST.get("product_name")
-            paking = request.POST.get("paking")
-            price = request.POST.get("price")
             category = request.POST.get("category")
             type = request.POST.get("type")
-            gst = request.POST.get("gst")
-            hsn_code = request.POST.get("hsn_code")
-            
             Product(
                 product_name=product_name,
-                paking=paking,
-                price=price,
                 category=category,
                 type=type,
-                gst=gst,
-                hsn_code=hsn_code,
                 added_by=e.employee_name
 
             ).save()
             messages.success(request,"Product Added Succesfully")
         elif "Edit" in request.POST:
             product_name = request.POST.get("product_name")
-            paking = request.POST.get("paking")
-            price = request.POST.get("price")
             category = request.POST.get("category")
             type = request.POST.get("type")
-            gst = request.POST.get("gst")
-            hsn_code = request.POST.get("hsn_code")
             product_id = request.POST.get("product_id")
             Product(
                 product_name=product_name,
-                paking=paking,
-                price=price,
                 category=category,
                 type=type,
-                gst=gst,
-                hsn_code=hsn_code,
                 added_by=e.employee_name,
                 id=product_id
             ).save()

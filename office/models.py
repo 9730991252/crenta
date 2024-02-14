@@ -24,12 +24,8 @@ class Employee (models.Model):
 
 class Product(models.Model):
     product_name=models.CharField(max_length=100)
-    paking=models.CharField(max_length=100)
-    price=models.FloatField(default=0)
     category=models.CharField(max_length=100,null=True,blank=True)
     type = models.CharField(max_length=100,null=True,blank=True)
-    gst=models.FloatField(default=0)
-    hsn_code = models.CharField(max_length=100,null=True,blank=True)
     added_by=models.CharField(max_length=100)
     added_date=models.DateTimeField(auto_now_add=True,null=True)
     status = models.IntegerField(default=1)
