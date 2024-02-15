@@ -335,10 +335,16 @@ def stock_product(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']        
         e=Employee.objects.get(employee_mobile=office_mobile)
+        context={}
+        select_p=Product.objects.filter().all().order_by('product_name')
         p=Stock_Product.objects.filter().all().order_by('-id')   
+        if "Search" in request.POST:
+            product_id = request.POST.get("product_id")
+            p=Stock_Product.objects.filter(product_id=product_id).order_by('-id')
         context={    
             'e':e,
-            'p':p       
+            'p':p,
+            'select_p':select_p
         }
         return render(request,'office/office/stock_product.html',context=context)
     else:

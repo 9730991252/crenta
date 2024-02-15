@@ -23,7 +23,23 @@
                       <div class="alert alert-success text-center mb-3">{{message}}</div>
                       {% endfor %}
                       {% endif %}
-  
+                      <div> 
+                        <form action="" method="POST">{% csrf_token %}
+                          <div class="row">
+                            <div class="col-2">
+                            <select name="product_id">
+                                <option value="0" >Search Product</option>
+                                {% for p in select_p %}
+                                <option value="{{p.id}}">{{p.product_name}}</option>
+                                {% endfor %}
+                            </select>
+                          </div>
+                            <div class="col-1">
+                              <button type="submit" class="btn btn-primary" name="Search">Search</button>
+                              </div>
+                            </div>
+                        </form>
+                      </div>
                       <table class="table">
                           <thead>
                             <tr>
