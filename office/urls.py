@@ -12,4 +12,7 @@ urlpatterns = [
     path('office_dashboard', views.office_dashboard,name='office_dashboard'),
     path('office_logout', views.office_logout,name='office_logout'),
     path('product', views.product,name='product'),
+    path('add_product', views.add_product,name='add_product'),
+    path('sell_product', views.sell_product,name='sell_product'),
+    path('stock_product', views.stock_product,name='stock_product'),
 ]

@@ -5,6 +5,8 @@ from django.http import JsonResponse
 
 # Create your views here.
 def index(request):
+    #Add_Product.objects.all().delete()
+    #Stock_Product.objects.all().delete()
     return render(request,'index.html')
 
 # sunil code 
@@ -270,3 +272,74 @@ def product(request):
     else:
         return redirect('login')
     
+
+
+
+def add_product(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        e=Employee.objects.get(employee_mobile=office_mobile)
+        p=Product.objects.filter().all().order_by('product_name')
+        added_p=Add_Product.objects.filter().order_by('-id')
+        context={    
+            'e':e,
+            'p':p,
+            'added_p':added_p       
+        }
+        if "Add" in request.POST:
+            product_id = request.POST.get("product_id")
+            qty = request.POST.get("qty")          
+            Add_Product(
+                product_id=product_id,
+                qty=qty,
+                employee_id=e.id
+            ).save()
+            messages.success(request,"Product Added Succesfully")
+        return render(request,'office/office/add_product.html',context=context)
+    else:
+        return redirect('login')
+    
+
+
+
+
+def sell_product(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        e=Employee.objects.get(employee_mobile=office_mobile)
+        p=Product.objects.filter().all().order_by('product_name')
+        sell_p=Sell_Product.objects.filter().order_by('-id')
+        context={    
+            'e':e,
+            'p':p,
+            'sell_p':sell_p       
+        }
+        if "Add" in request.POST:
+            product_id = request.POST.get("product_id")
+            qty = request.POST.get("qty")          
+            Sell_Product(
+                product_id=product_id,
+                qty=qty,
+                employee_id=e.id
+            ).save()
+            messages.success(request,"Product Added Succesfully")
+        return render(request,'office/office/sell_product.html',context=context)
+    else:
+        return redirect('login')
+    
+
+
+
+
+def stock_product(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        e=Employee.objects.get(employee_mobile=office_mobile)
+        p=Stock_Product.objects.filter().all().order_by('-id')   
+        context={    
+            'e':e,
+            'p':p       
+        }
+        return render(request,'office/office/stock_product.html',context=context)
+    else:
+        return redirect('login')

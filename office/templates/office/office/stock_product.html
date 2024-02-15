@@ -1,0 +1,72 @@
+{% extends 'office/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+</div>
+
+
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 ">
+            {% include 'office/office/office_menu.html' %}  
+           </div>
+
+         
+            <div class="col-10">
+              <div>
+                  <div class="container mt-1 p-1 border rounded">
+                      {% if messages %}
+                      
+                      {% for message in messages %}
+                      <div class="alert alert-success text-center mb-3">{{message}}</div>
+                      {% endfor %}
+                      {% endif %}
+  
+                      <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">category</th>
+                              <th scope="col">type</th>
+                              <th scope="col">Add Qty</th>
+                              <th scope="col">Sell Qty</th>
+                              <th scope="col">Stock Qty</th>
+                              <th scope="col">Added By</th>
+                              <th scope="col">Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>{% for p in p %}
+                            <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{p.product.product_name}}</td>
+                            <td>{{p.product.category}}</td>
+                            <td>{{p.product.type}}</td>
+                            <td class="bg-danger">{% if p.add_qty == 0 %}{% else %} {{p.add_qty}}{% endif %}</td>
+                            <td class="bg-success">{% if p.sell_qty == 0 %}{% else %} {{p.sell_qty}}{% endif %}</td>
+                            <td class="bg-primary">{{p.stock_qty}}</td>
+                            <td>{{p.employee.employee_name}}</td>
+                            <td>{{p.added_date}}</td>
+                            </tr>
+                          
+                           
+                            {% endfor %}
+                          </tbody>
+                          
+                          </table>
+                          
+                          
+
+
+              </div>
+
+          </div>
+      </div>
+
+   
+</div>
+
+
+{% endblock content %}
