@@ -2,6 +2,7 @@ from django.shortcuts import render ,redirect
 from office.models import *
 from django.contrib import messages
 from django.http import JsonResponse
+from datetime import date
 
 # Create your views here.
 def index(request):
@@ -109,9 +110,18 @@ def admin_dashboard(request):
         context={}
         if a:
             a=Admin.objects.get(admin_mobile=admin_mobile)
-        
+            total_product=Product.objects.all().count()
+            today_add_product=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
+            today_sell_product=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
+            total_employee=Employee.objects.all().count()
+            office_employee=Employee.objects.filter(department='office_staff').count()
         context={
-            'a':a
+            'a':a,
+            'total_product':total_product,
+            'today_add_product':today_add_product,
+            'today_sell_product':today_sell_product,
+            'total_employee':total_employee,
+            'office_employee':office_employee
         }
         return render(request,'office/admin/admin_dashboard.html',context)
     else:

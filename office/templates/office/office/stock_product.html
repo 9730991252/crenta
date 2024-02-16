@@ -26,7 +26,7 @@
                       <div> 
                         <form action="" method="POST">{% csrf_token %}
                           <div class="row">
-                            <div class="col-2">
+                            <div class="col-5">
                             <select name="product_id">
                                 <option value="0" >Search Product</option>
                                 {% for p in select_p %}
@@ -34,7 +34,7 @@
                                 {% endfor %}
                             </select>
                           </div>
-                            <div class="col-1">
+                            <div class="col-2">
                               <button type="submit" class="btn btn-primary" name="Search">Search</button>
                               </div>
                             </div>
