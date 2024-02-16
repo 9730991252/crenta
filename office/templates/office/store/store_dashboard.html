@@ -1,0 +1,42 @@
+{% extends 'office/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+    {% if messages %}
+                      
+    {% for message in messages %}
+    <div class="alert alert-success text-center mb-3">{{message}}</div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<div class="container">
+    {% for p in product %}
+    <form action="" method="POST">
+        {% csrf_token %}
+<div class="border text-center my-5">
+    <input type="hidden" name="product_id" value="{{p.id}}">
+    <div class="my-1"><h2 > {{p.product_name}} </h2></div>
+    <div class="row">
+        <div class="col-6"><h6 > {{p.category}} </h6></div>
+        <div class="col-6"><h6 >{{p.type}} </h6></div>
+    </div>
+    <br>
+    <div class="row mb-2 mx-1">
+        <div class="col-4">
+            <select id="type" class="form-control" name="type" required>
+                <option value="">Type</option>
+                <option value="new">New</option>
+              <option value="return">Return</option>
+                </select>
+            </div>
+        <div class="col-4"><input type="number" class="form-control" id="qty" name="qty" required> </div>
+        <div class="col-4"><button type="submit" class="btn btn-primary" name="Add">Add</button> </div>
+    </div>
+</div>
+</form>
+{% endfor %}
+  </div>
+</div>
+{% endblock content %}

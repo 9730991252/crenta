@@ -84,6 +84,8 @@ def add_admin(request):
 def login (request):
     if request.session.has_key('office_mobile'):
         return redirect('office_dashboard')
+    if request.session.has_key('store_mobile'):
+        return redirect('store_dashboard')
     else:
         if request.method == "POST":
             mb=request.POST ['mb']
@@ -92,10 +94,14 @@ def login (request):
             if a:
                 request.session['admin_mobile'] = request.POST["mb"]
                 return redirect('admin_dashboard')
-            e= Employee.objects.filter(employee_mobile=mb,pin=pin,status=1)
+            e= Employee.objects.filter(employee_mobile=mb,pin=pin,status=1,department='office_staff')
             if e:
                 request.session['office_mobile'] = request.POST["mb"]
                 return redirect('office_dashboard')
+            s= Employee.objects.filter(employee_mobile=mb,pin=pin,status=1,department='store_department')
+            if s:
+                request.session['store_mobile'] = request.POST["mb"]
+                return redirect('store_dashboard')
             else:
                 messages.success(request,"please insert correct information or call more suport 9730991252")            
                 return redirect('login')
@@ -359,3 +365,37 @@ def stock_product(request):
         return render(request,'office/office/stock_product.html',context=context)
     else:
         return redirect('login')
+    
+
+
+
+def store_dashboard(request):
+    if request.session.has_key('store_mobile'):
+        store_mobile = request.session['store_mobile']        
+        context={}
+        e=Employee.objects.filter(employee_mobile=store_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=store_mobile)
+            product=Product.objects.filter().order_by('product_name')
+            context={    
+                'e':e,
+                'product':product
+
+            }
+        if "Add" in request.POST:
+            product_id = request.POST.get("product_id")
+            qty = request.POST.get("qty")          
+            type = request.POST.get("type") 
+            Add_Product(
+                product_id=product_id,
+                qty=qty,
+                employee_id=e.id,
+                type=type
+            ).save()
+            messages.success(request,"Product Added Succesfully")
+        return render(request,'office/store/store_dashboard.html',context=context)
+    else:
+        return redirect('login')
+    
+
+

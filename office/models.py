@@ -32,6 +32,7 @@ class Product(models.Model):
 
 class Add_Product(models.Model):
     product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
+    type = models.CharField(max_length=100,null=True,blank=True)
     employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
     qty = models.IntegerField(default=0)
     ordered_date = models.DateTimeField(auto_now_add=True,null=True)
@@ -54,8 +55,8 @@ class Add_Product(models.Model):
             product=self.product,
             employee=self.employee,
             add_qty=self.qty,
-            stock_qty=stock_qty
-
+            stock_qty=stock_qty,
+            type=self.type
 
         )
 
@@ -99,5 +100,6 @@ class Stock_Product(models.Model):
     add_qty = models.IntegerField(default=0)
     sell_qty = models.IntegerField(default=0)
     stock_qty = models.IntegerField(default=0)
+    type = models.CharField(max_length=100,null=True,blank=True)
     added_date = models.DateTimeField(auto_now_add=True,null=True)
     date=models.DateField(auto_now_add=True,null=True)
