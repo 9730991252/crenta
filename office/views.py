@@ -121,13 +121,15 @@ def admin_dashboard(request):
             today_sell_product=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
             total_employee=Employee.objects.all().count()
             office_employee=Employee.objects.filter(department='office_staff').count()
+            store_employee=Employee.objects.filter(department='store_department').count()
         context={
             'a':a,
             'total_product':total_product,
             'today_add_product':today_add_product,
             'today_sell_product':today_sell_product,
             'total_employee':total_employee,
-            'office_employee':office_employee
+            'office_employee':office_employee,
+            'store_employee':store_employee
         }
         return render(request,'office/admin/admin_dashboard.html',context)
     else:
@@ -377,9 +379,11 @@ def store_dashboard(request):
         if e:
             e=Employee.objects.get(employee_mobile=store_mobile)
             product=Product.objects.filter().order_by('product_name')
+            today_add_product=Add_Product.objects.filter(employee_id=e.id,date__gte=date.today(),date__lte=date.today())
             context={    
                 'e':e,
-                'product':product
+                'product':product,
+                'today_add_product':today_add_product
 
             }
         if "Add" in request.POST:
