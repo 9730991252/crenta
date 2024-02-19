@@ -50,7 +50,7 @@
     {% for p in product %}
     <form action="" method="POST">
         {% csrf_token %}
-<div class="border text-center my-5 product" style="display: none;">
+<div class="border text-center my-5 product" >
     <input type="hidden" name="product_id" value="{{p.id}}">
     <div class="my-1"><h2 > {{p.product_name}} </h2></div>
     <div class="row">
