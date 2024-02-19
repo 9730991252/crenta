@@ -41,13 +41,16 @@
         </tbody>
       </table>
 </div>
-
-
 <div class="container">
+  <p>Search Product</p>
+  <input type="text" class="form-control" name="user" id="search_iteam" placeholder="Search Product" onkeyup="search()">
+</div>
+
+<div class="container" >
     {% for p in product %}
     <form action="" method="POST">
         {% csrf_token %}
-<div class="border text-center my-5">
+<div class="border text-center my-5 product" style="display: none;">
     <input type="hidden" name="product_id" value="{{p.id}}">
     <div class="my-1"><h2 > {{p.product_name}} </h2></div>
     <div class="row">
@@ -71,4 +74,27 @@
 {% endfor %}
   </div>
 </div>
+
+<script>
+  function search(){
+  var searchbox = document.getElementById('search_iteam').value.toUpperCase();
+  var product = document.querySelectorAll('.product')
+  prd_name = document.getElementsByTagName('h2')
+  //console.log(product)
+  for (var i=0; i < prd_name.length; i++ ){
+    var match = product[i].getElementsByTagName('h2')[0];
+    if(match){
+      var textvalue = match.textContent || match.innerHTML
+      if (textvalue.toUpperCase().indexOf(searchbox)> -1){
+        product[i].style.display = "";
+      }else{
+        product[i].style.display = "none";
+      }
+    }
+    
+  }
+
+}
+</script>
+
 {% endblock content %}
