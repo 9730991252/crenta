@@ -308,25 +308,31 @@ def product(request):
 def add_product(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']        
-        e=Employee.objects.get(employee_mobile=office_mobile)
-        p=Product.objects.filter().all().order_by('product_name')
-        added_p=Add_Product.objects.all().order_by('-id')
-        paginator=Paginator(added_p,20)
-        page_number=request.GET.get('page')
-        #print(page_number)
-        added_p=paginator.get_page(page_number)
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        product=[]
+        add_p=[]
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            add_p=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today())
+        if "Search" in request.GET:
+            search_product = request.GET.get('search_product')
+            #print(search_product)
+            p=Product.objects.filter(product_name__icontains=search_product)
+            product=p
         context={    
-            'e':e,
-            'p':p,
-            'added_p':added_p       
-        }
+                'e':e,
+                'add_p':add_p,
+                'product':product,       
+            }
         if "Add" in request.POST:
             product_id = request.POST.get("product_id")
             qty = request.POST.get("qty")          
+            type = request.POST.get("type")
             Add_Product(
                 product_id=product_id,
                 qty=qty,
-                employee_id=e.id
+                employee_id=e.id,
+                type=type
             ).save()
             messages.success(request,"Product Added Succesfully")
         return render(request,'office/office/add_product.html',context=context)
@@ -340,19 +346,23 @@ def add_product(request):
 def sell_product(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']        
-        e=Employee.objects.get(employee_mobile=office_mobile)
-        p=Product.objects.filter().all().order_by('product_name')
-        sell_p=Sell_Product.objects.all().order_by('-id')
-        paginator=Paginator(sell_p,20)
-        page_number=request.GET.get('page')
-        #print(page_number)
-        sell_p=paginator.get_page(page_number)
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        product=[]
+        sell_p=[]
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            sell_p=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today())
+        if "Search" in request.GET:
+            search_product = request.GET.get('search_product')
+            print(search_product)
+            p=Product.objects.filter(product_name__icontains=search_product)
+            product=p
         context={    
-            'e':e,
-            'p':p,
-            'sell_p':sell_p       
-        }
-        if "Add" in request.POST:
+                'e':e,
+                'sell_p':sell_p,
+                'product':product,       
+            }
+        if "Sell" in request.POST:
             product_id = request.POST.get("product_id")
             qty = request.POST.get("qty")          
             Sell_Product(
@@ -372,22 +382,24 @@ def sell_product(request):
 def stock_product(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']        
-        e=Employee.objects.get(employee_mobile=office_mobile)
         context={}
-        select_p=Product.objects.filter().all().order_by('product_name')
-        p=Stock_Product.objects.filter().all().order_by('-id')   
-        paginator=Paginator(p,20)
-        page_number=request.GET.get('page')
-        #print(page_number)
-        p=paginator.get_page(page_number)
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            select_p=Product.objects.filter().all().order_by('product_name')
+            p=Stock_Product.objects.filter().all().order_by('-id')   
+            paginator=Paginator(p,20)
+            page_number=request.GET.get('page')
+            #print(page_number)
+            p=paginator.get_page(page_number)
         if "Search" in request.POST:
             product_id = request.POST.get("product_id")
             p=Stock_Product.objects.filter(product_id=product_id).order_by('-id')
         context={    
-            'e':e,
-            'p':p,
-            'select_p':select_p
-        }
+                'e':e,
+                'p':p,
+                'select_p':select_p
+                }
         return render(request,'office/office/stock_product.html',context=context)
     else:
         return redirect('login')

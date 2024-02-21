@@ -12,6 +12,8 @@
 
          
             <div class="col-10">
+
+
               <div>
                   <div class="container mt-1 p-1 border rounded">
                       {% if messages %}
@@ -20,11 +22,10 @@
                       <div class="alert alert-success text-center mb-3">{{message}}</div>
                       {% endfor %}
                       {% endif %}
-                      <div class="row">
-                        <div class="col-6"><a href=""  data-bs-toggle="modal" data-bs-target="#Add_Product_Modal" class="btn btn-danger " >Sell Stock Product </a></div>
-                      </div>
+       
 
                       <table class="table">
+                        <h6 class="text-center"> Today Sell Product List </h6>
                           <thead>
                             <tr>
                               <th scope="col">Number</th>
@@ -53,37 +54,42 @@
                           
                           </table>
                           
-                                               
-  <!-- start pegination -->
-  <div class="container">
-    <div class="mx-5">
-    <nav aria-label="...">
-      <ul class="pagination">
-        {% if sell_p.has_previous %}
-        <li class="page-item ">
-          <a class="page-link" href="/sell_product/?page={{sell_p.previous_page_number}}">Previous</a>
-        </li>
-        <li class="page-item ">
-       <a class="page-link" href="/sell_product/?page=1" >First</a>
-      </li>
-        {% endif %}
-  
-        <li class="page-item " aria-current="page">
-          <a class="page-link" href="/sell_product/?page=2">2</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="/sell_product/?page=3">3</a></li>
-        {% if sell_p.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="/sell_product/?page={{sell_p.next_page_number}}">Next</a>
-        </li>
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
-  </div>
-  <!-- end pegination -->
 
-   
+
+  <div class="container">
+    <p>Search Product</p>
+    <form method="GET" action="">
+    <input type="text" class="form-control" name="search_product"  placeholder="Search Product">
+    <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
+  </form>
+  </div>
+
+  <div class="container" >
+    {% for p in product %}
+    <form action="" method="POST">
+        {% csrf_token %}
+<div class="border text-center my-5 bg-info" >
+    <input type="hidden" name="product_id" value="{{p.id}}">
+    <div class="my-1"><h2 > {{p.product_name}} </h2></div>
+    <div class="row">
+        <div class="col-6"><h6 > {{p.category}} </h6></div>
+        <div class="col-6"><h6 >{{p.type}} </h6></div>
+    </div>
+    <br>
+    <div class="row mb-2 mx-1">
+        <div class="col-4"><input type="number" class="form-control" id="qty" name="qty" placeholder="QTY" required> </div>
+        <div class="col-4"><button type="submit" class="btn btn-danger" name="Sell">Sell
+</div>
+</div>
+</div>
+</form>
+{% endfor %}
+  </div>
+
+
+
+
+
 
 
               </div>
@@ -95,43 +101,8 @@
 </div>
 
 
-<!-- Add Employee Modal -->
-<form action="" method="POST">
-  {% csrf_token %}
-  <div class="modal fade" id="Add_Product_Modal" tabindex="-1" aria-labelledby="Add_Product_Modal" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="Add_Product_Modal">Add Stock Product</h1> 
-      </div>  
-      <div class="modal-body">
 
-        <div class="mb-3">
-                  
-            <select id="product_id" class="form-control" name="product_id" required>
-              <option value="">select Product</option>
-              {% for p in p %}
-            <option value="{{p.id}}">{{p.product_name}}</option>
-                {% endfor %}
-              </select>
-        
-           </div>
 
-        <div class="mb-3">
-          <label for="product_name" class="form-label">Qty </label>
-          <input type="number" class="form-control" id="qty" name="qty" required>
-        </div>
-        </div>
-                
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" name="Add">Submit</button>
-      </div>
-      </div>
-    </div>
-    </div>
-  
-  </form>
   
   
 
