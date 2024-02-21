@@ -3,6 +3,7 @@ from office.models import *
 from django.contrib import messages
 from django.http import JsonResponse
 from datetime import date
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
@@ -215,6 +216,13 @@ def office_logout (request):
     del request.session['office_mobile']
     return redirect('/')
 
+def store_logout (request):
+    del request.session['store_mobile']
+    return redirect('/')
+
+
+
+
 
 #### Office Code 
 
@@ -241,7 +249,11 @@ def product(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']
         e=Employee.objects.get(employee_mobile=office_mobile)
-        p=Product.objects.filter().all().order_by('-category')
+        p=Product.objects.all().order_by('-category')
+        paginator=Paginator(p,20)
+        page_number=request.GET.get('page')
+        print(page_number)
+        p=paginator.get_page(page_number)
         context={
             
             'e':e,
@@ -298,7 +310,11 @@ def add_product(request):
         office_mobile = request.session['office_mobile']        
         e=Employee.objects.get(employee_mobile=office_mobile)
         p=Product.objects.filter().all().order_by('product_name')
-        added_p=Add_Product.objects.filter().order_by('-id')
+        added_p=Add_Product.objects.all().order_by('-id')
+        paginator=Paginator(added_p,20)
+        page_number=request.GET.get('page')
+        #print(page_number)
+        added_p=paginator.get_page(page_number)
         context={    
             'e':e,
             'p':p,
@@ -326,7 +342,11 @@ def sell_product(request):
         office_mobile = request.session['office_mobile']        
         e=Employee.objects.get(employee_mobile=office_mobile)
         p=Product.objects.filter().all().order_by('product_name')
-        sell_p=Sell_Product.objects.filter().order_by('-id')
+        sell_p=Sell_Product.objects.all().order_by('-id')
+        paginator=Paginator(sell_p,20)
+        page_number=request.GET.get('page')
+        #print(page_number)
+        sell_p=paginator.get_page(page_number)
         context={    
             'e':e,
             'p':p,
@@ -356,6 +376,10 @@ def stock_product(request):
         context={}
         select_p=Product.objects.filter().all().order_by('product_name')
         p=Stock_Product.objects.filter().all().order_by('-id')   
+        paginator=Paginator(p,20)
+        page_number=request.GET.get('page')
+        #print(page_number)
+        p=paginator.get_page(page_number)
         if "Search" in request.POST:
             product_id = request.POST.get("product_id")
             p=Stock_Product.objects.filter(product_id=product_id).order_by('-id')
@@ -375,12 +399,17 @@ def store_dashboard(request):
     if request.session.has_key('store_mobile'):
         store_mobile = request.session['store_mobile']        
         context={}
+        product=[]
         e=Employee.objects.filter(employee_mobile=store_mobile).first()
         if e:
             e=Employee.objects.get(employee_mobile=store_mobile)
-            product=Product.objects.filter().order_by('product_name')
             today_add_product=Add_Product.objects.filter(employee_id=e.id,date__gte=date.today(),date__lte=date.today())
-            context={    
+        if "Search" in request.GET:
+            search_product = request.GET.get('search_product')
+            print(search_product)
+            p=Product.objects.filter(product_name__icontains=search_product)
+            product=p
+        context={    
                 'e':e,
                 'product':product,
                 'today_add_product':today_add_product

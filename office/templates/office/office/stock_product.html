@@ -79,6 +79,37 @@
                           
 
 
+  <!-- start pegination -->
+                          <div class="container">
+                            <div class="mx-5">
+                            <nav aria-label="...">
+                              <ul class="pagination">
+                                {% if p.has_previous %}
+                                <li class="page-item ">
+                                  <a class="page-link" href="/stock_product/?page={{p.previous_page_number}}">Previous</a>
+                                </li>
+                                <li class="page-item ">
+                               <a class="page-link" href="/stock_product/?page=1" >First</a>
+                              </li>
+                                {% endif %}
+                          
+                                <li class="page-item " aria-current="page">
+                                  <a class="page-link" href="/stock_product/?page=2">2</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="/stock_product/?page=3">3</a></li>
+                                {% if p.has_next %}
+                                <li class="page-item">
+                                  <a class="page-link" href="/stock_product/?page={{p.next_page_number}}">Next</a>
+                                </li>
+                                {% endif %}
+                              </ul>
+                            </nav>
+                          </div>
+                          </div>
+                          <!-- end pegination -->
+
+
+
               </div>
 
           </div>

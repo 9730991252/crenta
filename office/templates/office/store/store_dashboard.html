@@ -1,5 +1,5 @@
 {% extends 'office/base.html' %}
-{% block title %} Office Dashboard{% endblock title %}
+{% block title %} Store Dashboard{% endblock title %}
 {% block content %}
 <div class="container">
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
@@ -43,14 +43,17 @@
 </div>
 <div class="container">
   <p>Search Product</p>
-  <input type="text" class="form-control" name="user" id="search_iteam" placeholder="Search Product" onkeyup="search()">
+  <form method="GET" action="">
+  <input type="text" class="form-control" name="search_product"  placeholder="Search Product">
+  <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
+</form>
 </div>
 
 <div class="container" >
     {% for p in product %}
     <form action="" method="POST">
         {% csrf_token %}
-<div class="border text-center my-5 product" >
+<div class="border text-center my-5" >
     <input type="hidden" name="product_id" value="{{p.id}}">
     <div class="my-1"><h2 > {{p.product_name}} </h2></div>
     <div class="row">
@@ -62,8 +65,9 @@
         <div class="col-4">
             <select id="type" class="form-control" name="type" required>
                 <option value="">Type</option>
-                <option value="new">New</option>
+                <option value="production">production</option>
               <option value="return">Return</option>
+              <option value="consumption">Consumption </option>
                 </select>
             </div>
         <div class="col-4"><input type="number" class="form-control" id="qty" name="qty" required> </div>
@@ -73,28 +77,11 @@
 </form>
 {% endfor %}
   </div>
+  <a href="/store_logout" class="btn btn-danger my-1">Logout</a>
 </div>
 
-<script>
-  function search(){
-  var searchbox = document.getElementById('search_iteam').value.toUpperCase();
-  var product = document.querySelectorAll('.product')
-  prd_name = document.getElementsByTagName('h2')
-  //console.log(product)
-  for (var i=0; i < prd_name.length; i++ ){
-    var match = product[i].getElementsByTagName('h2')[0];
-    if(match){
-      var textvalue = match.textContent || match.innerHTML
-      if (textvalue.toUpperCase().indexOf(searchbox)> -1){
-        product[i].style.display = "";
-      }else{
-        product[i].style.display = "none";
-      }
-    }
-    
-  }
 
-}
-</script>
+
+
 
 {% endblock content %}
