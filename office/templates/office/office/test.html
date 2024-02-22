@@ -42,7 +42,6 @@
               <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Name</th>
                   <th scope="col">Add Qty </th>
                   <th scope="col">Sell Qty</th>
                   <th scope="col">Type</th>
@@ -54,7 +53,6 @@
               <tbody>
                   {% for p in all_stock %}
                 <tr>
-                  <td>{{forloop.counter}}</td>
                   <td>{{p.product.product_name}}</td>
                   <td>{% if p.add_qty == 0 %}{% else %}{{p.add_qty}}{% endif %}</td>
                   <td>{% if p.sell_qty == 0 %}{% else %}{{p.sell_qty}}{% endif %}</td>
@@ -75,20 +73,20 @@
       <ul class="pagination">
         {% if all_stock.has_previous %}
         <li class="page-item ">
-          <a class="page-link" href="/stock_product/?page={{all_stock.previous_page_number}}">Previous</a>
+          <a class="page-link" href="/view_stock/{{id}}/?page={{all_stock.previous_page_number}}">Previous</a>
         </li>
         <li class="page-item ">
-       <a class="page-link" href="/stock_product/?page=1" >First</a>
+       <a class="page-link" href="/view_stock/{{id}}/?page=1" >First</a>
       </li>
         {% endif %}
   
         <li class="page-item " aria-current="page">
-          <a class="page-link" href="/stock_product/?page=2">2</a>
+          <a class="page-link" href="/view_stock/{{id}}/?page=2">2</a>
         </li>
-        <li class="page-item"><a class="page-link" href="/stock_product/?page=3">3</a></li>
+        <li class="page-item"><a class="page-link" href="/view_stock/{{id}}/?page=3">3</a></li>
         {% if all_stock.has_next %}
         <li class="page-item">
-          <a class="page-link" href="/stock_product/?page={{all_stock.next_page_number}}">Next</a>
+          <a class="page-link" href="/view_stock/{{id}}/?page={{all_stock.next_page_number}}">Next</a>
         </li>
         {% endif %}
       </ul>

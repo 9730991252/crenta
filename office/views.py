@@ -383,19 +383,38 @@ def stock_product(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']        
         context={}
+        stock=[]
         product=[]
         e=Employee.objects.filter(employee_mobile=office_mobile).first()
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
+            p=Product.objects.filter().all()
+            for p in p:
+                id=p.id
+                #print(id)
+                s=Stock_Product.objects.filter(product_id=id).order_by('-id').first()
+                if s:
+                    stock.append(s)
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
-            print(search_product)
+            #print(search_product)
             p=Product.objects.filter(product_name__icontains=search_product)
             product=p
-        context={    
+        if "Select" in request.GET:
+            product_id = request.GET.get('product_id')
+            print(product_id)
+            s=Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
+            stock=[]
+            stock.append(s)
+        page_number=request.GET.get('page')
+        stock=Paginator(stock,25)
+        stock=stock.get_page(page_number)
+        context={
+                'all_stock':stock,
                 'e':e,
-                'product':product,       
-            }
+                'product':product
+                }
+                
         return render(request,'office/office/stock_product.html',context=context)
     else:
         return redirect('login')
@@ -460,6 +479,45 @@ def view_stock(request,id):
             'id':id
         }
         return render(request,'office/office/view_stock.html',context)
+    else:
+        return redirect('login')
+
+
+
+def test(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        context={}
+        stock=[]
+        product=[]
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            p=Product.objects.filter().all()
+            for p in p:
+                id=p.id
+                #print(id)
+                s=Stock_Product.objects.filter(product_id=id).order_by('-id').first()
+                if s:
+                    stock.append(s)
+        if "Search" in request.GET:
+            search_product = request.GET.get('search_product')
+            #print(search_product)
+            p=Product.objects.filter(product_name__icontains=search_product)
+            product=p
+        if "Select" in request.GET:
+            product_id = request.GET.get('product_id')
+            print(product_id)
+            s=Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
+            stock=[]
+            stock.append(s)
+        context={
+                'all_stock':stock,
+                'e':e,
+                'product':product
+                }
+                
+        return render(request,'office/office/test.html',context)
     else:
         return redirect('login')
 
