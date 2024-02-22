@@ -17,4 +17,7 @@ urlpatterns = [
     path('stock_product/', views.stock_product,name='stock_product'),
     path('store_dashboard/', views.store_dashboard,name='store_dashboard'),
     path('store_logout', views.store_logout,name='store_logout'),
+    path('view_stock/<int:id>/',views.view_stock,name='view_stock'),
+
+    
 ]

@@ -383,20 +383,19 @@ def stock_product(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']        
         context={}
-        p=[]
+        product=[]
         e=Employee.objects.filter(employee_mobile=office_mobile).first()
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
-            select_p=Product.objects.filter().all().order_by('product_name')           
-        if "Search" in request.POST:
-            product_id = request.POST.get("product_id")
-            p=Stock_Product.objects.filter(product_id=product_id).order_by('-id')
+        if "Search" in request.GET:
+            search_product = request.GET.get('search_product')
+            print(search_product)
+            p=Product.objects.filter(product_name__icontains=search_product)
+            product=p
         context={    
                 'e':e,
-                'p':p,
-                'select_p':select_p,
-
-                }
+                'product':product,       
+            }
         return render(request,'office/office/stock_product.html',context=context)
     else:
         return redirect('login')
@@ -439,5 +438,29 @@ def store_dashboard(request):
     else:
         return redirect('login')
     
+def view_stock(request,id):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        context={}
+        page_number =request.GET.get('page')
+        #print(page)
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+        stock=Stock_Product.objects.filter(product_id=id).order_by('-id').first()
+        if stock:
+            stock=Stock_Product.objects.filter(product_id=id).order_by('-id').first()
+        all_stock=Stock_Product.objects.filter(product_id=id).order_by('-id')
+        all_stock = Paginator(all_stock,10)
+        all_stock = all_stock.get_page(page_number)
+        context={
+            'e':e,
+            'stock':stock,
+            'all_stock':all_stock,
+            'id':id
+        }
+        return render(request,'office/office/view_stock.html',context)
+    else:
+        return redirect('login')
 
 
