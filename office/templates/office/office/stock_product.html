@@ -22,7 +22,7 @@
               </div>
               <div class="container border" >
                 {% for p in product %}
-                <form method="GET" action="">{% csrf_token %}
+                <form method="GET" action="">
                   <div class="border text-center my-5 " >  
                     <div class="row text-center">
                         <input type="hidden" name="product_id" value="{{p.id}}">
@@ -59,7 +59,7 @@
                   <td>{% if p.add_qty == 0 %}{% else %}{{p.add_qty}}{% endif %}</td>
                   <td>{% if p.sell_qty == 0 %}{% else %}{{p.sell_qty}}{% endif %}</td>
                   <td>{% if p.type == None %}{% else %}{{p.type}}{% endif %}</td>
-                  <td>{{p.stock_qty}}</td>
+                  <td class="bg-info">{{p.stock_qty}}</td>
                   <td>{{p.employee.employee_name}}</td>
                   <td>{{p.added_date}}</td>
                 </tr>

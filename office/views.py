@@ -335,6 +335,7 @@ def add_product(request):
                 type=type
             ).save()
             messages.success(request,"Product Added Succesfully")
+            return redirect('add_product')
         return render(request,'office/office/add_product.html',context=context)
     else:
         return redirect('login')
@@ -371,6 +372,7 @@ def sell_product(request):
                 employee_id=e.id
             ).save()
             messages.success(request,"Product Added Succesfully")
+            return redirect('sell_product')
         return render(request,'office/office/sell_product.html',context=context)
     else:
         return redirect('login')
@@ -402,7 +404,7 @@ def stock_product(request):
             product=p
         if "Select" in request.GET:
             product_id = request.GET.get('product_id')
-            print(product_id)
+            #print(product_id)
             s=Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
             stock=[]
             stock.append(s)
