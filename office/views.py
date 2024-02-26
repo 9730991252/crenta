@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 # Create your views here.
 def index(request):
     #Add_Product.objects.all().delete()
+    #Sell_Product.objects.all().delete()
     #Stock_Product.objects.all().delete()
     return render(request,'index.html')
 
@@ -313,7 +314,8 @@ def add_product(request):
         add_p=[]
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
-            add_p=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today())
+            #add_p=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today())
+            add_p=Add_Product.objects.all()
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
             #print(search_product)
@@ -355,7 +357,7 @@ def sell_product(request):
             sell_p=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today())
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
-            print(search_product)
+            #print(search_product)
             p=Product.objects.filter(product_name__icontains=search_product)
             product=p
         context={    
@@ -366,13 +368,24 @@ def sell_product(request):
         if "Sell" in request.POST:
             product_id = request.POST.get("product_id")
             qty = request.POST.get("qty")          
-            Sell_Product(
-                product_id=product_id,
-                qty=qty,
-                employee_id=e.id
-            ).save()
-            messages.success(request,"Product Added Succesfully")
-            return redirect('sell_product')
+            stock =Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
+            #print(stock.stock_qty)
+            qty=int(qty)
+            #print(type(qty))
+            if stock:
+                stock_qty=stock.stock_qty
+                if qty<stock_qty:     
+                    Sell_Product(
+                            product_id=product_id,
+                            qty=qty,
+                            employee_id=e.id
+                            ).save()
+                    messages.success(request,"Product Sell Succesfully")
+                    return redirect('sell_product')
+                else:
+                    messages.success(request," X X X X Production Add First")   
+            else:
+                messages.success(request," X X X X Production Add First") 
         return render(request,'office/office/sell_product.html',context=context)
     else:
         return redirect('login')
@@ -421,6 +434,59 @@ def stock_product(request):
     else:
         return redirect('login')
     
+
+
+
+
+
+
+
+
+def stock_product_admin(request):
+    if request.session.has_key('admin_mobile'):
+        office_mobile = request.session['admin_mobile']        
+        context={}
+        stock=[]
+        product=[]
+        a=Admin.objects.filter(admin_mobile=office_mobile).first()
+        if a:
+            a=Admin.objects.get(admin_mobile=office_mobile)
+            p=Product.objects.filter().all()
+            for p in p:
+                id=p.id
+                #print(id)
+                s=Stock_Product.objects.filter(product_id=id).order_by('-id').first()
+                if s:
+                    stock.append(s)
+        if "Search" in request.GET:
+            search_product = request.GET.get('search_product')
+            #print(search_product)
+            p=Product.objects.filter(product_name__icontains=search_product)
+            product=p
+        if "Select" in request.GET:
+            product_id = request.GET.get('product_id')
+            #print(product_id)
+            s=Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
+            stock=[]
+            stock.append(s)
+        page_number=request.GET.get('page')
+        stock=Paginator(stock,25)
+        stock=stock.get_page(page_number)
+        context={
+                'all_stock':stock,
+                'e':a,
+                'product':product
+                }
+                
+        return render(request,'office/admin/stock_product_admin.html',context=context)
+    else:
+        return redirect('login')
+    
+
+
+
+
+
 
 
 
