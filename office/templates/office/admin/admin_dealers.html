@@ -1,0 +1,322 @@
+{% extends 'office/base.html' %}
+{% block title %} Dealers {% endblock title %}
+{% block content %}
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+</div>
+
+
+
+<div class="container my-3">
+    <div class="row">
+      <div class="col-sm-2">
+            {% include 'office/admin/admin_menu.html' %}  
+           </div>
+
+        
+            <div class="col-10">
+              <div>
+                  <div class="container mt-1 p-1 border rounded" >
+                      {% if messages %}
+                      
+                      {% for message in messages %}
+                      <div class="alert alert-success text-center mb-3">{{message}}</div>
+                      {% endfor %}
+                      {% endif %}
+                      <div class="row">
+                        <div class="col-6"><a href=""  data-bs-toggle="modal" data-bs-target="#Add_Dealer_Modal" class="btn btn-success " >Add New Dealer </a></div>
+                      </div>
+
+                      <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Shope Name</th>
+                              <th scope="col">Dealer Name</th>
+                              <th scope="col">Mobile</th>
+                              <th scope="col">Added By</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Details</th>
+                              <th scope="col">Edit</th>
+                            </tr>
+                          </thead>
+                          <tbody>{% for d in d %}
+                            <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{d.dealer_shope_name}}</td>
+                            <td>{{d.dealer_name}}</td>
+                            <td>{{d.dealer_mobile}}</td>
+                            <td>{{d.employee.employee_name}}</td>
+                            <td><form class="" method="POST">{% csrf_token %}{% if d.status == 1 %}<button class="btn btn-success" type="submit" name="Active">Active<input type="hidden" name="id" value="{{d.id}}"></button>{% else %}<button class="btn btn-danger" type="submit" name="Deactive">Deactive<input type="hidden" name="id" value="{{d.id}}"></button>{% endif %}</form></td>
+                            <td><a href="" class="text-bg-info p-2"data-bs-toggle="modal" data-bs-target="#Details_Modal_{{d.id}}" >All Details</a></td>
+                            <td><a href="" class="text-bg-primary p-2"data-bs-toggle="modal" data-bs-target="#Edit_Modal_{{d.id}}" >Edit</a></td>
+                            
+                            </tr>
+                          
+                            
+                          <!-- Details Modal -->
+                         
+                          {% csrf_token %}
+                          <div class="modal fade" id="Details_Modal_{{d.id}}" tabindex="-1" aria-labelledby="Details_Modal_{{d.id}}" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="Details_Modal_{{d.id}}">Details</h1>
+    
+                              </div>
+                              <div class="modal-body">
+                               
+                        
+                                <div class="mb-3">
+                                  <label for="dealer_shope_name" class="form-label">dealer shope name </label>
+                                  <input type="text" class="form-control" id="dealer_shope_name" name="dealer_shope_name" value="{{d.dealer_shope_name}}" readonly>
+                                </div>
+                              
+                              
+                              
+                                    <div class="mb-3">
+                                  <label for="dealer_name" class="form-label">dealer name </label>
+                                  <input type="text" class="form-control" id="dealer_name" name="dealer_name" value="{{d.dealer_name}}" readonly>
+                                </div>
+                              
+                                    <div class="mb-3">
+                                  <label for="dealer_mobile" class="form-label">dealer mobile </label>
+                                  <input type="number" class="form-control" id="dealer_mobile" name="dealer_mobile" value="{{d.dealer_mobile}}" readonly>
+                                </div>
+                              
+                                        <div class="mb-3">
+                                  <label for="employee_name" class="form-label">dealer Email </label>
+                                  <input type="email" class="form-control" id="dealer_email" name="dealer_email" value="{{d.dealer_email}}" readonly>
+                                </div>
+                              
+                                <div class="mb-3">
+                                 <label for="dealer_address" class="form-label">Address</label>
+                                  <input type="text" class="form-control" id="dealer_address" name="dealer_address" value="{{d.dealer_address}}" readonly>
+                                </div>
+                              
+                              
+                                    <div class="mb-3">
+                                 <label for="state_name" class="form-label">State Name </label>
+                                  <input type="text" class="form-control" id="state_name" name="state_name" value="{{d.state_name}}" readonly >
+                                </div>
+                              
+                                    <div class="mb-3">
+                                 <label for="aadhar_card_number" class="form-label">aadhar card number </label>
+                                  <input type="number" class="form-control" id="aadhar_card_number" value="{{d.aadhar_card_number}}"readonly>
+                                </div>
+                              
+                              
+                                    <div class="mb-3">
+                                 <label for="pan_card_number" class="form-label">pan card number </label>
+                                  <input type="text" class="form-control" id="pan_card_number" value="{{d.pan_card_number}}" readonly>
+                                </div>
+                                    <div class="mb-3">
+                                 <label for="gst_number" class="form-label">GSTIN/UIN </label>
+                                  <input type="text" class="form-control" id="gst_number" name="gst_number" value="{{d.gst_number}}" readonly>
+                                </div>                          
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                
+                              </div>
+                              </div>
+                            </div>
+                            </div>
+                          </form>
+                          
+                          
+                          <!-- Edit Dealers Modal -->
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="modal fade" id="Edit_Modal_{{d.id}}" tabindex="-1" aria-labelledby="Edit_Modal_{{d.id}}" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="Edit_Modal">Add New Dealer</h1>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" name="dealer_id" value="{{d.id}}">
+          <div class="mb-3">
+              <label for="dealer_shope_name" class="form-label">dealer shope name </label>
+              <input type="text" class="form-control" id="dealer_shope_name" name="dealer_shope_name" value="{{d.dealer_shope_name}}">
+            </div>
+                <div class="mb-3">
+              <label for="dealer_name" class="form-label">dealer name </label>
+              <input type="text" class="form-control" id="dealer_name" name="dealer_name" value="{{d.dealer_name}}">
+            </div>
+                <div class="mb-3">
+              <label for="dealer_mobile" class="form-label">dealer mobile </label>
+              <input type="number" class="form-control" id="dealer_mobile" name="dealer_mobile" value="{{d.dealer_mobile}}">
+            </div>
+                    <div class="mb-3">
+              <label for="employee_name" class="form-label">dealer Email </label>
+              <input type="email" class="form-control" id="dealer_email" name="dealer_email" value="{{d.dealer_email}}">
+            </div>
+            <div class="mb-3">
+             <label for="dealer_address" class="form-label">Address</label>
+              <input type="text" class="form-control" id="dealer_address" name="dealer_address" value="{{d.dealer_address}}">
+            </div>
+                <div class="mb-3">
+             <label for="state_name" class="form-label">State Name </label>
+              <input type="text" class="form-control" id="state_name" name="state_name" value="{{d.state_name}}">
+            </div>
+                <div class="mb-3">
+             <label for="aadhar_card_number" class="form-label">aadhar card number </label>
+              <input type="number" class="form-control" id="aadhar_card_number" name="aadhar_card_number" value="{{d.aadhar_card_number}}">
+            </div>
+                <div class="mb-3">
+             <label for="pan_card_number" class="form-label">pan card number </label>
+              <input type="text" class="form-control" id="pan_card_number" name="pan_card_number" value="{{d.pan_card_number}}">
+            </div>
+                <div class="mb-3">
+             <label for="gst_number" class="form-label">GSTIN/UIN </label>
+              <input type="text" class="form-control" id="gst_number" name="gst_number" value="{{d.gst_number}}">
+            </div>
+        </div>
+                  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" name="Edit">Submit</button>
+        </div>
+        </div>
+      </div>
+      </div>
+    
+    </form>
+    
+                            
+    
+                            {% endfor %}
+                          </tbody>
+                          
+                          </table>
+                          
+                          
+
+
+<!-- Pagination -->
+ 
+                          <div class="container">
+                            <div class="mx-5">
+                            <nav aria-label="...">
+                              <ul class="pagination">
+                                {% if p.has_previous %}
+                                <li class="page-item ">
+                                  <a class="page-link" href="/product/?page={{p.previous_page_number}}">Previous</a>
+                                </li>
+                                <li class="page-item ">
+                               <a class="page-link" href="/product/?page=1" >First</a>
+                              </li>
+                                {% endif %}
+                          
+                                <li class="page-item " aria-current="page">
+                                  <a class="page-link" href="/product/?page=2">2</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="/product/?page=3">3</a></li>
+                                {% if p.has_next %}
+                                <li class="page-item">
+                                  <a class="page-link" href="/product/?page={{p.next_page_number}}">Next</a>
+                                </li>
+                                {% endif %}
+                              </ul>
+                            </nav>
+                          </div>
+                          </div>
+                          <!-- Pagination -->
+
+              </div>
+
+          </div>
+      </div>
+
+  
+</div>
+
+
+<!-- Add Dealers Modal -->
+<form action="" method="POST">
+  {% csrf_token %}
+  <div class="modal fade" id="Add_Dealer_Modal" tabindex="-1" aria-labelledby="Add_Dealer_Modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="Add_Product_Modal">Add New Dealer</h1>
+        
+      </div>
+            
+      <div class="modal-body">
+
+ 
+        <div class="mb-3">
+            <label for="dealer_shope_name" class="form-label">dealer shope name </label>
+            <input type="text" class="form-control" id="dealer_shope_name" name="dealer_shope_name" required>
+          </div>
+        
+        
+        
+              <div class="mb-3">
+            <label for="dealer_name" class="form-label">dealer name </label>
+            <input type="text" class="form-control" id="dealer_name" name="dealer_name" required>
+          </div>
+        
+              <div class="mb-3">
+            <label for="dealer_mobile" class="form-label">dealer mobile </label>
+            <input type="number" class="form-control" id="dealer_mobile" name="dealer_mobile" required>
+          </div>
+        
+                  <div class="mb-3">
+            <label for="employee_name" class="form-label">dealer Email </label>
+            <input type="email" class="form-control" id="dealer_email" name="dealer_email">
+          </div>
+        
+        
+        
+        
+          <div class="mb-3">
+           <label for="dealer_address" class="form-label">Address</label>
+            <input type="text" class="form-control" id="dealer_address" name="dealer_address" required>
+          </div>
+        
+        
+              <div class="mb-3">
+           <label for="state_name" class="form-label">State Name </label>
+            <input type="text" class="form-control" id="state_name" name="state_name" required>
+          </div>
+        
+        
+        
+        
+        
+              <div class="mb-3">
+           <label for="aadhar_card_number" class="form-label">aadhar card number </label>
+            <input type="number" class="form-control" id="aadhar_card_number" name="aadhar_card_number">
+          </div>
+        
+        
+              <div class="mb-3">
+           <label for="pan_card_number" class="form-label">pan card number </label>
+            <input type="text" class="form-control" id="pan_card_number" name="pan_card_number">
+          </div>
+        
+        
+        
+              <div class="mb-3">
+           <label for="gst_number" class="form-label">GSTIN/UIN </label>
+            <input type="text" class="form-control" id="gst_number" name="gst_number">
+          </div>
+
+    
+      </div>
+                
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" name="Add">Submit</button>
+      </div>
+      </div>
+    </div>
+    </div>
+  
+  </form>
+  
+ 
+{% endblock content %}

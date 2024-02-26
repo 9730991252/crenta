@@ -419,8 +419,11 @@ def stock_product(request):
             product_id = request.GET.get('product_id')
             #print(product_id)
             s=Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
-            stock=[]
-            stock.append(s)
+            if s :
+                stock=[]
+                stock.append(s)
+            else:
+                messages.success(request," X X X X Production Add First X X X X ") 
         page_number=request.GET.get('page')
         stock=Paginator(stock,25)
         stock=stock.get_page(page_number)
@@ -467,8 +470,11 @@ def stock_product_admin(request):
             product_id = request.GET.get('product_id')
             #print(product_id)
             s=Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
-            stock=[]
-            stock.append(s)
+            if s :
+                stock=[]
+                stock.append(s)
+            else:
+                messages.success(request," X X X X Production Add First X X X X ") 
         page_number=request.GET.get('page')
         stock=Paginator(stock,25)
         stock=stock.get_page(page_number)
@@ -590,3 +596,158 @@ def test(request):
         return redirect('login')
 
 
+# dealrs Code 
+    
+def dealers(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            d=Dealer.objects.all().order_by('-id')
+            paginator=Paginator(d,20)
+            page_number=request.GET.get('page')
+            print(page_number)
+            d=paginator.get_page(page_number)
+            context={
+                
+                'e':e,
+                'd':d       
+            }
+            if "Add" in request.POST:
+                dealer_shope_name = request.POST.get("dealer_shope_name")
+                dealer_name = request.POST.get("dealer_name")
+                dealer_mobile = request.POST.get("dealer_mobile")
+                dealer_email = request.POST.get("dealer_email")
+                dealer_address = request.POST.get("dealer_address")
+                state_name = request.POST.get("state_name")
+                aadhar_card_number = request.POST.get("aadhar_card_number")
+                pan_card_number = request.POST.get("pan_card_number")
+                gst_number = request.POST.get("gst_number")
+                if Dealer.objects.filter(dealer_mobile=dealer_mobile).exists():
+                    messages.success(request,"Mobile Allready Exists")
+                if Dealer.objects.filter(aadhar_card_number=aadhar_card_number).exists():
+                    messages.success(request,"Aadhar Aard Number Allready Exists")
+                if Dealer.objects.filter(pan_card_number=pan_card_number).exists():
+                    messages.success(request,"Pan Card Number Allready Exists")
+                if Dealer.objects.filter(gst_number=gst_number).exists():
+                    messages.success(request,"GST Number Allready Exists")
+                else:
+                
+                    Dealer(
+                        dealer_shope_name=dealer_shope_name,
+                        dealer_name=dealer_name,
+                        dealer_mobile=dealer_mobile,
+                        dealer_email=dealer_email,
+                        dealer_address=dealer_address,
+                        state_name=state_name,
+                        aadhar_card_number=aadhar_card_number,
+                        pan_card_number=pan_card_number,
+                        gst_number=gst_number,
+                        employee_id=e.id
+
+                        ).save()
+                    messages.success(request,"Dealer Added Succesfully")         
+                    return redirect('dealers')
+            return render(request,'office/office/dealers.html',context=context)
+        else:
+            return redirect('login')
+        
+
+
+def admin_dealers(request):
+    if request.session.has_key('admin_mobile'):
+        office_mobile = request.session['admin_mobile']
+        e=Admin.objects.filter(admin_mobile=office_mobile).first()
+        if e:
+            e=Admin.objects.get(admin_mobile=office_mobile)
+            d=Dealer.objects.all().order_by('-id')
+            paginator=Paginator(d,20)
+            page_number=request.GET.get('page')
+            print(page_number)
+            d=paginator.get_page(page_number)
+            context={
+                
+                'e':e,
+                'd':d       
+            }
+            if "Add" in request.POST:
+                dealer_shope_name = request.POST.get("dealer_shope_name")
+                dealer_name = request.POST.get("dealer_name")
+                dealer_mobile = request.POST.get("dealer_mobile")
+                dealer_email = request.POST.get("dealer_email")
+                dealer_address = request.POST.get("dealer_address")
+                state_name = request.POST.get("state_name")
+                aadhar_card_number = request.POST.get("aadhar_card_number")
+                pan_card_number = request.POST.get("pan_card_number")
+                gst_number = request.POST.get("gst_number")
+                if Dealer.objects.filter(dealer_mobile=dealer_mobile).exists():
+                    messages.success(request,"Mobile Allready Exists")
+                if Dealer.objects.filter(aadhar_card_number=aadhar_card_number).exists():
+                    messages.success(request,"Aadhar Aard Number Allready Exists")
+                if Dealer.objects.filter(pan_card_number=pan_card_number).exists():
+                    messages.success(request,"Pan Card Number Allready Exists")
+                if Dealer.objects.filter(gst_number=gst_number).exists():
+                    messages.success(request,"GST Number Allready Exists")
+                else:
+                
+                    Dealer(
+                        dealer_shope_name=dealer_shope_name,
+                        dealer_name=dealer_name,
+                        dealer_mobile=dealer_mobile,
+                        dealer_email=dealer_email,
+                        dealer_address=dealer_address,
+                        state_name=state_name,
+                        aadhar_card_number=aadhar_card_number,
+                        pan_card_number=pan_card_number,
+                        gst_number=gst_number,
+                        admin_id=e.id
+
+                        ).save()
+                    messages.success(request,"Dealer Added Succesfully")         
+                    return redirect('admin_dealers')
+            elif "Edit" in request.POST:
+                dealer_id = request.POST.get("dealer_id")
+                dealer_shope_name = request.POST.get("dealer_shope_name")
+                dealer_name = request.POST.get("dealer_name")
+                dealer_mobile = request.POST.get("dealer_mobile")
+                dealer_email = request.POST.get("dealer_email")
+                dealer_address = request.POST.get("dealer_address")
+                state_name = request.POST.get("state_name")
+                aadhar_card_number = request.POST.get("aadhar_card_number")
+                pan_card_number = request.POST.get("pan_card_number")
+                gst_number = request.POST.get("gst_number")
+                Dealer(
+                    dealer_shope_name=dealer_shope_name,
+                    dealer_name=dealer_name,
+                    dealer_mobile=dealer_mobile,
+                    dealer_email=dealer_email,
+                    dealer_address=dealer_address,
+                    state_name=state_name,
+                    aadhar_card_number=aadhar_card_number,
+                    pan_card_number=pan_card_number,
+                    gst_number=gst_number,
+                    admin_id=e.id,
+                    id=dealer_id
+
+                    ).save()
+                messages.success(request,"Dealer Edit Succesfully")         
+                return redirect('admin_dealers')
+
+            elif "Active" in request.POST:
+                id=request.POST.get('id')
+                ac=Dealer.objects.get(id=id)
+                ac.status='0'
+                ac.save()
+            elif "Deactive" in request.POST:
+                id=request.POST.get('id')
+                ac=Dealer.objects.get(id=id)
+                ac.status='1'
+                ac.save()   
+            return render(request,'office/admin/admin_dealers.html',context=context)
+        else:
+            return redirect('login')
+        
+
+    
+    

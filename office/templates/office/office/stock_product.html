@@ -12,7 +12,12 @@
             {% include 'office/office/office_menu.html' %}  
            </div>
            <div class="col-10">
-
+            {% if messages %}
+                      
+            {% for message in messages %}
+            <div class="alert alert-danger text-center mb-3">{{message}}</div>
+            {% endfor %}
+            {% endif %}
             <div class="container border">
                 <p>Search Product</p>
                 <form method="GET" action="">

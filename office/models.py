@@ -14,7 +14,7 @@ class Admin (models.Model):
 class Employee (models.Model):
     employee_name = models.CharField(max_length=100)
     employee_address=models.CharField(max_length=100)
-    employee_mobile=models.IntegerField(default=True)
+    employee_mobile=models.IntegerField(default=True,unique=True)
     pin = models.IntegerField()
     department=models.CharField(max_length=50,default=True)
     added_by = models.CharField(max_length=50, default=True)
@@ -103,3 +103,23 @@ class Stock_Product(models.Model):
     type = models.CharField(max_length=100,null=True,blank=True)
     added_date = models.DateTimeField(auto_now_add=True,null=True)
     date=models.DateField(auto_now_add=True,null=True)
+
+
+
+
+class Dealer(models.Model):
+    dealer_shope_name = models.CharField(max_length=100)
+    dealer_name = models.CharField(max_length=100)
+    dealer_mobile = models.IntegerField()
+    dealer_email = models.CharField(max_length=100)
+    dealer_address = models.CharField(max_length=100)
+    state_name = models.CharField(max_length=100)
+    aadhar_card_number = models.IntegerField(default=True,unique=True)
+    pan_card_number = models.CharField(max_length=100,default=True,unique=True)
+    gst_number = models.CharField(max_length=100,default=True,unique=True)
+    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,null=True,blank=True)
+    admin = models.ForeignKey(Admin,on_delete=models.PROTECT,null=True,blank=True)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
+    date=models.DateField(auto_now_add=True,null=True)
+    status = models.IntegerField(default=1)
+

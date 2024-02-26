@@ -1,13 +1,23 @@
 {% extends 'office/base.html' %}
 {% block title %} Admin Dashboard{% endblock title %}
 {% block content %}
+<style>
+
+  .section{
+    display: inline-flex;
+    margin-bottom: 50px;
+    
+  }
+
+</style>
+
 <div class="container">
     <div class=""><h>Welcome - {{a.admin_name}}</h></div>
 </div>
 
-<div class="container my-3">
+<div class="container my-3" id="b">
 <div class="row">
-    <div class="col-2 ">
+    <div class="col-sm-2">
      {% include 'office/admin/admin_menu.html' %}  
     </div>
     <div class="col-10 ">
@@ -18,7 +28,7 @@
 
 
 
-      <div  class="d-inline-block"> 
+      <div  class="section"> 
         <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
             <div class="card-header">Products </div>
             <div class="card-body">
@@ -33,7 +43,7 @@
 
 
 
-    <div  class="d-inline-block"> 
+    <div  class="section"> 
     <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
         <div class="card-header">Employee</div>
         <div class="card-body">
@@ -48,7 +58,7 @@
        
 
 
-        <div  class="d-inline-block"> 
+        <div  class="section"> 
             <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
                 <div class="card-header">Product Category</div>
                 <div class="card-body">
@@ -59,7 +69,7 @@
               </div>
             </div>
      
-            <div  class="d-inline-block"> 
+            <div  class="section"> 
                 <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
                     <div class="card-header">Dealers</div>
                     <div class="card-body">
@@ -70,7 +80,7 @@
                   </div>
                 </div>
 
-                <div  class="d-inline-block"> 
+                <div  class="section"> 
                     <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
                         <div class="card-header">Today Sale</div>
                         <div class="card-body">
