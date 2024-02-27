@@ -88,6 +88,8 @@ def login (request):
         return redirect('office_dashboard')
     if request.session.has_key('store_mobile'):
         return redirect('store_dashboard')
+    if request.session.has_key('admin_mobile'):
+        return redirect('admin_dashboard')
     else:
         if request.method == "POST":
             mb=request.POST ['mb']
