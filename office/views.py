@@ -244,12 +244,29 @@ def office_dashboard(request):
         context={}
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
-        
+            total_product=Product.objects.all().count()
+            FG_Goods=Product.objects.filter(category='FG_Goods').count()
+            Raw_Material=Product.objects.filter(category='Raw_Material').count()
+            Trading=Product.objects.filter(category='Trading').count()
+            today_add_product=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
+            today_sell_product=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
+            total_employee=Employee.objects.all().count()
+            office_employee=Employee.objects.filter(department='office_staff').count()
+            store_employee=Employee.objects.filter(department='store_department').count()
+            total_dealer=Dealer.objects.all().count()
         context={
-            
-            'e':e
+            'e':e,
+            'total_product':total_product,
+            'today_add_product':today_add_product,
+            'today_sell_product':today_sell_product,
+            'total_employee':total_employee,
+            'office_employee':office_employee,
+            'store_employee':store_employee,
+            'total_dealer':total_dealer,
+            'FG_Goods':FG_Goods,
+            'Raw_Material':Raw_Material,
+            'Trading':Trading
         }
-
         return render(request,'office/office/office_dashboard.html',context)
     else:
         return render(request,'login.html')
