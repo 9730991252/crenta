@@ -121,11 +121,15 @@ def admin_dashboard(request):
         if a:
             a=Admin.objects.get(admin_mobile=admin_mobile)
             total_product=Product.objects.all().count()
+            FG_Goods=Product.objects.filter(category='FG_Goods').count()
+            Raw_Material=Product.objects.filter(category='Raw_Material').count()
+            Trading=Product.objects.filter(category='Trading').count()
             today_add_product=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
             today_sell_product=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
             total_employee=Employee.objects.all().count()
             office_employee=Employee.objects.filter(department='office_staff').count()
             store_employee=Employee.objects.filter(department='store_department').count()
+            total_dealer=Dealer.objects.all().count()
         context={
             'a':a,
             'total_product':total_product,
@@ -133,7 +137,11 @@ def admin_dashboard(request):
             'today_sell_product':today_sell_product,
             'total_employee':total_employee,
             'office_employee':office_employee,
-            'store_employee':store_employee
+            'store_employee':store_employee,
+            'total_dealer':total_dealer,
+            'FG_Goods':FG_Goods,
+            'Raw_Material':Raw_Material,
+            'Trading':Trading
         }
         return render(request,'office/admin/admin_dashboard.html',context)
     else:
@@ -316,8 +324,8 @@ def add_product(request):
         add_p=[]
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
-            #add_p=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today())
-            add_p=Add_Product.objects.all()
+            add_p=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today())
+            #add_p=Add_Product.objects.all()
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
             #print(search_product)
@@ -752,4 +760,78 @@ def admin_dealers(request):
         
 
     
+    
+
+
+
+
+def employee(request):
+    if request.session.has_key('office_mobile'):
+        admin_mobile = request.session['office_mobile']
+        e=Employee.objects.filter(admin_mobile=admin_mobile).first()
+        context={}
+        if e:
+            e=Employee.objects.get(admin_mobile=admin_mobile)
+        
+        context={
+            'a':e,
+            
+        }
+        if request.method == "POST":
+            if "Add" in request.POST:
+                employee_name=request.POST.get('employee_name')
+                employee_address=request.POST.get('employee_address')
+                employee_mobile=request.POST.get('employee_mobile')
+                pin=request.POST.get('pin')
+                department=request.POST.get('department')
+                #validatin
+                if Employee.objects.filter(employee_mobile=employee_mobile).exists():
+                    messages.success(request,"Employee Allready Exits")
+                else:
+                    Employee(
+                        employee_name=employee_name,
+                        employee_address=employee_address,
+                        employee_mobile=employee_mobile,
+                        pin=pin,
+                        department=department,
+                        added_by=a.admin_name
+                    ).save()
+                    messages.success(request,"Employee Add Succesfully") 
+            elif "Edit" in request.POST:
+                id=request.POST.get('id')
+                employee_name=request.POST.get('employee_name')
+                employee_address=request.POST.get('employee_address')
+                employee_mobile=request.POST.get('employee_mobile')
+                pin=request.POST.get('pin')
+                department=request.POST.get('department')
+                #print(id)
+                Employee(
+                    id=id,
+                    employee_name=employee_name,
+                    employee_address=employee_address,
+                    employee_mobile=employee_mobile,
+                    pin=pin,
+                    department=department,
+                    added_by=a.admin_name
+                ).save()
+                messages.success(request,"Employee Edit Succesfully") 
+            elif "Delete" in request.POST:
+                id=request.POST.get('id')
+                Employee.objects.get(id=id).delete()
+                messages.success(request,"Category Delete Successfully")
+            elif "Active" in request.POST:
+                id=request.POST.get('id')
+                #print(id)
+                ac=Employee.objects.get(id=id)
+                ac.status='0'
+                ac.save()
+            elif "Deactive" in request.POST:
+                id=request.POST.get('id')
+                #print(id)
+                ac=Employee.objects.get(id=id)
+                ac.status='1'
+                ac.save()                                                
+        return render(request,'office/admin/employee.html',context)
+    else:
+        return render(request,'login.html')
     

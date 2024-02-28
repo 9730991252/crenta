@@ -8,6 +8,7 @@ urlpatterns = [
     path('login', views.login,name='login'),
     path('admin_dashboard', views.admin_dashboard,name='admin_dashboard'),
     path('admin_employee', views.admin_employee,name='admin_employee'),
+    path('employee', views.employee,name='employee'),
     path('stock_product_admin/', views.stock_product_admin,name='stock_product_admin'),
     path('admin_logout', views.admin_logout,name='admin_logout'),
     path('office_dashboard', views.office_dashboard,name='office_dashboard'),
@@ -19,7 +20,7 @@ urlpatterns = [
     path('store_dashboard/', views.store_dashboard,name='store_dashboard'),
     path('store_logout', views.store_logout,name='store_logout'),
     path('view_stock/<int:id>/',views.view_stock,name='view_stock'),
-    path('dealers', views.dealers,name='dealers'),
+    path('dealers/', views.dealers,name='dealers'),
     path('admin_dealers', views.admin_dealers,name='admin_dealers'),
     path('test',views.test,name='test'),
 
