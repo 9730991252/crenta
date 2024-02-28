@@ -1,20 +1,106 @@
 {% extends 'office/base.html' %}
 {% block title %} Office Dashboard{% endblock title %}
 {% block content %}
+<style>
+
+  .section{
+    display: inline-flex;
+    margin-bottom: 50px;
+    
+  }
+
+</style>
+
 <div class="container">
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
 </div>
 
+<div class="container my-3" id="b">
+<div class="row">
+    <div class="col-sm-2">
+     {% include 'office/office/office_menu.html' %}  
+    </div>
+    <div class="col-10 ">
+
+<div class="row">
+    <div class="container">
+
+      <div  class="section"> 
+        <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+            <div class="card-header">Products </div>
+            <div class="card-body">
+                    <li>Total Products - {{total_product}} </li>
+                    <li>FG Goods - {{FG_Goods}} </li>
+                    <li>Raw Material - {{Raw_Material}} </li>
+                    <li>Trading - {{Trading}} </li>
+            </div>
+          </div>
+        </div>
+ 
 
 
-<div class="container my-3">
-    <div class="row">
-        <div class="col-2 ">
-            {% include 'office/office/office_menu.html' %}  
-           </div>
+
+      <div  class="section"> 
+        <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+            <div class="card-header">Production / Sell</div>
+            <div class="card-body">
+                    
+                    <li>Today Production - {{today_add_product}} </li>
+                    <li>Today Sell Products - {{today_sell_product}} </li>
+            </div>
+          </div>
+        </div>
+ 
+
+
+
+
+    <div  class="section"> 
+    <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+        <div class="card-header">Employee</div>
+        <div class="card-body">
+           
+                <li>Total Employee - {{total_employee}} </li>
+                <li>Office Employee - {{office_employee}} </li>
+                <li>Store Department - {{store_employee}} </li>
+        </div>
+      </div>
+    </div>
+          
+       
+
+
+ 
+     
+            <div  class="section"> 
+                <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+                    <div class="card-header">Dealers</div>
+                    <div class="card-body">
+                       
+                            <li>Total Dealers - {{total_dealer}} </li>
+                        
+                    </div>
+                  </div>
+                </div>
+
+                <div  class="section"> 
+                    <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
+                        <div class="card-header">Today Amount</div>
+                        <div class="card-body">
+                           
+                                <li>Today Sale -  </li>
+                            
+                        </div>
+                      </div>
+                    </div>
 
 
     </div>
+
+
 </div>
 
+</div>
+</div>
+</div>
 {% endblock content %}

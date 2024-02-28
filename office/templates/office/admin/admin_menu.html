@@ -1,7 +1,9 @@
 <div class="row">
-    <a  href="/admin_dashboard" class="btn btn-primary my-1">Dashboard</a>
-    <a href="/stock_product_admin" class="btn btn-primary my-1">Stock Product</a>
-    <a href="/admin_employee" class="btn btn-primary my-1">Employee</a>
-    <a href="/admin_dealers" class="btn btn-primary my-1">Dealers</a>
-    <a href="/admin_logout" class="btn btn-danger my-1">Logout</a>
+    
+    
+    <a href="/admin_dashboard" class="my-1 {% if request.path == '/admin_dashboard' %}btn btn-warning{% else %}btn btn-primary{% endif %}" >Dashboard</a>
+    <a href="/stock_product_admin" class="my-1 {% if request.path == '/stock_product_admin/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Stock Product</a>
+    <a href="/admin_employee" class=" my-1 {% if request.path == '/admin_employee' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Employee</a>
+    <a href="/admin_dealers" class="my-1 {% if request.path == '/admin_dealers' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Dealers</a>
+    <a href="/admin_logout" class="btn btn-danger my-1 ">Logout</a>
 </div>

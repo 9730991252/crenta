@@ -1,10 +1,10 @@
 <div class="row">
-    <a  href="/office_dashboard" class="btn btn-success my-1">Dashboard</a>
-    <a href="/product" class="btn btn-info my-1">Product</a>
-    <a href="/add_product" class="btn btn-success my-1">Production / Return </a>
-    <a href="/sell_product" class="btn btn-secondary my-1">Sell Product</a>
-    <a href="/stock_product" class="btn btn-primary my-1">Stock Product</a>
-    <a href="/dealers" class="btn btn-primary my-1">Dealers</a>
+    <a  href="/office_dashboard" class="my-1 {% if request.path == '/office_dashboard' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Dashboard</a>
+    <a href="/product" class="my-1 {% if request.path == '/product/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Product</a>
+    <a href="/add_product"  class="my-1 {% if request.path == '/add_product/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Production / Return </a>
+    <a href="/sell_product" class="my-1 {% if request.path == '/sell_product/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Sell Product</a>
+    <a href="/stock_product" class="my-1 {% if request.path == '/stock_product/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Stock Product</a>
+    <a href="/dealers" class="my-1 {% if request.path == '/dealers/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Dealers</a>
     <a href="#" class="btn btn-primary my-1">Employees</a>
     <a href="/office_logout" class="btn btn-danger my-1">Logout</a>
 </div>
