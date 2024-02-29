@@ -440,8 +440,10 @@ def stock_product(request):
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
             #print(search_product)
-            p=Product.objects.filter(product_name__icontains=search_product)
-            product=p
+            l=len(search_product)
+            if 1<l:
+                p=Product.objects.filter(product_name__icontains=search_product)
+                product=p
         if "Select" in request.GET:
             product_id = request.GET.get('product_id')
             #print(product_id)
@@ -490,9 +492,11 @@ def stock_product_admin(request):
                     stock.append(s)
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
-            #print(search_product)
-            p=Product.objects.filter(product_name__icontains=search_product)
-            product=p
+            l=len(search_product)
+            if 1<l:
+
+                p=Product.objects.filter(product_name__icontains=search_product)
+                product=p
         if "Select" in request.GET:
             product_id = request.GET.get('product_id')
             #print(product_id)
@@ -534,9 +538,11 @@ def store_dashboard(request):
             today_add_product=Add_Product.objects.filter(employee_id=e.id,date__gte=date.today(),date__lte=date.today())
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
-            print(search_product)
-            p=Product.objects.filter(product_name__icontains=search_product)
-            product=p
+            l=len(search_product)
+            if 1<l:
+                p=Product.objects.filter(product_name__icontains=search_product)
+            #print(search_product)
+                product=p
         context={    
                 'e':e,
                 'product':product,
