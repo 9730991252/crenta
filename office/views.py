@@ -106,6 +106,11 @@ def login (request):
             if s:
                 request.session['store_mobile'] = request.POST["mb"]
                 return redirect('store_dashboard')
+            m= Employee.objects.filter(employee_mobile=mb,pin=pin,status=1,department='marketing_employee')
+            if s:
+                request.session['marketing_mobile'] = request.POST["mb"]
+                return redirect('order/marketing_employee_dashboard/')
+            
             else:
                 messages.success(request,"please insert correct information or call more suport 9730991252")            
                 return redirect('login')
