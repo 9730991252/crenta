@@ -80,7 +80,7 @@ class Add_Product(models.Model):
 
 
 class Sell_Product(models.Model):
-    dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT,default=True)
+    dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT,null=True,blank=True)
     product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
     employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
     qty = models.IntegerField(default=0)
