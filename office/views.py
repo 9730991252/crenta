@@ -140,6 +140,11 @@ def admin_dashboard(request):
             office_employee=Employee.objects.filter(department='office_staff').count()
             store_employee=Employee.objects.filter(department='store_department').count()
             marketing_employee=Employee.objects.filter(department='marketing_employee').count()
+            Accepted=OrderMaster.objects.filter(status='Accepted').count()
+            Pending=OrderMaster.objects.filter(status='Pending').count()
+            Delivered=OrderMaster.objects.filter(status='Delivered').count()
+            On_The_Way=OrderMaster.objects.filter(status='On The Way').count()
+            Cancel=OrderMaster.objects.filter(status='Cancel').count()
             total_dealer=Dealer.objects.all().count()
         context={
             'a':a,
@@ -154,6 +159,11 @@ def admin_dashboard(request):
             'Raw_Material':Raw_Material,
             'Trading':Trading,
             'marketing_employee':marketing_employee,
+            'Accepted':Accepted,
+            'Pending':Pending,
+            'Delivered':Delivered,
+            'On_The_Way':On_The_Way,
+            'Cancel':Cancel
         }
         return render(request,'office/admin/admin_dashboard.html',context)
     else:
@@ -266,6 +276,11 @@ def office_dashboard(request):
             office_employee=Employee.objects.filter(department='office_staff').count()
             store_employee=Employee.objects.filter(department='store_department').count()
             marketing_employee=Employee.objects.filter(department='marketing_employee').count()
+            Accepted=OrderMaster.objects.filter(status='Accepted').count()
+            Pending=OrderMaster.objects.filter(status='Pending').count()
+            Delivered=OrderMaster.objects.filter(status='Delivered').count()
+            On_The_Way=OrderMaster.objects.filter(status='On The Way').count()
+            Cancel=OrderMaster.objects.filter(status='Cancel').count()
             total_dealer=Dealer.objects.all().count()
         context={
             'e':e,
@@ -279,7 +294,12 @@ def office_dashboard(request):
             'FG_Goods':FG_Goods,
             'Raw_Material':Raw_Material,
             'Trading':Trading,
-            'marketing_employee':marketing_employee
+            'marketing_employee':marketing_employee,
+            'Accepted':Accepted,
+            'Pending':Pending,
+            'Delivered':Delivered,
+            'On_The_Way':On_The_Way,
+            'Cancel':Cancel
         }
         return render(request,'office/office/office_dashboard.html',context)
     else:
@@ -665,32 +685,18 @@ def dealers(request):
                 dealer_shope_name = request.POST.get("dealer_shope_name")
                 dealer_name = request.POST.get("dealer_name")
                 dealer_mobile = request.POST.get("dealer_mobile")
-                dealer_email = request.POST.get("dealer_email")
+                location = request.POST.get("location")
                 dealer_address = request.POST.get("dealer_address")
-                state_name = request.POST.get("state_name")
-                aadhar_card_number = request.POST.get("aadhar_card_number")
-                pan_card_number = request.POST.get("pan_card_number")
-                gst_number = request.POST.get("gst_number")
                 if Dealer.objects.filter(dealer_mobile=dealer_mobile).exists():
                     messages.success(request,"Mobile Allready Exists")
-                if Dealer.objects.filter(aadhar_card_number=aadhar_card_number).exists():
-                    messages.success(request,"Aadhar Aard Number Allready Exists")
-                if Dealer.objects.filter(pan_card_number=pan_card_number).exists():
-                    messages.success(request,"Pan Card Number Allready Exists")
-                if Dealer.objects.filter(gst_number=gst_number).exists():
-                    messages.success(request,"GST Number Allready Exists")
                 else:
                 
                     Dealer(
                         dealer_shope_name=dealer_shope_name,
                         dealer_name=dealer_name,
                         dealer_mobile=dealer_mobile,
-                        dealer_email=dealer_email,
+                        location=location,
                         dealer_address=dealer_address,
-                        state_name=state_name,
-                        aadhar_card_number=aadhar_card_number,
-                        pan_card_number=pan_card_number,
-                        gst_number=gst_number,
                         employee_id=e.id
 
                         ).save()
