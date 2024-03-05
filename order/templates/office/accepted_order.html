@@ -1,0 +1,73 @@
+{% extends 'office/base.html' %}
+{% block title %} Accepted {% endblock title %}
+{% block content %}
+
+<style>
+.order_menu{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    gap: 20px;
+
+
+}
+.header_iteam{
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr 2fr 1fr 1fr;
+    gap: 20px;
+    border: solid 1px black;
+    padding: 5px;
+    font-size: 18px;
+    
+}
+.p_list{
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr 2fr 1fr 1fr;
+    gap: 20px;
+    border: solid 1px black;
+    padding: 5px;
+    font-size: 18px;
+}
+</style>
+
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+</div>
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 ">
+            {% include 'office/office/office_menu.html' %}  
+           </div>
+            <div class="col-10">
+                <div class="order_menu">
+                {% include 'office/order_menu.html' %} 
+            </div>
+            <h4 class="text-center pt-3">Accepted Order List</h4>
+            <div class="header_iteam">
+                <div>#</div>
+                <div>Dealer Name</div>
+                <div>Marketing Employee</div>
+                <div>Total Amount</div>
+                <div>Date</div>
+                <div>Status</div>
+                <div>Action</div>
+            </div>
+            {% for p in accepted %}
+            <div class="p_list">
+                <div>{{forloop.counter}}</div>
+                <div>{{p.dealer.dealer_shope_name}}</div>
+                <div>{{p.marketing_employee_name}}</div>
+                <div>{{p.total_price}}</div>
+                <div>{{p.ordered_date}}</div>
+                <div class="text-danger">{{p.status}}</div>
+                <div><a href="/order/accepted_view_order/{{p.order_filter}}" target="_blank" class="btn btn-success">View</a></div>
+                
+            </div>
+            {% endfor %}
+      </div>
+</div>
+
+
+
+  
+ 
+{% endblock content %}

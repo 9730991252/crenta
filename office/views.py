@@ -1,5 +1,6 @@
 from django.shortcuts import render ,redirect
 from office.models import *
+from order.models import *
 from django.contrib import messages
 from django.http import JsonResponse
 from datetime import date
@@ -10,6 +11,10 @@ def index(request):
     #Add_Product.objects.all().delete()
     #Sell_Product.objects.all().delete()
     #Stock_Product.objects.all().delete()
+    #Order_detail.objects.all().delete()
+    #OrderMaster.objects.all().delete()
+    #Cart.objects.all().delete()
+    
     return render(request,'index.html')
 
 # sunil code 
@@ -107,9 +112,9 @@ def login (request):
                 request.session['store_mobile'] = request.POST["mb"]
                 return redirect('store_dashboard')
             m= Employee.objects.filter(employee_mobile=mb,pin=pin,status=1,department='marketing_employee')
-            if s:
+            if m:
                 request.session['marketing_mobile'] = request.POST["mb"]
-                return redirect('order/marketing_employee_dashboard/')
+                return redirect('order/marketing_dashboard/')
             
             else:
                 messages.success(request,"please insert correct information or call more suport 9730991252")            
@@ -134,6 +139,7 @@ def admin_dashboard(request):
             total_employee=Employee.objects.all().count()
             office_employee=Employee.objects.filter(department='office_staff').count()
             store_employee=Employee.objects.filter(department='store_department').count()
+            marketing_employee=Employee.objects.filter(department='marketing_employee').count()
             total_dealer=Dealer.objects.all().count()
         context={
             'a':a,
@@ -146,7 +152,8 @@ def admin_dashboard(request):
             'total_dealer':total_dealer,
             'FG_Goods':FG_Goods,
             'Raw_Material':Raw_Material,
-            'Trading':Trading
+            'Trading':Trading,
+            'marketing_employee':marketing_employee,
         }
         return render(request,'office/admin/admin_dashboard.html',context)
     else:
@@ -258,6 +265,7 @@ def office_dashboard(request):
             total_employee=Employee.objects.all().count()
             office_employee=Employee.objects.filter(department='office_staff').count()
             store_employee=Employee.objects.filter(department='store_department').count()
+            marketing_employee=Employee.objects.filter(department='marketing_employee').count()
             total_dealer=Dealer.objects.all().count()
         context={
             'e':e,
@@ -270,7 +278,8 @@ def office_dashboard(request):
             'total_dealer':total_dealer,
             'FG_Goods':FG_Goods,
             'Raw_Material':Raw_Material,
-            'Trading':Trading
+            'Trading':Trading,
+            'marketing_employee':marketing_employee
         }
         return render(request,'office/office/office_dashboard.html',context)
     else:

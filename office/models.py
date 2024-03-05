@@ -30,6 +30,22 @@ class Product(models.Model):
     added_date=models.DateTimeField(auto_now_add=True,null=True)
     status = models.IntegerField(default=1)
 
+class Dealer(models.Model):
+    dealer_shope_name = models.CharField(max_length=100)
+    dealer_name = models.CharField(max_length=100)
+    dealer_mobile = models.IntegerField()
+    dealer_email = models.CharField(max_length=100)
+    dealer_address = models.CharField(max_length=100)
+    state_name = models.CharField(max_length=100)
+    aadhar_card_number = models.IntegerField(default=True,unique=True)
+    pan_card_number = models.CharField(max_length=100,default=True,unique=True)
+    gst_number = models.CharField(max_length=100,default=True,unique=True)
+    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,null=True,blank=True)
+    admin = models.ForeignKey(Admin,on_delete=models.PROTECT,null=True,blank=True)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
+    date=models.DateField(auto_now_add=True,null=True)
+    status = models.IntegerField(default=1)
+
 class Add_Product(models.Model):
     product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
     type = models.CharField(max_length=100,null=True,blank=True)
@@ -64,6 +80,7 @@ class Add_Product(models.Model):
 
 
 class Sell_Product(models.Model):
+    dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT,default=True)
     product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
     employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
     qty = models.IntegerField(default=0)
@@ -106,20 +123,4 @@ class Stock_Product(models.Model):
 
 
 
-
-class Dealer(models.Model):
-    dealer_shope_name = models.CharField(max_length=100)
-    dealer_name = models.CharField(max_length=100)
-    dealer_mobile = models.IntegerField()
-    dealer_email = models.CharField(max_length=100)
-    dealer_address = models.CharField(max_length=100)
-    state_name = models.CharField(max_length=100)
-    aadhar_card_number = models.IntegerField(default=True,unique=True)
-    pan_card_number = models.CharField(max_length=100,default=True,unique=True)
-    gst_number = models.CharField(max_length=100,default=True,unique=True)
-    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,null=True,blank=True)
-    admin = models.ForeignKey(Admin,on_delete=models.PROTECT,null=True,blank=True)
-    added_date = models.DateTimeField(auto_now_add=True, null=True)
-    date=models.DateField(auto_now_add=True,null=True)
-    status = models.IntegerField(default=1)
 
