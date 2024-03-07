@@ -687,21 +687,20 @@ def dealers(request):
                 dealer_mobile = request.POST.get("dealer_mobile")
                 location = request.POST.get("location")
                 dealer_address = request.POST.get("dealer_address")
-                if Dealer.objects.filter(dealer_mobile=dealer_mobile).exists():
-                    messages.success(request,"Mobile Allready Exists")
-                else:
-                
-                    Dealer(
-                        dealer_shope_name=dealer_shope_name,
-                        dealer_name=dealer_name,
-                        dealer_mobile=dealer_mobile,
-                        location=location,
-                        dealer_address=dealer_address,
-                        employee_id=e.id
+                if dealer_mobile=="":
+                    dealer_mobile=None
 
-                        ).save()
-                    messages.success(request,"Dealer Added Succesfully")         
-                    return redirect('dealers')
+                Dealer(
+                    dealer_shope_name=dealer_shope_name,
+                    dealer_name=dealer_name,
+                    dealer_mobile=dealer_mobile,
+                    location=location,
+                    dealer_address=dealer_address,
+                    employee_id=e.id
+
+                    ).save()
+                messages.success(request,"Dealer Added Succesfully")         
+                return redirect('dealers')
             return render(request,'office/office/dealers.html',context=context)
         else:
             return redirect('login')

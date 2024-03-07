@@ -33,7 +33,7 @@ class Product(models.Model):
 class Dealer(models.Model):
     dealer_shope_name = models.CharField(max_length=100)
     dealer_name = models.CharField(max_length=100)
-    dealer_mobile = models.IntegerField()
+    dealer_mobile = models.IntegerField(null=True,blank=True)
     dealer_address = models.CharField(max_length=100)
     location = models.CharField(max_length=100,null=True,blank=True)
     employee = models.ForeignKey(Employee,on_delete=models.PROTECT,null=True,blank=True)

@@ -1,10 +1,7 @@
 {% extends 'office/base.html' %}
 {% block title %} pending view order {% endblock title %}
 {% block content %}
-
 <style>
-
-
 *{
   margin: 0;
   padding: 0;
@@ -15,9 +12,6 @@ body{
   height: 100%;
   width: 100%;
 }
-
-
-
 .dealer_box{
     
     padding: 5px;
@@ -49,19 +43,12 @@ body{
     border-bottom: 1px solid black;
 }
 
-
-
-
-
-
-
 .cart_list{
     display: grid;
     grid-template-columns: 5fr 1fr 1fr 1fr 1fr 1fr 1fr ;
     column-gap: 2rem;
     border-bottom: 1px solid black;
 }
-
 
 </style>
 
@@ -82,9 +69,6 @@ body{
     </div>
 
       </div>
-
-
-
 
 
  <div class="list_box">
@@ -109,9 +93,6 @@ body{
 </div>
 {% endfor %}
 </div>     
-
-
-
 
 
 
@@ -161,8 +142,6 @@ function stock(pid,sqty){
     document.getElementById('stc'+product_id).innerHTML=stock_qty
     document.getElementById('changecolor'+product_id).style.backgroundColor='green'
     document.getElementById('btn'+product_id).style.display =''
-    
-
 }
 
 }
