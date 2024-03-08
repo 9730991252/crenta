@@ -51,6 +51,30 @@ def marketing_dashboard(request):
         return redirect('login')
     
 
+
+
+def order_master_marketing(request):
+    if request.session.has_key('marketing_mobile'):
+        marketing_mobile = request.session['marketing_mobile']        
+        context={}
+
+        e=Employee.objects.filter(employee_mobile=marketing_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=marketing_mobile)
+            o=OrderMaster.objects.filter(marketing_employee_id=e.id)
+
+        context={
+            'e':e,
+            'o':o
+        }
+        return render(request,'marketing/order_master_marketing.html',context=context)
+    else:
+        return redirect('login')
+    
+
+
+
+
 def marketing_add_order(request,id):
     if request.session.has_key('marketing_mobile'):
         marketing_mobile = request.session['marketing_mobile']        
@@ -124,8 +148,7 @@ def product_filter(request):
         if 1<l:
             p=Product.objects.values().filter(product_name__icontains=words)
             product=list(p)
-            #print(p)
-                
+            #print(p)               
             return JsonResponse({'status': 1,'product':product})
     else:
         return JsonResponse({'status': 0})
@@ -163,8 +186,7 @@ def add_to_cart(request):
         if t:
             for t in t:
                 t=t.total_price
-                total_amount+=t
-        
+                total_amount+=t        
         return JsonResponse({'status': 1,'cart':cart,'ng':ng,'total_amount':total_amount})
     else:
         return JsonResponse({'status': 0})
@@ -280,8 +302,7 @@ def pending_view_order(request,id):
             r=OrderMaster.objects.get(id=order_master_id)
             r.status='Cancel'
             r.save()
-            return redirect('/order/pending_order/')
-            
+            return redirect('/order/pending_order/')            
         context={
             'e':e,
             'o':order,
@@ -290,8 +311,7 @@ def pending_view_order(request,id):
             'stock':stock,
             'oms':oms
         }
-        return render(request,'office/pending_view_order.html',context=context)
-        
+        return render(request,'office/pending_view_order.html',context=context)        
     else:
         return redirect('login')
     
