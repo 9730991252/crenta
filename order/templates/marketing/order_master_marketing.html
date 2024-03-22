@@ -22,7 +22,7 @@
     
 }
 .table_content{
-    border: solid 1px black;
+   
     display: grid;
     grid-template-columns: 1fr 5fr 1fr 1fr;
     padding: 5px; 
@@ -42,18 +42,20 @@
 
     <div class="table">
         <div class="head">
-            <div>Invoice Number</div>
-            <div>Dealer Name </div>
-            <div>Amount</div>
-            <div>Status</div>
+            <strong><div>Invoice Number</div></strong>
+            <strong><div>Dealer Name </div></strong>
+            <strong><div>Amount</div></strong>
+            <strong><div>Status</div></strong>
         </div>
 {% for o in o %}
+
         <div class="table_content">
             <div>{{o.order_filter}}</div>
             <div>{{o.dealer.dealer_shope_name}} </div>
             <div>{{o.total_price}}</div>
             <div>{% if o.status == 'Pending' %} <h6 class="bg-danger">{{o.status}}</h6>{% elif o.status == 'Accepted' %}<h6 class="bg-success">{{o.status}}</h6>{% else %}{{o.status}} {% endif %} </div>
         </div>
+        <hr>
 {% endfor %}
 
     </div>
