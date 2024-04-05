@@ -320,7 +320,7 @@ document.getElementById('qty'+id).style.borderColor ='red';return false;
     url: "{% url 'add_to_cart' %}",
     method: "GET",
     data:{
-        employee_id:dealer_id,
+        employee_id:employee_id,
         dealer_id:dealer_id,
         product_id:id,
         qty:qty,
