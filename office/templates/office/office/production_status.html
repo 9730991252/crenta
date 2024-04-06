@@ -47,8 +47,8 @@
                             <td>{{p.type}}</td>
                             <td> Order Qty <strong class="order_qty"> {% order_qty p.product_id %} </strong></td>
                             <td>Stock <strong class="stock_qty">{% call_stock p.product_id %} </strong></td>
-                            <td><strong id="set{{forloop.counter}}"></strong></td>
-                            <td style="display: none;"><strong class="id"> {{forloop.counter}}</strong></td>
+                            <td><strong id="set{% order_qty p.product_id %}"></strong></td>
+                            
                             </tr>
                             {% endfor %}
                           </tbody>
@@ -99,21 +99,24 @@
 
   const order_qty=document.querySelectorAll('.order_qty');
   const sqty=document.querySelectorAll('.stock_qty');
-  const id=document.querySelectorAll('.id');
 
+
+  console.log(order_qty)
   
-  
-  stock(order_qty,sqty,id)
-  function stock(order_qty,sqty,id){
+  stock(order_qty,sqty)
+  function stock(order_qty,sqty){
     for (var key=0; key<order_qty.length; key++){
-      o_qty = order_qty[key].innerText;
       stock_qty = sqty[key].innerText;
-      i = id[key].innerText;
-      
-      console.log(i)
-      
+      o_qty = order_qty[key].innerText;
+      //console.log(stock_qty-o_qty)
+      document.getElementById('set'+ o_qty).innerHTML=`<h5 class="text-danger">Less  ${stock_qty - o_qty}</h5>`
+
+      if (stock_qty > 0 ){
+        document.getElementById('set'+ o_qty).innerHTML=`<h5 class="text-success">More ${stock_qty - o_qty}</h5>`
+      }
+  
+  
     }
-    //document.getElementById('set'+i).innerHTML=`<h5>hi</h5>`
   
   }
   
