@@ -41,13 +41,12 @@
                           </thead>
                           <tbody>{% for p in p %}
                             <tr>
-                            <th scope="row">{{forloop.counter}}</th>
+                            <th ><strong class="forl">{{forloop.counter}}</strong></th>
                             <td>{{p.product_name}}</td>
-
                             <td>{{p.type}}</td>
                             <td> Order Qty <strong class="order_qty"> {% order_qty p.product_id %} </strong></td>
                             <td>Stock <strong class="stock_qty">{% call_stock p.product_id %} </strong></td>
-                            <td><strong id="set{% order_qty p.product_id %}"></strong></td>
+                            <td><strong id="set{{forloop.counter}}"></strong></td>
                             
                             </tr>
                             {% endfor %}
@@ -99,20 +98,22 @@
 
   const order_qty=document.querySelectorAll('.order_qty');
   const sqty=document.querySelectorAll('.stock_qty');
+  const forl=document.querySelectorAll('.forl');
 
 
-  console.log(order_qty)
+  //console.log(forl)
   
-  stock(order_qty,sqty)
-  function stock(order_qty,sqty){
+  stock(order_qty,sqty,forl)
+  function stock(order_qty,sqty,forl){
     for (var key=0; key<order_qty.length; key++){
       stock_qty = sqty[key].innerText;
       o_qty = order_qty[key].innerText;
-      //console.log(stock_qty-o_qty)
-      document.getElementById('set'+ o_qty).innerHTML=`<h5 class="text-danger">Less  ${stock_qty - o_qty}</h5>`
+      fr = forl[key].innerText;
+      console.log(fr)
+      document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">Less  ${stock_qty - o_qty}</h5>`
 
       if (stock_qty > 0 ){
-        document.getElementById('set'+ o_qty).innerHTML=`<h5 class="text-success">More ${stock_qty - o_qty}</h5>`
+        document.getElementById('set'+ fr).innerHTML=`<h5 class="text-success">More ${stock_qty - o_qty}</h5>`
       }
   
   
