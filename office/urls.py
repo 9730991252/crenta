@@ -22,6 +22,7 @@ urlpatterns = [
     path('view_stock/<int:id>/',views.view_stock,name='view_stock'),
     path('dealers/', views.dealers,name='dealers'),
     path('admin_dealers', views.admin_dealers,name='admin_dealers'),
+    path('production_status/', views.production_status,name='production_status'),
     path('test',views.test,name='test'),
 
     

@@ -365,8 +365,8 @@ def accepted_view_order(request,id):
             'stock':stock,
             'oms':oms
         }
-        return render(request,'office/accepted_view_order.html',context=context)
-        
+        return render(request,'office/accepted_view_order.html',context=context)        
     else:
         return redirect('login')
     
+

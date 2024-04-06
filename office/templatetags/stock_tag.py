@@ -10,3 +10,17 @@ def call_stock(id):
         return 0
     if s:
         return s.stock_qty
+
+
+@register.simple_tag
+def order_qty(id):
+    p=Order_detail.objects.filter(product_id=id)
+    n=0
+    if p:
+        for p in p:
+            qty=p.qty
+            n += qty
+        return n
+    
+
+  

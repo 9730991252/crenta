@@ -877,3 +877,28 @@ def employee(request):
     else:
         return render(request,'login.html')
     
+
+def production_status(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        context={}
+        p=[]
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            n=Product.objects.all()
+            if n:
+                for n in n:
+                    pid=n.id
+                    k=Order_detail.objects.filter(product_id=pid).order_by('-id').first()
+                    if k:
+                        p.append(k)
+        context={
+            'e':e,
+            'p':p
+
+        }
+        return render(request,'office/office/production_status.html',context=context)        
+    else:
+        return redirect('login')
+    
