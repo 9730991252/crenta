@@ -93,7 +93,7 @@ body{
     <div><strong id="set{{forloop.counter}}"></strong></div>    
     <div>{{o.price}}</div>
     <div>{{o.total_price}}</div> 
-    <div id="btn{{forloop.counter}}" style="display: none;"><form class="" method="POST">{% csrf_token %}{% if o.stock_status == 0 %}<input type="hidden" name="order_detail_id" value="{{o.id}}"><button class="btn btn-danger btn-sm my-1" type="submit" name="Accepte">Pending</button>{% else %}Accepted{% endif %}</form></div>
+    <div id="btn{{forloop.counter}}"><form class="" method="POST">{% csrf_token %}{% if o.stock_status == 0 %}<input type="hidden" name="order_detail_id" value="{{o.id}}"><button class="btn btn-danger btn-sm my-1" type="submit" name="Accepte">Pending</button>{% else %}Accepted{% endif %}</form></div>
 </div>
 {% endfor %}
 </div>     
@@ -151,12 +151,9 @@ const order_qty=document.querySelectorAll('.order_qty');
       o_qty = order_qty[key].innerText;
       fr = forl[key].innerText;
       console.log(fr)
-      document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">Less  ${stock_qty - o_qty}</h5>`
+      document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">${stock_qty - o_qty}</h5>`
 
-      if (stock_qty > o_qty ){
-        document.getElementById('set'+ fr).innerHTML=`<h5 class="text-success">More ${stock_qty - o_qty}</h5>`
-        document.getElementById('btn'+ fr).style.display =''
-      }
+
   
   
     }

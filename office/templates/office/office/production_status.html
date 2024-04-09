@@ -110,13 +110,7 @@
       o_qty = order_qty[key].innerText;
       fr = forl[key].innerText;
       console.log(fr)
-      document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">Less  ${stock_qty - o_qty}</h5>`
-
-      if (stock_qty > o_qty ){
-        document.getElementById('set'+ fr).innerHTML=`<h5 class="text-success">More ${stock_qty - o_qty}</h5>`
-      }
-  
-  
+        document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">${stock_qty - o_qty}</h5>`
     }
   
   }
