@@ -890,7 +890,7 @@ def production_status(request):
             if n:
                 for n in n:
                     pid=n.id
-                    k=Order_detail.objects.filter(product_id=pid).order_by('-id').first()
+                    k=Order_detail.objects.filter(product_id=pid,stock_status=0).order_by('-id').first()
                     if k:
                         p.append(k)
         context={

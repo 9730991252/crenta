@@ -26,7 +26,7 @@ def order_qty(id):
   
 @register.simple_tag
 def qty_status(id):
-    p=Order_detail.objects.filter(product_id=id)
+    p=Order_detail.objects.filter(product_id=id,stock_status=0)
     s=Stock_Product.objects.filter(product_id=id).order_by('-id').first()
     if s == None:
         return 0

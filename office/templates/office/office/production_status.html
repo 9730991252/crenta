@@ -55,7 +55,7 @@
                           
                         <!-- Pagination -->
  
-                          <div class="container">
+                          <div class="container" style="display: none;">
                             <div class="mx-5">
                             <nav aria-label="...">
                               <ul class="pagination">
@@ -112,7 +112,7 @@
       console.log(fr)
       document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">Less  ${stock_qty - o_qty}</h5>`
 
-      if (stock_qty > 0 ){
+      if (stock_qty > o_qty ){
         document.getElementById('set'+ fr).innerHTML=`<h5 class="text-success">More ${stock_qty - o_qty}</h5>`
       }
   

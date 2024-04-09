@@ -282,21 +282,22 @@ def pending_view_order(request,id):
             order_detail_id=request.POST.get('order_detail_id')
             p=Order_detail.objects.get(id=order_detail_id)
             s=Stock_Product.objects.filter(product_id=p.product_id).order_by('-id').first()
-            stock_qty=s.stock_qty
-            odqty=p.qty
-            if odqty<stock_qty:
-                Sell_Product(
-                    dealer_id=p.dealer_id,
-                    product_id=p.product_id,
-                    employee_id=e.id,
-                    qty=odqty,
-                ).save()
-                p.stock_status=1
-                p.save()
-                om=OrderMaster.objects.get(order_filter=p.order_filter)
-                om.status='Accepted'
-                om.save()
-                return redirect(f'/order/pending_view_order/{id}')
+            if s is not None:
+                stock_qty=s.stock_qty
+                odqty=p.qty
+                if odqty<stock_qty:
+                    Sell_Product(
+                        dealer_id=p.dealer_id,
+                        product_id=p.product_id,
+                        employee_id=e.id,
+                        qty=odqty,
+                    ).save()
+                    p.stock_status=1
+                    p.save()
+                    om=OrderMaster.objects.get(order_filter=p.order_filter)
+                    om.status='Accepted'
+                    om.save()
+                    return redirect(f'/order/pending_view_order/{id}')
         elif "Cancel_order" in request.POST:
             order_master_id=request.POST.get('order_master_id')
             r=OrderMaster.objects.get(id=order_master_id)

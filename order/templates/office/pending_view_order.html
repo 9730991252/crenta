@@ -1,6 +1,7 @@
 {% extends 'office/base.html' %}
 {% block title %} pending view order {% endblock title %}
 {% block content %}
+{% load stock_tag %}
 <style>
 *{
   margin: 0;
@@ -76,6 +77,7 @@ body{
     <div>Product Name</div>
     <div>Qty</div>
     <div>Stock Qty</div>
+    <div>Stock Status</div>
     <div>Price</div>
     <div>Total Price</div>
     <div>Action</div>
@@ -84,12 +86,14 @@ body{
 <div id="cart_result">
 {% for o in o %}
 <div  class="cart_list">
+    <div style="display: none;"><strong class="forl">{{forloop.counter}}</strong></div>  
     <div>{{o.product_name}}</div>  
-    <div>{{o.qty}}</div>
-    <div id="changecolor{{o.product_id}}"><strong id="stc{{o.product_id}}"><h6 class="bg-danger my-1">Out Of Stock </h6></strong></div>
+    <div><strong class="order_qty">{{o.qty}}</strong></div>
+    <div>Stock <strong class="stock_qty">{% call_stock o.product_id %}</strong></div>    
+    <div><strong id="set{{forloop.counter}}"></strong></div>    
     <div>{{o.price}}</div>
     <div>{{o.total_price}}</div> 
-    <div id="btn{{o.product_id}}" style="display: none;"><form class="" method="POST">{% csrf_token %}{% if o.stock_status == 0 %}<input type="hidden" name="order_detail_id" value="{{o.id}}"><button class="btn btn-danger btn-sm my-1" type="submit" name="Accepte">Pending</button>{% else %}Accepted{% endif %}</form></div>
+    <div id="btn{{forloop.counter}}" style="display: none;"><form class="" method="POST">{% csrf_token %}{% if o.stock_status == 0 %}<input type="hidden" name="order_detail_id" value="{{o.id}}"><button class="btn btn-danger btn-sm my-1" type="submit" name="Accepte">Pending</button>{% else %}Accepted{% endif %}</form></div>
 </div>
 {% endfor %}
 </div>     
@@ -131,20 +135,34 @@ Total Amount Rs.<input type="readonly" id="total_amount" value="{{total}}" size=
 {% block script %}
 <script>
 
-const pid=document.querySelectorAll('.spid');
-const sqty=document.querySelectorAll('.sqty');
 
-stock(pid,sqty)
-function stock(pid,sqty){
-    for (var key=0; key<pid.length; key++){
-    product_id = pid[key].innerText;
-    stock_qty = sqty[key].innerText;
-    document.getElementById('stc'+product_id).innerHTML=stock_qty
-    document.getElementById('changecolor'+product_id).style.backgroundColor='green'
-    document.getElementById('btn'+product_id).style.display =''
-}
 
-}
+const order_qty=document.querySelectorAll('.order_qty');
+  const sqty=document.querySelectorAll('.stock_qty');
+  const forl=document.querySelectorAll('.forl');
+
+
+  //console.log(forl)
+  
+  stock(order_qty,sqty,forl)
+  function stock(order_qty,sqty,forl){
+    for (var key=0; key<order_qty.length; key++){
+      stock_qty = sqty[key].innerText;
+      o_qty = order_qty[key].innerText;
+      fr = forl[key].innerText;
+      console.log(fr)
+      document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">Less  ${stock_qty - o_qty}</h5>`
+
+      if (stock_qty > o_qty ){
+        document.getElementById('set'+ fr).innerHTML=`<h5 class="text-success">More ${stock_qty - o_qty}</h5>`
+        document.getElementById('btn'+ fr).style.display =''
+      }
+  
+  
+    }
+  
+  }
+  
 
 
 </script>
