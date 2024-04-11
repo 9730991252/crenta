@@ -91,7 +91,6 @@ body{
 <div class="list_title">
     <div>Product Name</div>
     <div>Qty</div>
-    <div>Stock Qty</div>
     <div>Price</div>
     <div>Total Price</div>
     <div>Action</div>
@@ -102,9 +101,9 @@ body{
 <div  class="cart_list">
     <div>{{o.product_name}}</div>  
     <div>{{o.qty}}</div>
-    <div id="changecolor{{o.product_id}}"><strong id="stc{{o.product_id}}"><h6 class="bg-danger my-1">Out Of Stock </h6></strong></div>
     <div>{{o.price}}</div>
     <div>{{o.total_price}}</div> 
+    <div>{{o.stock_status}}</div> 
     
 </div>
 {% endfor %}
@@ -147,27 +146,6 @@ Total Amount Rs.<input type="readonly" id="total_amount" value="{{total}}" size=
     {% endfor %}
     </div>     
     
-{% block script %}
-<script>
-
-const pid=document.querySelectorAll('.spid');
-const sqty=document.querySelectorAll('.sqty');
-
-stock(pid,sqty)
-function stock(pid,sqty){
-    for (var key=0; key<pid.length; key++){
-    product_id = pid[key].innerText;
-    stock_qty = sqty[key].innerText;
-    document.getElementById('stc'+product_id).innerHTML=stock_qty
-    document.getElementById('changecolor'+product_id).style.backgroundColor='green'
-    document.getElementById('btn'+product_id).style.display =''
-    
-
-}
-
-}
 
 
-</script>
-{% endblock script %}
 {% endblock content %}
