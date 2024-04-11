@@ -260,7 +260,9 @@ def pending_view_order(request,id):
             e=Employee.objects.get(employee_mobile=office_mobile)
             oms=OrderMaster.objects.get(order_filter=id)
             count_cancel=Order_detail.objects.filter(order_filter=order_filter,stock_status=2).count()
-            #print(coun_cancel)
+            acpt_order=Order_detail.objects.filter(order_filter=order_filter,stock_status= 1).count()
+            acpt_order+=count_cancel
+            #print(acpt_order)
             total=0
             am_order=Order_detail.objects.filter(order_filter=order_filter,stock_status=1)
             if am_order:
@@ -308,6 +310,12 @@ def pending_view_order(request,id):
             r.status='Cancel'
             r.save()
             return redirect('/order/pending_order/')            
+        elif "Accepte_order" in request.POST:
+            order_master_id=request.POST.get('order_master_id')
+            r=OrderMaster.objects.get(id=order_master_id)
+            r.status='Accepted'
+            r.save()
+            return redirect('/order/pending_order/')            
         context={
             'e':e,
             'o':order,
@@ -315,7 +323,8 @@ def pending_view_order(request,id):
             'total':total,
             'stock':stock,
             'oms':oms,
-            'count_cancel':count_cancel
+            'count_cancel':count_cancel,
+            'acpt_order':acpt_order
         }
         return render(request,'office/pending_view_order.html',context=context)        
     else:
