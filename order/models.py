@@ -14,7 +14,8 @@ STATUS_CHOICES = (
 
 INSTOCK_OUTSTOCK_CHOICE=(
     ('1','in stock'),
-    ('0','out of stock')
+    ('0','out of stock'),
+    ('2','cancel'),
 )
 
 

@@ -259,7 +259,8 @@ def pending_view_order(request,id):
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
             oms=OrderMaster.objects.get(order_filter=id)
-            #print(oms)
+            count_cancel=Order_detail.objects.filter(order_filter=order_filter,stock_status=2).count()
+            #print(coun_cancel)
             total=0
             am_order=Order_detail.objects.filter(order_filter=order_filter,stock_status=1)
             if am_order:
@@ -294,10 +295,13 @@ def pending_view_order(request,id):
                     ).save()
                     p.stock_status=1
                     p.save()
-                    om=OrderMaster.objects.get(order_filter=p.order_filter)
-                    om.status='Accepted'
-                    om.save()
                     return redirect(f'/order/pending_view_order/{id}')
+        elif "Out_of_stock" in request.POST:
+            order_detail_id=request.POST.get('order_detail_id')
+            p=Order_detail.objects.get(id=order_detail_id)
+            p.stock_status=2
+            p.save()
+            return redirect(f'/order/pending_view_order/{id}')
         elif "Cancel_order" in request.POST:
             order_master_id=request.POST.get('order_master_id')
             r=OrderMaster.objects.get(id=order_master_id)
@@ -310,7 +314,8 @@ def pending_view_order(request,id):
             'd':d,
             'total':total,
             'stock':stock,
-            'oms':oms
+            'oms':oms,
+            'count_cancel':count_cancel
         }
         return render(request,'office/pending_view_order.html',context=context)        
     else:
