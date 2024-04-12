@@ -15,7 +15,7 @@ def call_stock(id):
 @register.simple_tag
 def order_qty(id):
     p=Order_detail.objects.filter(product_id=id,stock_status=0)
-    print(p)
+    #print(p)
     n=0
     if p:
         for p in p:

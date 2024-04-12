@@ -566,10 +566,18 @@ def store_dashboard(request):
         store_mobile = request.session['store_mobile']        
         context={}
         product=[]
+        pe=[]
         e=Employee.objects.filter(employee_mobile=store_mobile).first()
         if e:
             e=Employee.objects.get(employee_mobile=store_mobile)
             today_add_product=Add_Product.objects.filter(employee_id=e.id,date__gte=date.today(),date__lte=date.today())
+            n=Product.objects.all()
+            if n:
+                for n in n:
+                    pid=n.id
+                    k=Order_detail.objects.filter(product_id=pid,stock_status=0).order_by('-id').first()
+                    if k:
+                        pe.append(k)
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
             l=len(search_product)
@@ -580,7 +588,8 @@ def store_dashboard(request):
         context={    
                 'e':e,
                 'product':product,
-                'today_add_product':today_add_product
+                'today_add_product':today_add_product,
+                'pe':pe
 
             }
         if "Add" in request.POST:
