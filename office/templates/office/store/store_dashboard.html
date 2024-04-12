@@ -52,6 +52,7 @@
 
 <div class="container" >
     {% for p in product %}
+    <div style="display: none;"><strong class="forl">{{forloop.counter}}</strong></div>  
     <form action="" method="POST">
         {% csrf_token %}
 <div class="border text-center my-5" >
@@ -60,7 +61,11 @@
     <div class="row">
         <div class="col-4"><h6 > {{p.category}} </h6></div>
         <div class="col-4"><h6 >{{p.type}} </h6></div>
-        <div class="col-4"><h6 class="text-success">Stock {% call_stock p.id %}</h6></div>
+      </div>
+      <div class="row">
+      <div class="col-4 ">Stock<h6 class="text-success stock_qty"> {% call_stock p.id %}</h6></div>
+      <div class="col-4 ">Order<h6 class="text-danger order_qty"> {% order_qty p.id %}</h6></div>
+      <div class="col-4"><h6 id="set{{forloop.counter}}"></h6></div> 
     </div>
     <br>
     <div class="row mb-2 mx-1">
@@ -83,7 +88,38 @@
 </div>
 
 
+{% block script %}
+<script>
 
+
+
+const order_qty=document.querySelectorAll('.order_qty');
+  const sqty=document.querySelectorAll('.stock_qty');
+  const forl=document.querySelectorAll('.forl');
+
+
+  //console.log(forl)
+  
+  stock(order_qty,sqty,forl)
+  function stock(order_qty,sqty,forl){
+    for (var key=0; key<order_qty.length; key++){
+      stock_qty = sqty[key].innerText;
+      o_qty = order_qty[key].innerText;
+      fr = forl[key].innerText;
+      console.log(stock_qty)
+      document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">${stock_qty - o_qty}</h5>`
+
+
+  
+  
+    }
+  
+  }
+  
+
+
+</script>
+{% endblock script %}
 
 
 {% endblock content %}
