@@ -1,6 +1,7 @@
 {% extends 'office/base.html' %}
 {% block title %} Office Dashboard{% endblock title %}
 {% block content %}
+{% load stock_tag %}
 <style>
 
   .section{
@@ -124,10 +125,11 @@
 
                 <div  class="section"> 
                     <div class="card text-bg-light mb-3 mx-3" style="max-width: 18rem;">
-                        <div class="card-header">Today Amount</div>
+                        <div class="card-header">Total Amount</div>
                         <div class="card-body">
                            
-                                <li>Today Sale -  </li>
+                                <li >Pending Order Amount Rs.<strong class="text-danger"> {% pending_order_amount %} </strong> </li>
+                                <li >Accepted Order Amount Rs.<strong class="text-success"> {% accepted_order_amount %} </strong> </li>
                             
                         </div>
                       </div>

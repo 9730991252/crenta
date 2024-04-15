@@ -24,6 +24,30 @@ def order_qty(id):
         return n
     
 
+@register.simple_tag
+def pending_order_amount():
+    p=Order_detail.objects.filter(stock_status=0)
+    #print(p)
+    a=0
+    if p:
+        for p in p:
+            total=p.total_price
+            a += total
+        return a
+
+
+@register.simple_tag
+def accepted_order_amount():
+    p=Order_detail.objects.filter(stock_status=1)
+    #print(p)
+    a=0
+    if p:
+        for p in p:
+            total=p.total_price
+            a += total
+        return a
+    
+
   
 @register.simple_tag
 def qty_status(id):
