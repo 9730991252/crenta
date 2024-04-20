@@ -79,6 +79,48 @@ text-align: center;
   </a>
   </div>
 
+
+
+
+
+
+
+
+  <div class="container">
+    <p>Search Product</p>
+    <form method="GET" action="">
+    <input type="text" class="form-control" name="search_product"  placeholder="Search Product">
+    <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
+  </form>
+  </div>
+
+
+
+  <div class="container" >
+    {% for p in product %}
+    <div style="display: none;"><strong class="forl">{{forloop.counter}}</strong></div>  
+    <form action="" method="POST">
+        {% csrf_token %}
+<div class="border text-center my-5" >
+    <input type="hidden" name="product_id" value="{{p.id}}">
+    <div class="my-1"><h2 > {{p.product_name}} </h2></div>
+
+      <div class="row">
+      <div class="col-4 ">Stock<h6 class="text-success stock_qty"> {% call_stock p.id %}</h6></div>
+      <div class="col-4 ">Order<h6 class="text-danger order_qty"> {% order_qty p.id %}</h6></div>
+      
+      <div class="col-4">status<h6 id="set{{forloop.counter}}"></h6></div> 
+    </div>
+    <br>
+
+</div>
+</form>
+{% endfor %}
+  </div>
+
+
+
+
 <div class="main_box">
     <div class="box_headline">Production & Sell </div>
     <div class="box_items">
@@ -114,37 +156,6 @@ text-align: center;
 
 
 
-<div class="container">
-    <p>Search Product</p>
-    <form method="GET" action="">
-    <input type="text" class="form-control" name="search_product"  placeholder="Search Product">
-    <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
-  </form>
-  </div>
-
-
-
-  <div class="container" >
-    {% for p in product %}
-    <div style="display: none;"><strong class="forl">{{forloop.counter}}</strong></div>  
-    <form action="" method="POST">
-        {% csrf_token %}
-<div class="border text-center my-5" >
-    <input type="hidden" name="product_id" value="{{p.id}}">
-    <div class="my-1"><h2 > {{p.product_name}} </h2></div>
-
-      <div class="row">
-      <div class="col-4 ">Stock<h6 class="text-success stock_qty"> {% call_stock p.id %}</h6></div>
-      <div class="col-4 ">Order<h6 class="text-danger order_qty"> {% order_qty p.id %}</h6></div>
-      
-      <div class="col-4">status<h6 id="set{{forloop.counter}}"></h6></div> 
-    </div>
-    <br>
-
-</div>
-</form>
-{% endfor %}
-  </div>
 
 <div>
 <a href="/crenta_admin/crenta_admin_logout" class="btn btn-danger my-1">Logout</a>
