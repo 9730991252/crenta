@@ -1,0 +1,262 @@
+{% extends 'office/base.html' %}
+{% block title %} Admin Dashboard{% endblock title %}
+{% block content %}
+{% load stock_tag %}
+<style>
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  height: 100%;
+  width: 100%;
+}
+
+.main_box{
+    margin-top: 50px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    background-color: rgb(245, 245, 245);
+}
+.box_headline{
+    font-weight: 700;
+    padding-top: 5px;
+    height: 35px;
+    background-color: rgb(222, 222, 222);
+    -webkit-border-radius: 20px 20px 0px 0px;
+-moz-border-radius: 20px 20px 0px 0px;
+border-radius: 20px 20px 0px 0px;
+text-align: center;
+}
+
+.box_items{
+    margin-left: 4%;
+    margin-top: 10px;
+    padding-bottom: 15px;
+    margin: 10px;
+}
+
+.refresh_btn{
+    margin-top: 3px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+}
+
+
+
+
+.pending_product_head{
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 1fr;
+}
+.pending_product_list{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+
+}
+
+
+
+
+
+</style>
+
+<div class="container">
+
+<div class='refresh_btn'>
+<a href="/crenta_admin/crenta_admin_dashboard" class="btn btn-info my-1">Refresh</a>
+</div>
+
+<div>
+    <!-- Button trigger modal -->
+  <a class="btn btn-primary mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+   Production Status
+  </a>
+  </div>
+
+<div class="main_box">
+    <div class="box_headline">Production & Sell </div>
+    <div class="box_items">
+    <li>Today Production - {{today_add_product}} </li>
+    <li>Today Sell Products - {{today_sell_product}} </li>
+</div>
+</div>
+
+
+<div class="main_box">
+    <div class="box_headline">Total Amount </div>
+    <div class="box_items">
+        <li >Pending Order Amount Rs.<strong class="text-danger"> {% pending_order_amount %} </strong> </li>
+
+        <li >Accepted Order Amount Rs.<strong class="text-success"> {% accepted_order_amount %} </strong> </li>
+</div>
+</div>
+
+
+
+
+
+<div class="main_box">
+    <div class="box_headline">Orders </div>
+    <div class="box_items">
+        <li>Total Accepted -<strong class="text-success"> {{Accepted}}</strong> </li>
+        <li>Total Pending - <strong class="text-danger">{{Pending}} </strong></li>
+        <li>Total Delivered - {{Delivered}} </li>
+        <li>Total On The Way - {{On_The_Way}} </li>
+        <li>Total Cancel - {{Cancel}} </li>
+</div>
+</div>
+
+
+
+<div class="container">
+    <p>Search Product</p>
+    <form method="GET" action="">
+    <input type="text" class="form-control" name="search_product"  placeholder="Search Product">
+    <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
+  </form>
+  </div>
+
+
+
+  <div class="container" >
+    {% for p in product %}
+    <div style="display: none;"><strong class="forl">{{forloop.counter}}</strong></div>  
+    <form action="" method="POST">
+        {% csrf_token %}
+<div class="border text-center my-5" >
+    <input type="hidden" name="product_id" value="{{p.id}}">
+    <div class="my-1"><h2 > {{p.product_name}} </h2></div>
+
+      <div class="row">
+      <div class="col-4 ">Stock<h6 class="text-success stock_qty"> {% call_stock p.id %}</h6></div>
+      <div class="col-4 ">Order<h6 class="text-danger order_qty"> {% order_qty p.id %}</h6></div>
+      
+      <div class="col-4">status<h6 id="set{{forloop.counter}}"></h6></div> 
+    </div>
+    <br>
+
+</div>
+</form>
+{% endfor %}
+  </div>
+
+<div>
+<a href="/crenta_admin/crenta_admin_logout" class="btn btn-danger my-1">Logout</a>
+</div>
+
+
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Productin Status List</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+    <div class="pending_product_head">
+      <div>Name</div>
+      <div>Order</div>
+      <div>Stock</div>
+      <div>Status</div>
+    </div>
+    <div class="pending_product_list">
+      {% for p in pe %}
+      <strong class="forl_modal" style="display: none;">{{forloop.counter}}</strong>
+      <div>{{p.product_name}}</div>
+      <div class="text-bg-danger order_qty_modal">{% order_qty p.product_id %}</div>
+      <div class="text-bg-success stock_qty_modal">{% call_stock p.product_id %}</div>
+      <div><strong id="set_modal{{forloop.counter}}"></strong></div>
+      {% endfor %}
+    </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  {% block script %}
+  <script>
+
+
+
+
+
+const order_qty=document.querySelectorAll('.order_qty');
+  const sqty=document.querySelectorAll('.stock_qty');
+  const forl=document.querySelectorAll('.forl');
+  //console.log(forl)
+  
+  stock(order_qty,sqty,forl)
+  function stock(order_qty,sqty,forl){
+    for (var key=0; key<order_qty.length; key++){
+      stock_qty = sqty[key].innerText;
+      o_qty = order_qty[key].innerText;
+      fr = forl[key].innerText;
+      console.log(stock_qty)
+      document.getElementById('set'+ fr).innerHTML=`<h6 class="text-danger">${stock_qty - o_qty}</h6>`
+
+
+  
+  
+    }
+  
+  }
+  
+
+
+
+
+
+const order_qty_m=document.querySelectorAll('.order_qty_modal');
+  const sqty_m=document.querySelectorAll('.stock_qty_modal');
+  const forl_m=document.querySelectorAll('.forl_modal');
+  //console.log(forl)
+  
+  stock_modal(order_qty_m,sqty_m,forl_m)
+  function stock_modal(order_qty_m,sqty_m,forl_m){
+    for (var key=0; key<order_qty_m.length; key++){
+      stock_qty_m = sqty_m[key].innerText;
+      o_qty_m = order_qty_m[key].innerText;
+      fr_m = forl_m[key].innerText;
+      console.log(stock_qty_m)
+      document.getElementById('set_modal'+ fr_m).innerHTML=`<h5 class="text-danger">${stock_qty_m - o_qty_m}</h5>`
+
+
+  
+  
+    }
+  
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+  {% endblock script %}
+{% endblock content %}

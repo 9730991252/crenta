@@ -95,10 +95,16 @@ def login (request):
         return redirect('store_dashboard')
     if request.session.has_key('admin_mobile'):
         return redirect('admin_dashboard')
+    if request.session.has_key('crenta_admin_mobile'):
+        return redirect('crenta_admin/crenta_admin_dashboard')
     else:
         if request.method == "POST":
             mb=request.POST ['mb']
             pin=request.POST ['pin']
+            crenta_admin={'mobile':'9697079777','pin':'7777'}
+            if crenta_admin["mobile"]==mb and crenta_admin["pin"]==pin:
+                request.session['crenta_admin_mobile'] = request.POST["mb"]
+                return redirect('crenta_admin/crenta_admin_dashboard')
             a= Admin.objects.filter(admin_mobile=mb,pin=pin,status=1)
             if a:
                 request.session['admin_mobile'] = request.POST["mb"]
@@ -900,6 +906,7 @@ def production_status(request):
                 for n in n:
                     pid=n.id
                     k=Order_detail.objects.filter(product_id=pid,stock_status=0).order_by('-id').first()
+                    #k=Order_detail.objects.filter(product_id=pid,stock_status=0).distinct()
                     if k:
                         p.append(k)
         context={

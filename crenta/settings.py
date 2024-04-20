@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'office',
-    'order'
+    'order',
+    'crenta_admin'
 ]
 
 MIDDLEWARE = [
