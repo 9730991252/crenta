@@ -101,7 +101,7 @@ def login (request):
         if request.method == "POST":
             mb=request.POST ['mb']
             pin=request.POST ['pin']
-            crenta_admin={'mobile':'9697079777','pin':'7777'}
+            crenta_admin={'mobile':'9697079777','pin':'1252'}
             if crenta_admin["mobile"]==mb and crenta_admin["pin"]==pin:
                 request.session['crenta_admin_mobile'] = request.POST["mb"]
                 return redirect('crenta_admin/crenta_admin_dashboard')
