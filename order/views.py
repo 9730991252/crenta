@@ -245,6 +245,25 @@ def accepted_order(request):
     
 
 
+def cancel_order(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        context={}
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            cancel=OrderMaster.objects.filter(status='Cancel').order_by('-id')
+
+        context={
+            'e':e,
+            'cancel':cancel
+        }
+        return render(request,'office/cancel_order.html',context=context)
+    else:
+        return redirect('login')
+    
+
+
 
 
 
@@ -381,6 +400,58 @@ def accepted_view_order(request,id):
             'oms':oms
         }
         return render(request,'office/accepted_view_order.html',context=context)        
+    else:
+        return redirect('login')
+    
+
+
+def cancel_view_order(request,id):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        context={}
+        stock=[]
+        d={}
+        order_filter=id
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            oms=OrderMaster.objects.get(order_filter=id)
+            #print(oms)
+            total=0
+            am_order=Order_detail.objects.filter(order_filter=order_filter,stock_status=2)
+            if am_order:
+                for am in am_order:
+                    t=am.total_price
+                    total+=t
+            order=Order_detail.objects.filter(order_filter=order_filter,stock_status=2)
+            if order :
+                for p in order:
+                    d_id=p.dealer_id
+                    product_id=p.product_id
+                    s=Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
+                    if s:
+                        stock.append(s)
+                        #print(stock)                      
+                d=Dealer.objects.get(id=d_id)
+                if d:
+                    d=d
+
+        elif "Cancel_order" in request.POST:
+            order_master_id=request.POST.get('order_master_id')
+            r=OrderMaster.objects.get(id=order_master_id)
+            r.status='Cancel'
+            #r.save()
+            return redirect('/order/pending_order/')
+            
+        context={
+            'e':e,
+            'o':order,
+            'd':d,
+            'total':total,
+            'stock':stock,
+            'oms':oms
+        }
+        return render(request,'office/cancel_view_order.html',context=context)        
     else:
         return redirect('login')
     
