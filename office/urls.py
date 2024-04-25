@@ -23,6 +23,8 @@ urlpatterns = [
     path('dealers/', views.dealers,name='dealers'),
     path('admin_dealers', views.admin_dealers,name='admin_dealers'),
     path('production_status/', views.production_status,name='production_status'),
+    path('report/', views.report,name='report'),
+    path('sell_product_report/', views.sell_product_report,name='sell_product_report'),
     path('test',views.test,name='test'),
 
     

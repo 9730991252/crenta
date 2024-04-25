@@ -19,7 +19,7 @@ def order(request):
         context={
             'e':e
         }
-        return render(request,'office/order.html',context=context)
+        return render(request,'order/order.html',context=context)
     else:
         return redirect('login')
     
@@ -218,7 +218,7 @@ def pending_order(request):
             'e':e,
             'pending':pending
         }
-        return render(request,'office/pending_order.html',context=context)
+        return render(request,'order/pending_order.html',context=context)
     else:
         return redirect('login')
 
@@ -239,7 +239,7 @@ def accepted_order(request):
             'e':e,
             'accepted':accepted
         }
-        return render(request,'office/accepted_order.html',context=context)
+        return render(request,'order/accepted_order.html',context=context)
     else:
         return redirect('login')
     
@@ -345,7 +345,7 @@ def pending_view_order(request,id):
             'count_cancel':count_cancel,
             'acpt_order':acpt_order
         }
-        return render(request,'office/pending_view_order.html',context=context)        
+        return render(request,'order/pending_view_order.html',context=context)        
     else:
         return redirect('login')
     
@@ -399,7 +399,7 @@ def accepted_view_order(request,id):
             'stock':stock,
             'oms':oms
         }
-        return render(request,'office/accepted_view_order.html',context=context)        
+        return render(request,'order/accepted_view_order.html',context=context)        
     else:
         return redirect('login')
     
@@ -451,7 +451,7 @@ def cancel_view_order(request,id):
             'stock':stock,
             'oms':oms
         }
-        return render(request,'office/cancel_view_order.html',context=context)        
+        return render(request,'order/cancel_view_order.html',context=context)        
     else:
         return redirect('login')
     

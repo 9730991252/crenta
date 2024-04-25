@@ -307,7 +307,7 @@ def office_dashboard(request):
             'On_The_Way':On_The_Way,
             'Cancel':Cancel
         }
-        return render(request,'office/office/office_dashboard.html',context)
+        return render(request,'office/office_dashboard.html',context)
     else:
         return render(request,'login.html')
     
@@ -366,7 +366,7 @@ def product(request):
             ac=Product.objects.get(id=id)
             ac.status='1'
             ac.save()            
-        return render(request,'office/office/product.html',context=context)
+        return render(request,'office/product.html',context=context)
     else:
         return redirect('login')
     
@@ -405,7 +405,7 @@ def add_product(request):
             ).save()
             messages.success(request,"Product Added Succesfully")
             return redirect('add_product')
-        return render(request,'office/office/add_product.html',context=context)
+        return render(request,'office/add_product.html',context=context)
     else:
         return redirect('login')
     
@@ -453,7 +453,7 @@ def sell_product(request):
                     messages.success(request," X X X X Production Add First")   
             else:
                 messages.success(request," X X X X Production Add First") 
-        return render(request,'office/office/sell_product.html',context=context)
+        return render(request,'office/sell_product.html',context=context)
     else:
         return redirect('login')
     
@@ -502,7 +502,7 @@ def stock_product(request):
                 'product':product
                 }
                 
-        return render(request,'office/office/stock_product.html',context=context)
+        return render(request,'office/stock_product.html',context=context)
     else:
         return redirect('login')
     
@@ -716,7 +716,7 @@ def dealers(request):
                     ).save()
                 messages.success(request,"Dealer Added Succesfully")         
                 return redirect('dealers')
-            return render(request,'office/office/dealers.html',context=context)
+            return render(request,'office/dealers.html',context=context)
         else:
             return redirect('login')
         
@@ -914,7 +914,77 @@ def production_status(request):
             'p':p
 
         }
-        return render(request,'office/office/production_status.html',context=context)        
+        return render(request,'office/production_status.html',context=context)        
+    else:
+        return redirect('login')
+
+
+def report(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        context={}
+        p=[]
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+        context={
+            'e':e,
+          
+
+        }
+        return render(request,'office/report.html',context=context)        
+    else:
+        return redirect('login')
+
+
+
+def sell_product_report(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        qty=0
+        amount=0
+        name=''
+        fromdate=''
+        todate=''
+        context={}
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+
+        if 'Search'in request.POST:
+            p_id=request.POST.get('product_id')
+            #print(p_id)
+            fromdate=request.POST.get('fromdate')
+            todate=request.POST.get('todate')
+            p_id=int(p_id)
+            if 0 == p_id:
+                p=Order_detail.objects.filter(stock_status=1,date__gte=fromdate,date__lte=todate)
+                if p:
+                    for p in p:
+                        q=p.qty
+                        name='all'
+                        qty+=q
+                        a=p.total_price
+                        amount+=a                    
+            else :
+                p=Order_detail.objects.filter(product_id=p_id,stock_status=1,date__gte=fromdate,date__lte=todate)
+                if p:
+                    for p in p:
+                        q=p.qty
+                        name=p.product_name
+                        qty+=q
+                        a=p.total_price
+                        amount+=a
+            context={
+            'e':e,
+            'qty':qty,
+            'name':name,
+            'fromdate':fromdate,
+            'todate':todate,
+            'amount':amount
+
+        }
+        return render(request,'office/sell_product_report.html',context=context)        
     else:
         return redirect('login')
     
