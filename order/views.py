@@ -258,7 +258,7 @@ def cancel_order(request):
             'e':e,
             'cancel':cancel
         }
-        return render(request,'office/cancel_order.html',context=context)
+        return render(request,'order/cancel_order.html',context=context)
     else:
         return redirect('login')
     
