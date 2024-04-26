@@ -53,7 +53,7 @@
             </div>
             {% for p in accepted %}
             <div class="p_list">
-                <div>{{forloop.counter}}</div>
+                <div>Order {{p.order_filter}}</div>
                 <div>{{p.dealer.dealer_shope_name}}</div>
                 <div>{{p.marketing_employee_name}}</div>
                 <div>{{p.total_price}}</div>
@@ -63,6 +63,37 @@
                 
             </div>
             {% endfor %}
+
+
+                        <!-- Pagination -->
+ 
+  <div class="container mt-2">
+    <div class="mx-5">
+    <nav aria-label="...">
+      <ul class="pagination">
+        {% if accepted.has_previous %}
+        <li class="page-item ">
+          <a class="page-link" href="/order/accepted_order/?page={{accepted.previous_page_number}}">Previous</a>
+        </li>
+        <li class="page-item ">
+       <a class="page-link" href="/order/accepted_order/?page=1" >First</a>
+      </li>
+        {% endif %}
+  
+        <li class="page-item " aria-current="page">
+          <a class="page-link" href="/order/accepted_order/?page=2">2</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="/order/accepted_order/?page=3">3</a></li>
+        {% if accepted.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="/order/accepted_order/?page={{accepted.next_page_number}}">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+  </div>
+  <!-- Pagination -->
       </div>
 </div>
 

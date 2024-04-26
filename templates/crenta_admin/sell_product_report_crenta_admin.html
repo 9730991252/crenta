@@ -1,0 +1,151 @@
+{% extends 'office/base.html' %}
+{% block title %} Report{% endblock title %}
+{% block content %}
+{% load stock_tag %}
+<style>
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  height: 100%;
+  width: 100%;
+}
+.product_box{
+margin-top: 1rem;
+
+    padding: 5px;
+    width: 80%;
+    border: solid 1px black;
+}
+
+
+.product_title{
+        font-size: 1rem;
+        text-align: center;
+        font-weight: 700;
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+}
+
+
+.product_content{
+    display: grid;
+    grid-template-columns: auto auto;
+    text-align: center;
+   
+}
+.search_btn{
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    text-align: center; 
+}
+@media only screen and (max-width: 600px) {
+    .search_btn{
+    margin: 50px;
+   display: inline;
+  
+    
+}
+.to_date_btn{
+    margin: 20px;
+}
+}
+</style>
+<div class="container">
+    <a href="/crenta_admin/crenta_admin_dashboard" class="btn btn-info my-1">Back</a>
+</div>
+
+    
+            <div id="search">
+              <div class="se-box" >
+                <label>Search sell Product</label>
+                <br>
+                <input type="text" placeholder="Search Product" class="form-control" id="product_words" oninput="search_product()">
+                <div id="product_result"></div>
+          </div>
+          <div> <a   id="check_box" onclick="all_btn()">All </a></div>
+<div id="date_box" style="display: none;">    
+    <form method="POST" action="" >{% csrf_token %}
+    <div class="search_btn">
+        <input  type="hidden" name="product_id" value="0"></input>
+        <div>From : <input type="date" name="fromdate" required/></div>
+        <div class="m-3">To : <input type="date" name="todate"required/></div>
+        <div><button type="submit" class="btn btn-primary" name="Search">Search</button></div>
+        </div>
+        </form>
+    </div>
+
+          <div>{% if qty != 0 %}
+               <div>Form Date {{fromdate}}</div> 
+               <div>To Date {{todate}}</div> 
+               <div>Name {{name}}</div> 
+               <div>Qty {{qty}}</div> 
+               <div>Amount {{amount}}</div> 
+               {% endif %}
+               
+          </div>
+
+      </div>
+
+  
+
+
+{% endblock content %}
+
+{% block script %}
+<script>
+ function search_product(){
+    var words = document.getElementById('product_words').value
+    //console.log(words)
+    $.ajax({
+    url: "{% url 'product_filter' %}",
+    method: "GET",
+    data:{
+        words:words,
+      
+    },
+    success: function(data){
+        $("#product_result").empty()
+        for (var key=0; key<1000; key++){
+            //${data.product[key].id}
+
+            temp=`<div class="product_box border m-5 p-3" >
+    <div class="product_title" >${data.product[key].product_name}</div>
+    <div class="product_content">
+        <div class="category">${data.product[key].category}</div>
+        <div class="category">${data.product[key].type}</div>
+    </div>
+    <form method="POST" action="">{% csrf_token %}
+    <div class="search_btn">
+        <input  type="hidden" name="product_id" value="${data.product[key].id}"></input>
+        <div>From : <input type="date" name="fromdate" required/></div>
+        <div class="to_date_btn">To : <input type="date" name="todate"required/></div>
+        <div><button type="submit" class="btn btn-primary" name="Search">Search</button></div>
+        </div>
+        </form>
+
+
+
+</div>`
+        $("#product_result").append(temp);
+        }
+        
+    }
+    })
+ }
+
+
+
+function all_btn(){
+    
+    document.getElementById('date_box').style.display=''
+}
+  
+  </script>
+{% endblock script %}

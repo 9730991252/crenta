@@ -234,10 +234,12 @@ def accepted_order(request):
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
             accepted=OrderMaster.objects.filter(status='Accepted').order_by('-id')
-
+            page_number=request.GET.get('page')
+            accepted=Paginator(accepted,25)
+            accepted_new=accepted.get_page(page_number)
         context={
             'e':e,
-            'accepted':accepted
+            'accepted':accepted_new
         }
         return render(request,'order/accepted_order.html',context=context)
     else:

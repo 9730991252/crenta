@@ -1,6 +1,7 @@
 {% extends 'office/base.html' %}
 {% block title %} Office Dashboard{% endblock title %}
 {% block content %}
+{% load stock_tag %}
 <div class="container">
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
 </div>
@@ -30,6 +31,7 @@
                               <th scope="col">Type</th>
                               <th scope="col">Type</th>
                               <th scope="col">Add Qty</th>
+                              <th scope="col">Stock Qty</th>
                               <th scope="col">Added By</th>
                               <th scope="col">Date</th>
                             </tr>
@@ -41,7 +43,8 @@
                             <td>{{p.product.category}}</td>
                             <td>{{p.product.type}}</td>
                             <td>{{p.type}}</td>
-                            <td>{{p.qty}}</td>
+                            <td>add {{p.qty}}</td>
+                            <td>stock <strong class="text-success">{% call_stock p.product_id %}</strong></td>
                             <td>{{p.employee.employee_name}}</td>
                             <td>{{p.ordered_date}}</td>
                             </tr>

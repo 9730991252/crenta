@@ -42,10 +42,59 @@ def crenta_admin_dashboard(request):
             'pe':pe  ,
             'product':product
         }
-        return render(request,'crenta_admin_dashboard.html',context)
+        return render(request,'crenta_admin/crenta_admin_dashboard.html',context)
     else:
         return render(request,'login.html')
+
+
+
+
+def sell_product_report_crenta_admin(request):
+    if request.session.has_key('crenta_admin_mobile'):      
+        qty=0
+        amount=0
+        name=''
+        fromdate=''
+        todate=''
+        context={}
+        if 'Search'in request.POST:
+            p_id=request.POST.get('product_id')
+            #print(p_id)
+            fromdate=request.POST.get('fromdate')
+            todate=request.POST.get('todate')
+            p_id=int(p_id)
+            if 0 == p_id:
+                p=Order_detail.objects.filter(stock_status=1,date__gte=fromdate,date__lte=todate)
+                if p:
+                    for p in p:
+                        q=p.qty
+                        name='all'
+                        qty+=q
+                        a=p.total_price
+                        amount+=a                    
+            else :
+                p=Order_detail.objects.filter(product_id=p_id,stock_status=1,date__gte=fromdate,date__lte=todate)
+                if p:
+                    for p in p:
+                        q=p.qty
+                        name=p.product_name
+                        qty+=q
+                        a=p.total_price
+                        amount+=a
+            context={
+           
+            'qty':qty,
+            'name':name,
+            'fromdate':fromdate,
+            'todate':todate,
+            'amount':amount
+
+        }
+        return render(request,'crenta_admin/sell_product_report_crenta_admin.html',context=context)        
+    else:
+        return redirect('login')
     
+   
 
 def crenta_admin_logout (request):
     del request.session['crenta_admin_mobile']

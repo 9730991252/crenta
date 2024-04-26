@@ -58,9 +58,8 @@ body{
             <div class="row">
             <div class="col-2"><th>Name</th></div>
             <div class="col-2"><th>type</th></div>
-            <div class="col-2"><th>type</th></div>
-            <div class="col-2"><th>type</th></div>
-            <div class="col-2"><th>qty</th></div>
+            <div class="col-2"><th>Add qty</th></div>
+            <div class="col-2"><th>Stock </th></div>
             </div>
         </tr>
         </thead>
@@ -68,10 +67,9 @@ body{
           <tr>
             <div class="row">
             <div class="col-2"> <td>{{p.product.product_name}}</td></div>
-            <div class="col-2"><td>{{p.product.type}}</td></div>
-            <div class="col-2"><td>{{p.product.category}}</td></div>
             <div class="col-2"><td>{{p.type}}</td></div>
-            <div class="col-2"><td>{{p.qty}}</td></div>
+            <div class="col-2"><td>add {{p.qty}}</td></div>
+            <div class="col-2"><td>stock <strong class="text-success">{% call_stock p.product_id %}</strong></td></div>
             </div>
           </tr>
      

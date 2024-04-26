@@ -609,7 +609,7 @@ def store_dashboard(request):
                 type=type
             ).save()
             messages.success(request,"Product Added Succesfully")
-        return render(request,'office/store/store_dashboard.html',context=context)
+        return render(request,'store/store_dashboard.html',context=context)
     else:
         return redirect('login')
     

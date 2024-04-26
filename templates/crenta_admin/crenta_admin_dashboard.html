@@ -62,7 +62,11 @@ text-align: center;
 
 
 
-
+.menu_btn{
+  display: flex;
+  margin-top: 50px;
+  justify-content: space-evenly;
+}
 
 </style>
 
@@ -72,11 +76,12 @@ text-align: center;
 <a href="/crenta_admin/crenta_admin_dashboard" class="btn btn-info my-1">Refresh</a>
 </div>
 <br>
-<div>
-    <!-- Button trigger modal -->
-  <a class="btn btn-primary mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
-   Production Status
-  </a>
+<div class="menu_btn">
+   
+  <div><a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Production Status </a></div>
+  <div><a href="/crenta_admin/sell_product_report_crenta_admin/"   class="btn btn-success " >Search Sell Product </a></div>
+
+  
   </div>
 
 
