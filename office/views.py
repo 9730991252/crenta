@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from datetime import date
 from django.core.paginator import Paginator
+from django.db.models import *
 
 # Create your views here.
 def index(request):
@@ -985,6 +986,42 @@ def sell_product_report(request):
 
         }
         return render(request,'office/sell_product_report.html',context=context)        
+    else:
+        return redirect('login')
+    
+
+
+def sell_product_list(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        stock=[]
+        context={}
+        fromdate=''
+        todate=''
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if 'Search'in request.POST:
+            fromdate=request.POST.get('fromdate')
+            todate=request.POST.get('todate')
+            pr=Product.objects.all()
+            if pr:
+                for pr in pr:
+                    pid=pr.id                    
+                    s=Order_detail.objects.filter(product_id=pid,stock_status=1,date__gte=fromdate,date__lte=todate).order_by('-id').first()
+                    if s:
+                        stock.append(s)
+
+
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+
+        context={
+            'e':e,
+            'p':stock,
+            'fromdate':fromdate,
+            'todate':todate
+
+                }
+        return render(request,'office/sell_product_list.html',context=context)        
     else:
         return redirect('login')
     

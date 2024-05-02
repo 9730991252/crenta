@@ -1,0 +1,88 @@
+{% extends 'office/base.html' %}
+{% block title %} Report{% endblock title %}
+{% block content %}
+{% load stock_tag %}
+<style>
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  height: 100%;
+  width: 100%;
+}
+
+.search_btn{
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    text-align: center; 
+}
+</style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+</div>
+<div class="container my-3">
+    <div class="row" >
+        <div class="col-2 ">
+            {% include 'include/office_menu.html' %}  
+           </div>
+
+        
+            <div id="search" class="col-10">
+                <div>
+                    <form method="POST" action="">{% csrf_token %}
+                        <div class="search_btn">
+                            <div>From : <input type="date" name="fromdate" required/>{{fromdate}}</div>
+                            <div>To : <input type="date" name="todate"required/>{{todate}}</div>
+                            <div><button type="submit" class="btn btn-primary" name="Search">Search</button></div>
+                            </div>
+                            </form>
+                </div>
+
+                <div>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">from</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Total Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            {% for p in p %}
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{p.product_name}}</td>
+                            <td>{{fromdate}}</td>
+                            <td>{{todate}}</td>
+                            <td>Sell Qty <strong class="bg-danger p-2">{% sell_qty p.product_id fromdate  todate %}</strong></td>
+                            <td>Total Amount <strong class="bg-success p-2">{% sell_total p.product_id fromdate  todate %}</strong></td>
+                          
+                          </tr>
+                            {% endfor %}
+                 
+                        </tbody>
+                      </table>
+                </div>
+
+            </div>
+
+
+
+  
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+
+</script>
+{% endblock script %}

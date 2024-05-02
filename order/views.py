@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from datetime import date
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 # Create your views here.
 def order(request):
@@ -36,12 +37,9 @@ def marketing_dashboard(request):
             e=Employee.objects.get(employee_mobile=marketing_mobile)
         if "Search" in request.GET:
             search_dealer = request.GET.get('search_dealer')
-            dl=len(search_dealer)
-            print(search_dealer)
-            if 2<dl:
-                d=Dealer.objects.filter(dealer_shope_name__icontains=search_dealer)
-                d=d
-                print(d)
+            if 3< len(search_dealer):
+                d=Dealer.objects.filter(Q(dealer_shope_name__icontains=search_dealer) | Q(dealer_name__icontains=search_dealer) | Q(dealer_address__icontains=search_dealer) | Q(dealer_mobile__icontains=search_dealer))
+
         context={
             'e':e,
             'd':d

@@ -66,3 +66,27 @@ def qty_status(id):
     
 
   
+  
+@register.simple_tag
+def sell_qty(id,fromdate,todate):
+    p=Order_detail.objects.filter(product_id=id,stock_status=1,date__gte=fromdate,date__lte=todate)
+    n=0
+    if p:
+        for p in p:
+            qty=p.qty
+            n += qty
+        return n
+
+  
+  
+@register.simple_tag
+def sell_total(id,fromdate,todate):
+    p=Order_detail.objects.filter(product_id=id,stock_status=1,date__gte=fromdate,date__lte=todate)
+    n=0
+    if p:
+        for p in p:
+            a=p.total_price
+            n += a
+        return n
+
+  
