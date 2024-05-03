@@ -61,6 +61,29 @@ body{
 </div>
 
 
+<div class="row">
+
+<div class="border text-center mt-3 col-6">
+    <h6>Date</h6> 
+    <h6>{{date.date}}</h6>
+    <form method="POST" action="">{% csrf_token %}
+    <div>Set Date <input type="date" name="set_date" required/>{{fromdate}}</div>
+    <div><button type="submit" class="btn btn-primary m-3" name="Set_date">Set Date</button></div>
+    </form>
+    </div>
+
+    <div class="border text-center mt-3 col-6">
+        <h6>Tally Invoice Number </h6>
+        <h6>{{oms.tally_invoice_number}}</h6>
+        <form method="POST" action="">{% csrf_token %}
+        <input type="text" name="tally_invoice_number" placeholder="Enter Tally Invoice Number"/>
+        <div><button type="submit" class="btn btn-primary m-3" name="Set_tally_invoice_number">Submit</button></div>
+    </form>
+    </div>
+    
+</div>
+
+
 <div class="dealer_box">
     <div class="titale"><h5>{{d.dealer_shope_name}}</h5></div>
     <div class="address"><h6>{{d.dealer_address}}</h6></div>
@@ -136,6 +159,8 @@ Total Amount Rs.<input type="readonly" id="total_amount" value="{{total}}" size=
     {% endfor %}
     </div>     
     
+
+
 {% block script %}
 <script>
 

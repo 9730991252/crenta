@@ -43,9 +43,9 @@
             </div>
             <h4 class="text-center pt-3">Pending Order List</h4>
             <div class="header_iteam">
-                <div>#</div>
+                <div>Order Number</div>
+                <div>Tally Invoice Number</div>
                 <div>Dealer Name</div>
-                <div>Marketing Employee</div>
                 <div>Total Amount</div>
                 <div>Date</div>
                 <div>Status</div>
@@ -54,8 +54,8 @@
             {% for p in pending %}
             <div class="p_list">
                 <div>Order {{p.order_filter}}</div>
+                <div>{{p.tally_invoice_number}}</div>
                 <div>{{p.dealer.dealer_shope_name}}</div>
-                <div>{{p.marketing_employee_name}}</div>
                 <div>{{p.total_price}}</div>
                 <div>{{p.ordered_date}}</div>
                 <div class="text-danger">{{p.status}}</div>

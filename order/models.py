@@ -31,8 +31,9 @@ class Cart(models.Model):
     price=models.FloatField(default=0,null=True)
     total_price=models.FloatField(default=0,null=True)
     def save(self,*args,**kwargs):
-        price=int(self.price)
-        qty=int(self.qty)
+        price=eval(self.price)
+        qty=eval(self.qty)
+        #print(type(qty))
         self.total_price=price*qty
         super(Cart,self).save()
 
@@ -47,6 +48,7 @@ class OrderMaster(models.Model):
     status = models.CharField(choices=STATUS_CHOICES,default='Pending',max_length=50)
     total_price=models.FloatField(default=0,null=True)
     order_filter=models.IntegerField(default=True)
+    tally_invoice_number = models.CharField(max_length=100,null=True,blank=True)
     ordered_date = models.DateTimeField(auto_now_add=True,null=True)
     date=models.DateField(auto_now_add=True,null=True)
 

@@ -97,6 +97,8 @@ def marketing_add_order(request,id):
             Cart.objects.get(id=cart_id).delete()
             return redirect(f'/order/marketing_add_order/{id}') 
         elif "Place_order" in request.POST:
+            tally_invoice_number=request.POST.get('tally_invoice_number')
+            #print(tally_invoice_number)
             f=OrderMaster.objects.filter().count()
             f+=1
             OrderMaster(
@@ -104,7 +106,8 @@ def marketing_add_order(request,id):
                 marketing_employee_id=e.id,
                 status ='Pending',
                 total_price=total_amount,
-                order_filter=f
+                order_filter=f,
+                tally_invoice_number=tally_invoice_number
                 ).save()
             c=Cart.objects.filter(dealer_id=id)
             if c:
@@ -157,6 +160,7 @@ def add_to_cart(request):
         dealer_id = request.GET['dealer_id']
         product_id = request.GET['product_id']
         price = request.GET['price']
+        #price=int(price)
         #print('hi',type(price))
         p=Product.objects.get(id=product_id)
         qty = request.GET['qty']
@@ -289,6 +293,7 @@ def pending_view_order(request,id):
                     t=am.total_price
                     total+=t
             order=Order_detail.objects.filter(order_filter=order_filter)
+            date=Order_detail.objects.filter(order_filter=order_filter).first()
             if order :
                 for p in order:
                     d_id=p.dealer_id
@@ -335,6 +340,32 @@ def pending_view_order(request,id):
             r.status='Accepted'
             r.save()
             return redirect('/order/pending_order/')            
+        elif "Set_date" in request.POST:
+            set_date=request.POST.get('set_date')
+            od=Order_detail.objects.filter(order_filter=order_filter)
+            if od:
+                for d in od:     
+                    Order_detail(
+                        id=d.id,
+                        dealer_id=d.dealer_id,
+                        marketing_employee_id=d.marketing_employee_id,
+                        product_id=d.product_id,
+                        product_name=d.product_name,
+                        category=d.category,
+                        type=d.type,
+                        order_filter=d.order_filter,
+                        qty=d.qty,
+                        price=d.price,
+                        date=set_date,
+                        ordered_date=d.ordered_date,
+                            ).save()
+            return redirect(f'/order/pending_view_order/{id}')
+        elif "Set_tally_invoice_number" in request.POST:
+            tally_invoice_number=request.POST.get('tally_invoice_number')
+            taily=OrderMaster.objects.get(order_filter=id)
+            taily.tally_invoice_number=tally_invoice_number
+            taily.save()
+            return redirect(f'/order/pending_view_order/{id}')
         context={
             'e':e,
             'o':order,
@@ -343,7 +374,8 @@ def pending_view_order(request,id):
             'stock':stock,
             'oms':oms,
             'count_cancel':count_cancel,
-            'acpt_order':acpt_order
+            'acpt_order':acpt_order,
+            'date':date
         }
         return render(request,'order/pending_view_order.html',context=context)        
     else:
