@@ -1,4 +1,4 @@
-from django.shortcuts import render ,redirect
+from django.shortcuts import render ,redirect,HttpResponse
 from office.models import *
 from order.models import *
 from django.contrib import messages
@@ -642,41 +642,18 @@ def view_stock(request,id):
 
 
 def test(request):
-    if request.session.has_key('office_mobile'):
-        office_mobile = request.session['office_mobile']        
-        context={}
-        stock=[]
-        product=[]
-        e=Employee.objects.filter(employee_mobile=office_mobile).first()
-        if e:
-            e=Employee.objects.get(employee_mobile=office_mobile)
-            p=Product.objects.filter().all()
-            for p in p:
-                id=p.id
-                #print(id)
-                s=Stock_Product.objects.filter(product_id=id).order_by('-id').first()
-                if s:
-                    stock.append(s)
-        if "Search" in request.GET:
-            search_product = request.GET.get('search_product')
-            #print(search_product)
-            p=Product.objects.filter(product_name__icontains=search_product)
-            product=p
-        if "Select" in request.GET:
-            product_id = request.GET.get('product_id')
-            print(product_id)
-            s=Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
-            stock=[]
-            stock.append(s)
-        context={
-                'all_stock':stock,
-                'e':e,
-                'product':product
-                }
+    #m.status='Pending'
+    #m.save()
+    #o=Order_detail.objects.get(id=)
+    #o.stock_status =0
+    #o.save()
+    
+
+
+    return HttpResponse('hi')
                 
-        return render(request,'office/office/test.html',context)
-    else:
-        return redirect('login')
+
+
 
 
 # dealrs Code 

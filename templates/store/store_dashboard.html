@@ -50,7 +50,7 @@ body{
  Production Status
 </a>
 </div>
-<div class="container">
+<div class="container" style="display: none;">
     <h6 class="text-center"> Today Add Product </h6>
     <table class="table">
         <thead>
@@ -171,7 +171,7 @@ const order_qty=document.querySelectorAll('.order_qty');
       o_qty = order_qty[key].innerText;
       fr = forl[key].innerText;
       console.log(stock_qty)
-      document.getElementById('set'+ fr).innerHTML=`<h5 class="text-danger">${stock_qty - o_qty}</h5>`
+      document.getElementById('set'+ fr).innerHTML=`<h5 class="text-info">${stock_qty - o_qty}</h5>`
 
 
   

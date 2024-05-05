@@ -345,20 +345,8 @@ def pending_view_order(request,id):
             od=Order_detail.objects.filter(order_filter=order_filter)
             if od:
                 for d in od:     
-                    Order_detail(
-                        id=d.id,
-                        dealer_id=d.dealer_id,
-                        marketing_employee_id=d.marketing_employee_id,
-                        product_id=d.product_id,
-                        product_name=d.product_name,
-                        category=d.category,
-                        type=d.type,
-                        order_filter=d.order_filter,
-                        qty=d.qty,
-                        price=d.price,
-                        date=set_date,
-                        ordered_date=d.ordered_date,
-                            ).save()
+                    d.date=set_date
+                    d.save()
             return redirect(f'/order/pending_view_order/{id}')
         elif "Set_tally_invoice_number" in request.POST:
             tally_invoice_number=request.POST.get('tally_invoice_number')

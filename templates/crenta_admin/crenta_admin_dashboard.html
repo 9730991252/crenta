@@ -112,10 +112,18 @@ text-align: center;
 
       <div class="row">
       <div class="col-4 ">Stock<h6 class="text-success stock_qty"> {% call_stock p.id %}</h6></div>
-      <div class="col-4 ">Order<h6 class="text-danger order_qty"> {% order_qty p.id %}</h6></div>
-      
+      <div class="col-4 ">Run Order<h6 class="text-danger order_qty"> {% order_qty p.id %}</h6></div>
       <div class="col-4">status<h6 id="set{{forloop.counter}}"></h6></div> 
     </div>
+    <div style="display: flex; align-items: center; justify-content: center;" class="text-center " >
+    <div class="m-1 text-bg-success" style="width: 200px; display: flex; justify-content: center ; border-radius: 20px;">Total Sell Rs. <strong class="">{% sell_product_total p.id %}</strong></div>
+  </div>
+    <div class="row ">
+      <div class="col-4">Avrg Rate Rs.<strong >{% sell_product_average p.id %}</strong></div>
+      <div class="col-4 ">Max Rate Rs.<strong class="text-success ">{% sell_product_max p.id %}</strong></div>
+      <div class="col-4 ">Mini Rate Rs.<strong class="text-danger ">{% sell_product_min p.id %}</strong></div>
+    </div>
+
     <br>
 
 </div>
