@@ -9,6 +9,7 @@ def crenta_admin_dashboard(request):
     if request.session.has_key('crenta_admin_mobile'):
         pe=[]
         product=[]
+        search_product=''
         today_add_product=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
         today_sell_product=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
         Accepted=OrderMaster.objects.filter(status='Accepted').count()
