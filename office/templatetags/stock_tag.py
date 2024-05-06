@@ -1,6 +1,7 @@
 from django import template
 from order.models import *
 from django.db.models import Avg, Sum, Min, Max
+from math import *
 
 register = template.Library()
 
@@ -94,7 +95,14 @@ def sell_total(id,fromdate,todate):
 @register.simple_tag
 def sell_product_total(id):
     p=Order_detail.objects.filter(product_id=id,stock_status=1)
-    a=(p.aggregate(a=Sum('price')))
+    a=(p.aggregate(a=Sum('total_price')))
+    #print(a['a'])
+    return a['a']
+
+@register.simple_tag
+def sell_product_qty(id):
+    p=Order_detail.objects.filter(product_id=id,stock_status=1)
+    a=(p.aggregate(a=Sum('qty')))
     #print(a['a'])
     return a['a']
 
@@ -103,8 +111,11 @@ def sell_product_total(id):
 def sell_product_average(id):
     p=Order_detail.objects.filter(product_id=id,stock_status=1)
     a=(p.aggregate(a=Avg('price')))
-    #print(a['a'])
-    return a['a']
+    a=a['a']
+    if a is None:
+        a=0
+    a=(floor(a))
+    return a
 
 
 @register.simple_tag

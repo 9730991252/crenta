@@ -40,7 +40,8 @@ def crenta_admin_dashboard(request):
             'On_The_Way':On_The_Way,
             'Cancel':Cancel,
             'pe':pe  ,
-            'product':product
+            'product':product,
+            'search_product':search_product
         }
         return render(request,'crenta_admin/crenta_admin_dashboard.html',context)
     else:

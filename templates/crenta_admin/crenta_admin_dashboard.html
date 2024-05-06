@@ -94,7 +94,8 @@ text-align: center;
   <div class="container">
     <p class="mt-1"></p>
     <form method="GET" action="">
-    <input type="text" class="form-control" name="search_product"  placeholder="Search Stock Product">
+      <a></a>
+    <input type="text" class="form-control" name="search_product"  placeholder="Search Stock Product" value="{{search_product}}">
     <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
   </form>
   </div>
@@ -115,8 +116,13 @@ text-align: center;
       <div class="col-4 ">Run Order<h6 class="text-danger order_qty"> {% order_qty p.id %}</h6></div>
       <div class="col-4">status<h6 id="set{{forloop.counter}}"></h6></div> 
     </div>
+    <div style="display: flex; align-items: center; justify-content: center;" class="text-center ">
+      <div class="m-1 text-bg-secondary" style="width: 200px; display: flex; justify-content: center ; border-radius: 20px;">1 April To 30 April </div>
+    </div>
+
     <div style="display: flex; align-items: center; justify-content: center;" class="text-center " >
-    <div class="m-1 text-bg-success" style="width: 200px; display: flex; justify-content: center ; border-radius: 20px;">Total Sell Rs. <strong class="">{% sell_product_total p.id %}</strong></div>
+    <div class="m-1 text-bg-primary" style="  padding: 5px; width: auto; display: flex; justify-content: center ; border-radius: 10px; ">Total Sell Rs. <strong class="">&nbsp; {% sell_product_total p.id %}</strong></div>
+    <div class="m-1 text-bg-success" style=" padding: 5px; width: auto; display: flex; justify-content: center ; border-radius: 10px;"> Qty <strong class=""> &nbsp;{% sell_product_qty p.id %}</strong></div>
   </div>
     <div class="row ">
       <div class="col-4">Avrg Rate Rs.<strong >{% sell_product_average p.id %}</strong></div>
