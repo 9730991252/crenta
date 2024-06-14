@@ -319,7 +319,7 @@ def product(request):
         office_mobile = request.session['office_mobile']
         e=Employee.objects.get(employee_mobile=office_mobile)
         p=Product.objects.all().order_by('-category')
-        paginator=Paginator(p,20)
+        paginator=Paginator(p,100)
         page_number=request.GET.get('page')
         print(page_number)
         p=paginator.get_page(page_number)
@@ -422,7 +422,7 @@ def sell_product(request):
         sell_p=[]
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
-            sell_p=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today())
+            sell_p=Sell_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).order_by('-id')
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
             #print(search_product)
@@ -436,22 +436,24 @@ def sell_product(request):
         if "Sell" in request.POST:
             product_id = request.POST.get("product_id")
             qty = request.POST.get("qty")          
+            bach_number = request.POST.get("bach_number")          
             stock =Stock_Product.objects.filter(product_id=product_id).order_by('-id').first()
             #print(stock.stock_qty)
             qty=int(qty)
             #print(type(qty))
             if stock:
                 stock_qty=stock.stock_qty
-                if qty<stock_qty:     
+                if qty<=stock_qty:     
                     Sell_Product(
                             product_id=product_id,
                             qty=qty,
-                            employee_id=e.id
+                            employee_id=e.id,
+                            bach_number=bach_number,
                             ).save()
                     messages.success(request,"Product Sell Succesfully")
                     return redirect('sell_product')
                 else:
-                    messages.success(request," X X X X Production Add First")   
+                    messages.warning(request," X X X X Production Add First")   
             else:
                 messages.success(request," X X X X Production Add First") 
         return render(request,'office/sell_product.html',context=context)

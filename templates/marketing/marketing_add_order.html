@@ -105,7 +105,11 @@ margin-top: 1rem;
 .product_price input{
     width: 80%;
 }
-
+.Total_Amount{
+    font-weight: 700;
+    color: black;
+    font-size: 20px;
+}
 </style>
 <div class="fixed-top text-end bg-white"   ><strong id="all_qty"  class="badge bg-danger">{{all_qty}}</strong> - एकुण नग </div>
 <input type="hidden" id="employee_id" value="{{e.id}}"></input>
@@ -133,8 +137,8 @@ margin-top: 1rem;
  <div class="list_box">
 <div class="list_title">
     <div>Product Name</div>
-    <div>Qty</div>
     <div>Price</div>
+    <div>Qty</div>
     <div>Total Price</div>
     <div>Remove</div>
 </div>
@@ -142,15 +146,15 @@ margin-top: 1rem;
 {% for c in product%}
 <div  class="cart_list">
     <div>{{c.product_name}}</div>  
-    <div>{{c.qty}}</div>
     <div>{{c.price}}</div>
+    <div>{{c.qty}}</div>
     <div>{{c.total_price}}</div> 
     <div><form action="" method="POST">{% csrf_token %}<input type="hidden" name="cart_id" value="{{c.id}}"><button type="submit" class="btn btn-danger my-2" name="Delete">X</button></form></div> 
 </div>
 
 {% endfor %}
 </div>     
-Total Amount Rs.<input type="readonly" id="total_amount" value="{{total_amount}}" size=5 class="text-center" disabled></input>
+Total Amount Rs.<input type="readonly" id="total_amount" value="{{total_amount}}" size=5 class="text-center Total_Amount" disabled></input>
 <h5>Thank You Visit Again</h5>
 
 <div class="py-2 " id="place_btn" style="display: none;"><form action="" method="POST">{% csrf_token %}<h6>tally invoice number</h6><input type="" name="tally_invoice_number" placeholder="Enter tally invoice number"> <button type="submit" class="btn btn-danger" name="Place_order">Place Order</button></form></div>
@@ -188,7 +192,7 @@ function plus(id){
         }
 
 
-    if(qty < 1000){
+    if(qty < 10000){
       qty++;
     document.getElementById('qty'+id).value=qty;
 
@@ -196,6 +200,7 @@ function plus(id){
 
 
     p=qty*price
+    p = Math.ceil(p);
     document.getElementById('set_prc'+id).innerText=p;
       //speak code
       console.log(p)
@@ -224,6 +229,7 @@ function plus(id){
     qty--;
     document.getElementById('qty'+id).value=qty;
     p=qty*price
+    p = Math.ceil(p);
     document.getElementById('set_prc'+id).innerText=p;
 
           //speak code
@@ -336,8 +342,8 @@ document.getElementById('qty'+id).style.borderColor ='red';return false;
             temp=`<div class="cart_list">
     <div>${data.cart[key].product_name}</div>
     
-    <div>${data.cart[key].qty}</div>
     <div>${data.cart[key].price}</div>
+    <div>${data.cart[key].qty}</div>
     <div>${data.cart[key].total_price}</div>
    
     
@@ -384,6 +390,7 @@ function cl_cost(id){
     var qty = document.getElementById('qty'+id).value;
     var price = document.getElementById('prc'+id).value;
     p=qty*price
+    p = Math.ceil(p);
     document.getElementById('set_prc'+id).innerText=p;
 }
 

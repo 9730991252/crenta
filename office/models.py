@@ -76,6 +76,7 @@ class Add_Product(models.Model):
 
 class Sell_Product(models.Model):
     dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT,null=True,blank=True)
+    bach_number = models.CharField(max_length=100,null=True,default=1)
     product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
     employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
     qty = models.IntegerField(default=0)

@@ -312,7 +312,7 @@ def pending_view_order(request,id):
             if s is not None:
                 stock_qty=s.stock_qty
                 odqty=p.qty
-                if odqty<stock_qty:
+                if odqty<=stock_qty:
                     Sell_Product(
                         dealer_id=p.dealer_id,
                         product_id=p.product_id,

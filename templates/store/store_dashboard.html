@@ -87,7 +87,7 @@ body{
 
 <div class="container" >
     {% for p in product %}
-    <div style="display: none;"><strong class="forl">{{forloop.counter}}</strong></div>  
+    <div ><strong class="forl">{{forloop.counter}}</strong></div>  
     <form action="" method="POST">
         {% csrf_token %}
 <div class="border text-center my-5" >

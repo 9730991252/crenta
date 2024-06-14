@@ -1,4 +1,5 @@
 {% extends 'office/base.html' %}
+{% load stock_tag %}
 {% block title %} Office Dashboard{% endblock title %}
 {% block content %}
 <div class="container">
@@ -16,13 +17,9 @@
 
               <div>
                   <div class="container mt-1 p-1 border rounded">
-                      {% if messages %}
-                      
-                      {% for message in messages %}
-                      <div class="alert alert-success text-center mb-3">{{message}}</div>
-                      {% endfor %}
-                      {% endif %}
-       
+                    <div class="text-center">
+                    {% include 'include/alert.html' %} 
+                  </div>
 
                       <table class="table">
                         <h6 class="text-center"> Today Sell Product List </h6>
@@ -30,10 +27,11 @@
                             <tr>
                               <th scope="col">#</th>
                               <th scope="col">Name</th>
+                              <th scope="col">Bach</th>
                               <th scope="col">Category</th>
                               <th scope="col">Type</th>
                               <th scope="col">Sell Qty</th>
-                              <th scope="col">Added By</th>
+                              <th scope="col">Employee</th>
                               <th scope="col">Date</th>
                             </tr>
                           </thead>
@@ -41,6 +39,7 @@
                             <tr>
                             <th scope="row">{{forloop.counter}}</th>
                             <td>{{p.product.product_name}}</td>
+                            <td>{{p.bach_number}}</td>
                             <td>{{p.product.category}}</td>
                             <td>{{p.product.type}}</td>
                             <td>{{p.qty}}</td>
@@ -56,7 +55,7 @@
                           
 
 
-  <div class="container" style="display: none;">
+  <div class="container">
     <p>Search Product</p>
     <form method="GET" action="">
     <input type="text" class="form-control" name="search_product"  placeholder="Search Product">
@@ -72,12 +71,14 @@
     <input type="hidden" name="product_id" value="{{p.id}}">
     <div class="my-1"><h2 > {{p.product_name}} </h2></div>
     <div class="row">
-        <div class="col-6"><h6 > {{p.category}} </h6></div>
-        <div class="col-6"><h6 >{{p.type}} </h6></div>
+      <div class="col-4"><h6 >stock <strong class="text-danger">{% call_stock p.id %}</strong> </h6></div>
+        <div class="col-4"><h6 > {{p.category}} </h6></div>
+        <div class="col-4"><h6 >{{p.type}} </h6></div>
     </div>
     <br>
-    <div class="row mb-2 mx-1">
+    <div class="row mb-3 mx-1">
         <div class="col-4"><input type="number" class="form-control" id="qty" name="qty" placeholder="QTY" required> </div>
+        <div class="col-4"><input type="text" class="form-control" id="qty" name="bach_number" placeholder="Number"  required> </div>
         <div class="col-4"><button type="submit" class="btn btn-danger" name="Sell">Sell
 </div>
 </div>
