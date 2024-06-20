@@ -8,6 +8,7 @@ from datetime import date
 def crenta_admin_dashboard(request):
     if request.session.has_key('crenta_admin_mobile'):
         pe=[]
+        stock=[]
         product=[]
         search_product=''
         today_add_product=Add_Product.objects.filter(date__gte=date.today(),date__lte=date.today()).count()
@@ -24,6 +25,10 @@ def crenta_admin_dashboard(request):
                 k=Order_detail.objects.filter(product_id=pid,stock_status=0).order_by('-id').first()
                 if k:
                     pe.append(k)
+                    
+                s=Stock_Product.objects.filter(product_id=pid).order_by('-id').first()
+                if s:
+                    stock.append(s)
         if "Search" in request.GET:
             search_product = request.GET.get('search_product')
             l=len(search_product)
@@ -42,7 +47,8 @@ def crenta_admin_dashboard(request):
             'Cancel':Cancel,
             'pe':pe  ,
             'product':product,
-            'search_product':search_product
+            'search_product':search_product,
+            'stock':stock
         }
         return render(request,'crenta_admin/crenta_admin_dashboard.html',context)
     else:

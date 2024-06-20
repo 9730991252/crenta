@@ -78,6 +78,7 @@ text-align: center;
 <br>
 <div class="menu_btn">
    
+  <div><a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#StockModal">All Stock List </a></div>
   <div><a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Production Status </a></div>
   <div><a href="/crenta_admin/sell_product_report_crenta_admin/"   class="btn btn-success " >Search Sell Product </a></div>
 
@@ -219,6 +220,38 @@ text-align: center;
   </div>
 
 
+
+<!-- Modal All Stock List -->
+<div class="modal fade" id="StockModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">All Stock List</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+  <div class="pending_product_head">
+    <div>Name</div>
+    <div>Order</div>
+    <div>Stock</div>
+    <div>Status</div>
+  </div>
+  <div class="pending_product_list">
+    {% for p in stock %}
+    <strong class="forl_modal" style="display: none;">{{forloop.counter}}</strong>
+    <div>{{p.product.product_name}}</div>
+    
+    <div>Stock<div class="text-bg-success stock_qty_modal">{% call_stock p.product_id %}</div></div>
+    
+    {% endfor %}
+  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

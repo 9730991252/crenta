@@ -59,7 +59,7 @@ def order_master_marketing(request):
         e=Employee.objects.filter(employee_mobile=marketing_mobile).first()
         if e:
             e=Employee.objects.get(employee_mobile=marketing_mobile)
-            o=OrderMaster.objects.filter(marketing_employee_id=e.id)
+            o=OrderMaster.objects.filter().order_by('-id')[0:50]
 
         context={
             'e':e,

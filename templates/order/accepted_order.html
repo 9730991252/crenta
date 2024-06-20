@@ -12,7 +12,7 @@
 }
 .header_iteam{
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 1fr 2fr 1fr 1fr;
+    grid-template-columns:1fr 1fr 2fr 2fr 1fr 2fr 1fr 1fr;
     gap: 20px;
     border: solid 1px black;
     padding: 5px;
@@ -21,7 +21,7 @@
 }
 .p_list{
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr 1fr 2fr 1fr 1fr;
+    grid-template-columns:1fr 1fr 2fr 2fr 1fr 2fr 1fr 1fr;
     gap: 20px;
     border: solid 1px black;
     padding: 5px;
@@ -44,6 +44,7 @@
             <h4 class="text-center pt-3">Accepted Order List</h4>
             <div class="header_iteam">
                 <div>#</div>
+                <div>Tally Voucher Number</div>
                 <div>Dealer Name</div>
                 <div>Marketing Employee</div>
                 <div>Total Amount</div>
@@ -54,6 +55,7 @@
             {% for p in accepted %}
             <div class="p_list">
                 <div>Order {{p.order_filter}}</div>
+                <div>Order {{p.tally_invoice_number}}</div>
                 <div>{{p.dealer.dealer_shope_name}}</div>
                 <div>{{p.marketing_employee_name}}</div>
                 <div>{{p.total_price}}</div>

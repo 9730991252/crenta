@@ -16,7 +16,7 @@
 .head{
     border: solid 1px black;
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 5fr 1fr 1fr;
     padding: 5px;
     gap: 5px;
     
@@ -24,7 +24,7 @@
 .table_content{
    
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 5fr 1fr 1fr;
     padding: 5px; 
     gap: 5px; 
 }
@@ -42,7 +42,8 @@
 
     <div class="table">
         <div class="head">
-            <strong><div>Invoice Number</div></strong>
+            <strong><div>Tally Voucher</div></strong>
+            <strong><div>Date</div></strong>
             <strong><div>Dealer Name </div></strong>
             <strong><div>Amount</div></strong>
             <strong><div>Status</div></strong>
@@ -50,7 +51,8 @@
 {% for o in o %}
 
         <div class="table_content">
-            <div>{{o.order_filter}}</div>
+            <div>{{o.tally_invoice_number}}</div>
+            <div>{{o.date}}</div>
             <div>{{o.dealer.dealer_shope_name}} </div>
             <div>{{o.total_price}}</div>
             <div>{% if o.status == 'Pending' %} <h6 class="bg-danger">{{o.status}}</h6>{% elif o.status == 'Accepted' %}<h6 class="bg-success">{{o.status}}</h6>{% else %}{{o.status}} {% endif %} </div>
