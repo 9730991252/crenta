@@ -27,7 +27,17 @@ body{
   text-align: center;
 
 }
-
+.search_product{
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  position: fixed;
+  bottom: 0;
+  background-color: rgb(216, 255, 255);
+}
+.search_product_input{
+  width: 60%;
+}
 
 </style>
 
@@ -77,11 +87,10 @@ body{
         </tbody>
       </table>
 </div>
-<div class="container">
-  <p>Search Product</p>
-  <form method="GET" action="">
-  <input type="text" class="form-control" name="search_product"  placeholder="Search Product">
-  <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
+<div>
+  <form method="GET" action="" class="search_product">
+  <div class="search_product_input"><input type="text" class="form-control" name="search_product"  placeholder="Search Product"></div>
+  <div><button type="submit" class="btn btn-primary" name="Search">Search</button></div>
 </form>
 </div>
 

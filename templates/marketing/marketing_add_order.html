@@ -110,8 +110,21 @@ margin-top: 1rem;
     color: black;
     font-size: 20px;
 }
+.search_product{
+    background-color: rgb(212, 255, 255);
+    width: 100%;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    margin-left: 0;
+    gap: 20px;
+}
+.serarch_input{
+    width: 70%;
+
+}
 </style>
-<div class="fixed-top text-end bg-white"   ><strong id="all_qty"  class="badge bg-danger">{{all_qty}}</strong> - एकुण नग </div>
+
 <input type="hidden" id="employee_id" value="{{e.id}}"></input>
 <input type="hidden" id="dealer_id" value="{{d.id}}"></input>
 
@@ -148,13 +161,13 @@ margin-top: 1rem;
     <div>{{c.product_name}}</div>  
     <div>{{c.price}}</div>
     <div>{{c.qty}}</div>
-    <div>{{c.total_price}}</div> 
+    <div>{{c.total_price|floatformat:2}}</div> 
     <div><form action="" method="POST">{% csrf_token %}<input type="hidden" name="cart_id" value="{{c.id}}"><button type="submit" class="btn btn-danger my-2" name="Delete">X</button></form></div> 
 </div>
 
 {% endfor %}
 </div>     
-Total Amount Rs.<input type="readonly" id="total_amount" value="{{total_amount}}" size=5 class="text-center Total_Amount" disabled></input>
+Total Amount Rs.<input type="readonly" id="total_amount" value="{{total_amount|floatformat:2}}" size=5 class="text-center Total_Amount" disabled></input>
 <h5>Thank You Visit Again</h5>
 
 <div class="py-2 " id="place_btn" style="display: none;"><form action="" method="POST">{% csrf_token %}<h6>tally invoice number</h6><input type="" name="tally_invoice_number" placeholder="Enter tally voucher number"> <button type="submit" class="btn btn-danger" name="Place_order">Place Order</button></form></div>
@@ -162,11 +175,13 @@ Total Amount Rs.<input type="readonly" id="total_amount" value="{{total_amount}}
 
 
 
-<br>
- <div class="mb-3">
-        <input type="text" placeholder="Search And Add Product..." class="form-control" id="product_words" oninput="search_product()" required>
+
+<div id="product_result"></div>
+
+ <div class="mb-1 search_product" >
+        <div class="serarch_input"><input type="text" placeholder="Search And Add Product..." class="form-control" id="product_words" oninput="search_product()" required></div>
+        <div class="bg-white"   ><strong id="all_qty"  class="badge bg-danger">{{all_qty}}</strong> - एकुण नग </div>
   </div>
-  <div id="product_result"></div>
 
 
 
