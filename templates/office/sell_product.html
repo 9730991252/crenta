@@ -2,6 +2,25 @@
 {% load stock_tag %}
 {% block title %} Office Dashboard{% endblock title %}
 {% block content %}
+<style>
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.search_product{
+  display: flex;
+  background-color: rgb(223, 232, 255);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  .search_input{
+    width: 30%;
+  }
+}
+
+</style>
 <div class="container">
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
 </div>
@@ -36,7 +55,8 @@
                             </tr>
                           </thead>
                           <tbody>{% for p in sell_p %}
-                            <tr>
+                          {% if p.bach_number != '1' %}
+                          <tr>
                             <th scope="row">{{forloop.counter}}</th>
                             <td>{{p.product.product_name}}</td>
                             <td>{{p.bach_number}}</td>
@@ -46,6 +66,10 @@
                             <td>{{p.employee.employee_name}}</td>
                             <td>{{p.ordered_date}}</td>
                             </tr>
+                          {% else %}
+                         
+                          {% endif %}
+              
                           
                            
                             {% endfor %}
@@ -55,11 +79,11 @@
                           
 
 
-  <div class="container">
-    <p>Search Product</p>
-    <form method="GET" action="">
-    <input type="text" class="form-control" name="search_product"  placeholder="Search Product">
-    <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
+  <div >
+
+    <form method="GET" action="" class="search_product">
+    <div class="search_input"><input type="text" class="form-control" name="search_product"  placeholder="Search Product"></div>
+    <div><button type="submit" class="btn btn-primary" name="Search">Search</button></div>
   </form>
   </div>
 
