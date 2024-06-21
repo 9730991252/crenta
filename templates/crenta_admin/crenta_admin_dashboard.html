@@ -67,6 +67,14 @@ text-align: center;
   margin-top: 50px;
   justify-content: space-evenly;
 }
+.all_stock_list{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  margin-bottom: 10px;
+  background-color: rgb(249, 223, 255);
+  font-weight: 500;
+
+}
 
 </style>
 
@@ -230,21 +238,18 @@ text-align: center;
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-  <div class="pending_product_head">
-    <div>Name</div>
-    <div>Order</div>
-    <div>Stock</div>
-    <div>Status</div>
-  </div>
-  <div class="pending_product_list">
-    {% for p in stock %}
-    <strong class="forl_modal" style="display: none;">{{forloop.counter}}</strong>
-    <div>{{p.product.product_name}}</div>
+  <div class="row">
+    <div class="col">Name</div>
+    <div class="col">Stock</div>
+  </div >
+  {% for p in stock %}
+  <div class="all_stock_list">
+    <div >{{p.product.product_name}}</div>
+    <div class="text-bg-success stock_qty_modal">Stock &nbsp;&nbsp;{% call_stock p.product_id %}</div>
+  
     
-    <div>Stock<div class="text-bg-success stock_qty_modal">{% call_stock p.product_id %}</div></div>
-    
-    {% endfor %}
   </div>
+  {% endfor %}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
