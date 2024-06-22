@@ -245,7 +245,7 @@ text-align: center;
   {% for p in stock %}
   {% call_stock p.product_id as n %}
   
-  {% if n == 0 %}
+  {% if n < 2 %}
 
   {% else %}
 
