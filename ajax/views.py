@@ -90,3 +90,45 @@ def create_tage(request):
         }
         t = render_to_string('ajax/tag_list.html', context)
     return JsonResponse({'tag': tag,'status':status,'t':t}) 
+
+
+
+def in_stock(request):
+    if request.method == 'GET':
+        tp_product=[]
+        status = ''
+        tag_num = request.GET['tag_num']
+        em_id = request.GET['e_id']
+        qr_id = Qr_code.objects.filter(tag_number=tag_num).first()
+        p_name = qr_id.product.product_name
+
+        if qr_id:
+            qn = Qr_code.objects.get(id=qr_id.id)
+            in_sta = qn.in_status
+            if in_sta == 0:
+                In_stock(
+                    employee_id=em_id,
+                    qr_code_id=qn.id,
+                    product_id=qn.product_id,
+                    tag_number=qn.tag_number,
+                    status=1
+                    ).save()
+                qri = Qr_code.objects.get(id=qr_id.id)
+                qri.in_status=1
+                qri.save()
+            p=Product.objects.filter().all()
+            for p in p:
+                p_all_id=p.id
+                tp = In_stock.objects.filter(product_id=p_all_id).order_by('-id').first()
+                if tp:
+                    tp_product.append(tp)
+                status = 1
+            if in_sta == 1:
+                status = 2
+        else:
+            status = 0
+        context={
+            'p':tp_product
+                }
+        t = render_to_string('ajax/today_production.html', context)
+    return JsonResponse({'status': status,'t':t,'p_name':p_name})

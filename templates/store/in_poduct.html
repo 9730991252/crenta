@@ -1,0 +1,167 @@
+{% extends 'office/base.html' %}
+{% load static %}
+{% block title %} Store Dashboard{% endblock title %}
+{% load qr_tag %}
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js" ></script>
+{% endblock head %}
+{% block content %}
+
+<style>
+ .sticky_foot{
+    background-color: rgb(216, 216, 216);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    input{
+        width: 100%;
+    }
+    .sc_btn{
+        border-radius: 50%;
+    }
+ }
+ .todays_production_box{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+ }
+ .todays_production{
+    background-color: rgb(222, 255, 253);
+    width: fit-content;
+    padding: 5px;
+    border-radius: 10px;
+ }
+ .product_main_box{
+    margin-bottom: 50px;
+ }
+ .product_box{
+    background-color: rgb(242, 217, 255);
+    margin-bottom: 10px;
+    padding: 5px;
+ }
+</style>
+
+
+{% load stock_tag %}
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+    <input type="hidden" id="e_id" value="{{e.id}}">
+    {% if messages %}    
+    {% for message in messages %}
+    <div class="alert alert-success text-center mb-3">{{message}}</div>
+    {% endfor %}
+    {% endif %}
+</div>
+<div>
+  {% include 'include/store_menu.html' %}
+</div>
+
+
+<!--* content *-->
+
+
+<div class="video_scan">
+    <video id="preview" width="100%"></video>
+</div>
+
+<div id="last_ruselt" class="text-center"></div>
+
+<div>
+    <div class="todays_production_box">
+        <h6 class="todays_production">Todays Production </h6>
+    </div>
+    <div class="product_main_box" id="todays_production">
+        {% for p in p %}
+        <div class="product_box">
+            <div><strong>{{p.product.product_name}}</strong>&nbsp&nbsp&nbsp{% today_production p.product_id %}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<!--// end content //-->
+
+<div style="display: none;">
+    <audio id="audio" controls>
+		<source src="{% static 'audio/sucss.mp3' %}" type="audio/mp3">
+	</audio>
+</div>
+<div style="display: none;">
+    <audio id="fele_audio" controls>
+		<source src="{% static 'audio/error.mp3' %}" type="audio/mp3">
+	</audio>
+</div>
+
+<!--* sticky *-->
+<div class="sticky_foot" >
+    <form method="POST" style="display: flex;align-items: center;gap: 15px;">
+        <div><input placeholder="Enter Tag Number" type="text" name="tag_number" class="form-control"></div>
+        <div><button class="btn btn-primary btn-sm" name="">Search</button></div>
+    </form>
+    <div><button class="btn btn-transparent btn-sm sc_btn"><i class="fa fa-qrcode" style="font-size:20px"></i></button></div>
+</div>
+<!--// end sticky //-->
+
+
+<script>
+    let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+    Instascan.Camera.getCameras().then(function(cameras){
+        if(cameras.length > 0){
+            scanner.start(cameras[0]);
+        }else{
+            alert('No camera found');
+            
+        }
+    }).catch(function(e) {
+        console.error(e)
+    });
+
+    scanner.addListener('scan',function(c){
+        $.ajax({
+            url: "{% url 'in_stock' %}",
+            method: "GET",
+            data:{
+                tag_num:c,
+                e_id:document.getElementById('e_id').value,
+        },
+        success: function(res){
+            document.getElementById('last_ruselt').innerHTML=`${res.p_name}&nbsp&nbspTag&nbsp${c}`
+            //$("#last_ruselt").html(res.p_name),(c);
+            if(res.status == 1){
+                $("#todays_production").html(res.t);
+                success_audio()
+            }
+            else if (res.status == 0){
+                fele_audio()
+                alert('Rong Qr Code')
+            }
+            else if (res.status == 2){
+                fele_audio()
+                alert('Already Scaned')
+            }
+
+        }
+   })
+    })
+function success_audio(){
+    var audio = document.getElementById('audio');
+    audio.play();
+}
+function fele_audio(){
+    var audio = document.getElementById('fele_audio');
+    audio.play();
+}
+</script>
+
+
+{% endblock content %}

@@ -41,3 +41,27 @@ def qr_code(request):
         return render(request,'qr_code/qr_code.html',context=context)        
     else:
         return redirect('login')
+    
+
+
+
+def in_product(request):
+    if request.session.has_key('store_mobile'):
+        store_mobile = request.session['store_mobile']     
+        e=Employee.objects.filter(employee_mobile=store_mobile).first()
+        tp_product=[]
+        if e:
+            e=Employee.objects.get(employee_mobile=store_mobile)
+            p=Product.objects.filter().all()
+            for p in p:
+                p_all_id=p.id
+                tp = In_stock.objects.filter(product_id=p_all_id).order_by('-id').first()
+                if tp:
+                    tp_product.append(tp)
+        context={
+            'e':e,
+            'p':tp_product
+        }
+        return render(request,'store/in_poduct.html',context=context)        
+    else:
+        return redirect('login')

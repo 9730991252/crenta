@@ -19,6 +19,7 @@ def index(request):
     #Cart.objects.all().delete()
     #Batch.objects.all().delete()
     #Qr_code.objects.all().delete()
+    #In_stock.objects.all().delete()
     
     return render(request,'index.html')
 

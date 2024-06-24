@@ -1,0 +1,6 @@
+{% load qr_tag %}
+{% for p in p %}
+<div class="product_box">
+    <div><strong>{{p.product.product_name}}</strong>&nbsp&nbsp&nbsp{% today_production p.product_id %}</div>
+</div>
+{% endfor %}
