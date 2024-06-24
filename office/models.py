@@ -120,3 +120,11 @@ class Stock_Product(models.Model):
 
 
 
+
+
+class Batch(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
+    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
+    sr_num = models.IntegerField()
+    batch_name = models.CharField(max_length=200)
+    date = models.DateField(auto_now_add=True)

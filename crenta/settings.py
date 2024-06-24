@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'office',
     'order',
-    'crenta_admin'
+    'crenta_admin',
+    'qr_code'
 ]
 
 MIDDLEWARE = [

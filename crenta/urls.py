@@ -21,4 +21,6 @@ urlpatterns = [
     path('', include('office.urls')),
     path('order/', include('order.urls')),
     path('crenta_admin/', include('crenta_admin.urls')),
+    path('ajax/', include('ajax.urls')),
+    path('qr_code/', include('qr_code.urls')),
 ]

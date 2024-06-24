@@ -1,0 +1,20 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Sr Num</th>
+        <th scope="col">Tag Number</th>
+        <th scope="col">Generate Date</th>
+        <th scope="col">Generate By</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for qr in qr %}
+      <tr>
+        <td>{{qr.sr_num}}</td>
+        <td>{{qr.tag_number}}</td>
+        <td>{{qr.generate_date}}</td>
+        <td>{{qr.employee.employee_name}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>

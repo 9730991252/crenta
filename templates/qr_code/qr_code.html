@@ -1,0 +1,272 @@
+{% extends 'office/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+{% load stock_tag %}
+<style>
+*{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+  .search_product{
+  display: flex;
+  background-color: rgb(171, 194, 252);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  .search_input{
+    width: 50%;
+  }
+    }
+    .product{
+        border:1px solid rgba(0, 0, 0, 0.2);
+        margin-top: 10px;
+        font-weight: 600;
+        padding: 10px;
+        text-align: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        .product_foot{
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        h6{
+            font-size: 20px;
+            font-weight: 600;
+        }
+    }
+    .sel_pro{
+        h6{
+            font-weight: 700;
+            font-size: 18px;
+        }
+    }
+    .batch{
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+        border-radius: 10px;
+        width: 400px;
+        padding: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .tag_box{
+        text-align: center;
+        padding: 20px;
+        border: 2px solid black;
+        width: 6in;
+        height: 3in;
+        .product_name{
+            font-weight: 700;
+        }
+        .box_heade{
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+        }
+        .box_foot{
+            width: 100%;
+        }
+        .Qr_box{
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            height: fit-content;
+        }
+    }
+</style>
+<style media="print">
+  @page{
+  size: 4in 6in;
+  margin: 0in;
+  padding: 0in;
+}
+.office_menu,.employee_name,.search_product,.tb,.table{
+    display: none;
+}
+
+.tag_box{
+    transform: rotate(90deg);
+    margin-top: 1.5in;  
+}
+</style>
+<div class="container employee_name">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+    <input type="hidden" value="{{e.id}}" id="eid" class="form-control" required>
+</div>
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 office_menu">
+            {% include 'include/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            <!--* content -->
+        <div class="text-center">
+            {% if p %}
+            <div class="sel_pro">
+                <div><h6>{{p.product_name}}</h6></div>
+                <div style="display: flex;justify-content: center;gap: 10px;">
+                    <div>{{p.category}}</div>
+                    <div>{{p.type}}</div>
+                </div>
+            </div>
+            <hr>
+            {% for b in b %}
+            <div class="batch">
+                <div style="display: flex;justify-content: center;gap: 20px;">
+                    <div>{{b.sr_num}}</div>
+                    <div style="display: flex;justify-content: center;gap: 10px;"><p>Batch Name</p><strong>{{b.batch_name}}</strong></div>
+                    <div>{{b.date}}</div>
+                    <div>
+                        <form method="POST">
+                            <input type="hidden" value="{{b.id}}" name="bid" >
+                        <button class="btn btn-outline-success" name="Select_Batch" >select</button></div>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+
+            
+            {% else %}
+            <h6 class="sasb">Search and select batch</h6>
+            {% endif %}
+        </div>
+
+        {% if pr == '' %}{% else %}
+        <style>
+            .sasb{
+                display: none;
+            }
+        </style>
+        {% endif %}
+
+
+
+        {% if ba %}
+        <div class="tb_box">
+        <div class="tag_box">
+
+            <div class="box_heade">
+                <div>
+                    <div class="product_name mt-4 mb-2">{{pr.product_name}}</div>
+                    <div style="display: flex;justify-content: center;gap: 10px;">
+                        <div>{{pr.category}}</div>
+                        <div>{{ba.batch_name}}</div>
+                    </div>
+                    <input type="hidden" value="{{ba.id}}" id="batch_id">
+                    <div class="mt-4 mb-3"><strong>CRENTA CHEMICAL</strong></div>
+                    <div><p>Plot No. A-07/C-6/2f MIDC Tembhurni	
+                        Tal : Madha, Dist ; Solapur Mo.9637960777	
+                        </p></div>
+                </div>
+                <div class="Qr_box">
+                    <div><img id="img" src="" ></div>
+                    <div><h6 id="tag_nummber"></h6></div>
+                </div>
+            </div>
+            <div class="box_foot">
+                <p>UDYAM Reg No. : UDYAM-MH-32-0013027 (Small)	E-Mail : crenta7@gmail.com	GSTIN/UIN: 27AAOPY1370R1ZN	</p>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+        <div class="form-control my-3 text-center tb">
+            <a onclick="create_tage()" id="create_btn" class="btn btn-success" >Create Tage</a>
+            <button class="btn btn-primary" id="print_btn" onclick="window.print()" >Print</button>
+        </div>
+
+
+        <div class="container">
+            <div id="tag_list">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Sr Num</th>
+                    <th scope="col">Tag Number</th>
+                    <th scope="col">Generate Date</th>
+                    <th scope="col">Generate By</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for qr in qr %}
+                  <tr>
+                    <td>{{qr.sr_num}}</td>
+                    <td>{{qr.tag_number}}</td>
+                    <td>{{qr.generate_date}}</td>
+                    <td>{{qr.employee.employee_name}}</td>
+                    <td><a class="btn btn-info" onclick="re_print('{{qr.tag_number}}')">print</a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+
+
+        {% endif %}
+        
+
+                    <div id="product_result"></div>
+                    
+                    <div class="search_product">
+                        <div class="search_input"><input type="text" class="form-control" id="words" oninput="search_qr_product()"  placeholder="Search Product"></div>
+                      </div>
+                      <!--// end content -->
+    </div>
+    </div>
+</div>
+
+<script>
+    function search_qr_product(){
+   words = document.getElementById('words').value;
+   $.ajax({
+       url: "{% url 'search_qr_product' %}",
+       method: "GET",
+       data:{
+           words:words,
+         
+       },
+        success: function(res){
+           $("#product_result").html(res.data);
+        }
+   })
+    }
+    function create_tage(){
+        batch_id = document.getElementById('batch_id').value;
+        eid = document.getElementById('eid').value;
+        img = document.getElementById('img');
+        $.ajax({
+        url: "{% url 'create_tage' %}",
+        method: "GET",
+        data:{
+            batch_id:batch_id,
+            eid:eid,
+            
+        },
+            success: function(res){
+                img.src=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${res.tag}`
+                $("#tag_nummber").html(res.tag);
+                $("#tag_list").html(res.t);
+                if (res.status == 1){
+                    alert('This Batch Complite please create new batch ')
+                }
+            
+            }
+   })
+    }
+    
+
+function re_print(tag_number){
+    img = document.getElementById('img');
+    img.src=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${tag_number}`
+    $("#tag_nummber").html(tag_number);
+}
+
+
+</script>
+{% endblock content %}

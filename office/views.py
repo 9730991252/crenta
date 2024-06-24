@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from datetime import date
 from django.core.paginator import Paginator
 from django.db.models import *
+from django.views.decorators.csrf import csrf_exempt
+from qr_code.models import *
 
 # Create your views here.
 def index(request):
@@ -15,6 +17,8 @@ def index(request):
     #Order_detail.objects.all().delete()
     #OrderMaster.objects.all().delete()
     #Cart.objects.all().delete()
+    #Batch.objects.all().delete()
+    #Qr_code.objects.all().delete()
     
     return render(request,'index.html')
 
@@ -1003,4 +1007,29 @@ def sell_product_list(request):
         return render(request,'office/sell_product_list.html',context=context)        
     else:
         return redirect('login')
+
+@csrf_exempt
+def batch_number(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        p='' 
+        b='' 
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+        if 'Select_Product' in request.POST:
+            pid=request.POST.get('p_id')
+            p=Product.objects.get(id=pid)
+            b = Batch.objects.filter(product_id=pid)
+        context={
+            'e':e,
+            'p':p,
+            'b':b
+        }
+        return render(request,'office/batch_number.html',context=context)        
+    else:
+        return redirect('login')
     
+
+
+

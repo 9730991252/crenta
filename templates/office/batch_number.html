@@ -1,0 +1,190 @@
+{% extends 'office/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+{% load stock_tag %}
+<style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    .search_product{
+  display: flex;
+  background-color: rgb(171, 194, 252);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  .search_input{
+    width: 50%;
+  }
+}
+.filter_product{
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+    background-color: rgb(207, 220, 255);
+    margin-bottom: 10px;
+    font-weight: 500;
+    padding: 5px;
+}
+    
+    </style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+    <input type="hidden" value="{{e.id}}" id="eid" class="form-control" required>
+</div>
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 ">
+            {% include 'include/office_menu.html' %}  
+           </div>
+            <div class="col-10">
+              <div>
+                  <div class="container mt-1 p-1 ">
+                      {% if messages %}           
+                      {% for message in messages %}
+                      <div class="alert alert-success text-center mb-3">{{message}}</div>
+                      {% endfor %}
+                      {% endif %} 
+                      
+                      <div id="product_result">
+                      {% if p == '' %}
+                      <h6 class="text-center">Search And Select Product</h6>
+                      {% else %}
+                      <div class="text-center" style="background-color: rgba(255, 224, 186, 0.799);">
+                        <h5>{{p.product_name}}</h5>
+                        <div style="display: flex; gap: 20px; justify-content: center;">
+                          <h6>{{p.category}}</h6>
+                          <h6>{{p.type}}</h6>
+                        </div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                          Add New Batch
+                        </button>
+                      </div>
+                      {% endif %}
+                      
+                    </div>
+
+                    <div id="batch_hi">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Batch Name</th>
+                            <th scope="col">Employee</th>
+                            <th scope="col">Batch Start Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for b in b %}
+                          <tr>
+                            <td>{{b.id}}</td>
+                            <td>{{b.batch_name}}</td>
+                            <td>{{b.employee.employee_name}}</td>
+                            <td>{{b.date}}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+
+
+
+
+
+
+
+                    <!-- content -->
+                    
+                    
+                    <div class="search_product">
+                      <div class="search_input"><input type="text" class="form-control" id="words" oninput="search_batch_product()"  placeholder="Search Product"></div>
+                    </div>
+                    <!-- end content -->
+                  </div>
+                </div>
+              </div>  
+            </div>
+            
+
+          </div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel"> Add New Batch</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <input type="hidden" name="pid" value="{{p.id}}" id="pid" class="form-control" placeholder="Batch Name" required>
+
+          <div>
+            <label for="">Batch Name</label>
+            <input type="text" name="batch_name" id="batch_name" class="form-control batch_name" placeholder="Batch Name" required>
+          </div>
+          <button name="Add_New_Batch" class="btn btn-primary my-2" data-bs-dismiss="modal" onclick="add_new_batch('{{p.id}}')">Save</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+ function search_batch_product(){
+words = document.getElementById('words').value;
+$.ajax({
+    url: "{% url 'search_batch_product' %}",
+    method: "GET",
+    data:{
+        words:words,
+      
+    },
+     success: function(res){
+        $("#product_result").html(res.data);
+        $("#batch_hi").empty();
+     }
+})
+ }
+ function add_new_batch(id){
+   batch_name = document.getElementById('batch_name').value;
+   eid = document.getElementById('eid').value;
+   if (batch_name == ''){
+    alert("Batch name can't be blank")
+   }
+$.ajax({
+  url: "{% url 'add_new_batch' %}",
+    method: "GET",
+    data:{
+      batch_name:batch_name,
+      eid:eid,
+      pid:id,
+      
+    },
+     success: function(res){
+      $("#batch_hi").html(res.data);
+      document.getElementById('batch_name').value='';
+     }
+})
+ }
+</script>
+
+
+  
+
+
+{% endblock content %}

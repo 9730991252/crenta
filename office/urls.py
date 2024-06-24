@@ -7,6 +7,7 @@ urlpatterns = [
     path('add_admin', views.add_admin,name='add_admin'),
     path('login', views.login,name='login'),
     path('admin_dashboard', views.admin_dashboard,name='admin_dashboard'),
+    path('batch_number', views.batch_number,name='batch_number'),
     path('admin_employee', views.admin_employee,name='admin_employee'),
     path('employee', views.employee,name='employee'),
     path('stock_product_admin/', views.stock_product_admin,name='stock_product_admin'),
