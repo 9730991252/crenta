@@ -53,6 +53,8 @@
     transform: scaleX(-1);
     height: 200px;
     width: 200px;
+    margin-left: auto;
+    margin-right: auto;
  }
  #preview{
     width: 100%;
@@ -155,7 +157,7 @@
                 //speak code
          
                 const msg = new SpeechSynthesisUtterance;
-                msg.text=`mister ${e_name} ${res.p_name} Production Added Success`;
+                msg.text=`${res.p_name} Production Added Success mister ${e_name} `;
                 msg.voice=speechSynthesis.getVoices()[1];
                 speechSynthesis.speak(msg);
             }
