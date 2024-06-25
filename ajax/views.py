@@ -97,13 +97,13 @@ def in_stock(request):
     if request.method == 'GET':
         tp_product=[]
         status = ''
+        p_name = ''
         tag_num = request.GET['tag_num']
         em_id = request.GET['e_id']
         qr_id = Qr_code.objects.filter(tag_number=tag_num).first()
-        p_name = qr_id.product.product_name
-
         if qr_id:
             qn = Qr_code.objects.get(id=qr_id.id)
+            p_name = qn.product.product_name
             in_sta = qn.in_status
             if in_sta == 0:
                 In_stock(

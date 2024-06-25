@@ -11,6 +11,11 @@
 {% block content %}
 
 <style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
  .sticky_foot{
     background-color: rgb(216, 216, 216);
     position: fixed;
@@ -48,6 +53,12 @@
     margin-bottom: 10px;
     padding: 5px;
  }
+ .scaner_camera{
+    width: 300px;
+    height: 300px;
+    margin-top: -40px;
+    margin-bottom: -40px;
+ }
 </style>
 
 
@@ -55,6 +66,7 @@
 <div class="container">
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
     <input type="hidden" id="e_id" value="{{e.id}}">
+    <input type="hidden" id="e_name" value="{{e.employee_name}}">
     {% if messages %}    
     {% for message in messages %}
     <div class="alert alert-success text-center mb-3">{{message}}</div>
@@ -70,7 +82,7 @@
 
 
 <div class="video_scan">
-    <video id="preview" width="100%"></video>
+    <video id="preview" class="scaner_camera"></video>
 </div>
 
 <div id="last_ruselt" class="text-center"></div>
@@ -115,6 +127,7 @@
 
 <script>
     let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+    let e_name = document.getElementById('e_name').value;
     Instascan.Camera.getCameras().then(function(cameras){
         if(cameras.length > 0){
             scanner.start(cameras[1]);
@@ -139,14 +152,28 @@
             //$("#last_ruselt").html(res.p_name),(c);
             if(res.status == 1){
                 $("#todays_production").html(res.t);
-                success_audio()
+                //success_audio()
+                //speak code
+         
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=`mister ${e_name} ${res.p_name} Production Added Success`;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
             }
             else if (res.status == 0){
-                fele_audio()
+                //fele_audio()
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=`mister ${e_name} ${res.p_name} Rong Qr Code Plese Chack and try again`;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
                 alert('Rong Qr Code')
             }
             else if (res.status == 2){
-                fele_audio()
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=` Qr Code Already Scaned Plese Chack and try again ${res.p_name} mister ${e_name} `;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
+                //fele_audio()
                 alert('Already Scaned')
             }
 
