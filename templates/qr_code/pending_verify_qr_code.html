@@ -1,0 +1,53 @@
+{% extends 'office/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+{% load stock_tag %}
+<style>
+</style>
+</style>
+<div class="container employee_name">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+    <input type="hidden" value="{{e.id}}" id="eid" class="form-control" required>
+</div>
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 office_menu">
+            {% include 'include/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            {% include 'include/qr_menu.html' %}  
+            <!--* content -->
+
+            <div class="text-center">
+                <h6>Verify Voucher</h6>
+
+                <div>
+                    
+            
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Voucher Name</th>
+                            <th scope="col">Employee Name</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for v in v %}
+                          <tr>
+                            <td>{{v.name}}</td>
+                            <td>{{v.creted_by.employee_name}}</td>
+                            <td><a href="/qr_code/pending_view_voucher/{{v.id}}"  class="btn btn-success">View</a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+            <!--// end content //-->
+        </div>
+    </div>
+</div>
+<script>
+</script>
+{% endblock content %}

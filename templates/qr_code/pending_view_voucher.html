@@ -1,0 +1,65 @@
+{% extends 'office/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+{% load qr_tag %}
+
+<style>
+</style>
+</style>
+<div class="container employee_name">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+    <input type="hidden" value="{{e.id}}" id="eid" class="form-control" required>
+</div>
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 office_menu">
+            {% include 'include/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            {% include 'include/qr_menu.html' %}  
+            <!--* content -->
+            <div class="text-center">
+                <h6>Voucher Name {{v.name}}</h6>
+                <form method="POST">{% csrf_token %}
+                    <div style="display: flex; justify-content: center;gap: 20px;">
+                        <input type="text" placeholder="Voucher Name" name="new_name_v" required>
+                        <button class="btn btn-info" type="submit" name="Update_v">Update</button>
+                    </div>
+                </form>
+            </div>
+            <div class="container">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Product name</th>
+                    <th scope="col">Total Qty</th>
+                    <th scope="col">Verify By</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for q in q %}
+                  <tr>
+                    <td>{{q.product.product_name}}</td>
+                    <td>Total Qty {% out_voucher_qty q.product_id q.voucher_id %}</td>
+                    <td> {% if q.verify_by == None %} {% else %}{{q.verify_by}}{% endif %}</td>
+                    <td><form class="" method="POST">{% csrf_token %}{% if q.verify_status == 0 %}<input type="hidden" name="qid" value="{{q.id}}"><button class="btn btn-success btn-sm my-1" type="submit" name="Verify">Accepte</button>{% else %}Accepted{% endif %}</form></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <form class="" method="POST">{% csrf_token %}
+                {% if a == b %}
+                <button class="btn btn-success btn-sm my-1" type="submit" name="Voucher_Verify">Accepte</button>
+                {% else %}{% endif %}
+            </form>
+            </div>
+            <!--// end content //-->
+        </div>
+    </div>
+</div>
+<script>
+</script>
+{% endblock content %}

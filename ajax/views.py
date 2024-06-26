@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.http import *
+from datetime import date
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages 
 from django.db.models import Sum
@@ -119,7 +120,7 @@ def in_stock(request):
             p=Product.objects.filter().all()
             for p in p:
                 p_all_id=p.id
-                tp = In_stock.objects.filter(product_id=p_all_id).order_by('-id').first()
+                tp = In_stock.objects.filter(product_id=p_all_id,date__gte=date.today(),date__lte=date.today()).order_by('-id').first()
                 if tp:
                     tp_product.append(tp)
                 status = 1
@@ -132,3 +133,59 @@ def in_stock(request):
                 }
         t = render_to_string('ajax/today_production.html', context)
     return JsonResponse({'status': status,'t':t,'p_name':p_name})
+
+
+
+def out_stock(request):
+    if request.method == 'GET':
+        tp_product=[]
+        status = ''
+        p_name = ''
+        ps = ''
+        tag_num = request.GET['tag_num']
+        em_id = request.GET['e_id']
+        vid = request.GET['vid']
+        op_product=[]
+        qr_id = Qr_code.objects.filter(tag_number=tag_num).first()
+        if qr_id:
+            qn = Qr_code.objects.get(id=qr_id.id)
+            p_name = qn.product.product_name
+            out_sta = qn.out_status
+            in_sta = qn.in_status
+            if in_sta == 1 and out_sta == 0:
+                Out_stock(
+                    employee_id=em_id,
+                    qr_code_id=qn.id,
+                    product_id=qn.product_id,
+                    voucher_id=vid,
+                    tag_number=qn.tag_number,
+                    ).save()
+                qri = Qr_code.objects.get(id=qr_id.id)
+                qri.out_status=1
+                qri.save()
+                ins = In_stock.objects.get(qr_code_id = qr_id.id)
+                ins.status = 0
+                ins.save()
+                status = 1
+            if in_sta == 1 and out_sta == 1:
+                status = 2
+            if in_sta == 0 and out_sta == 0:
+                status = 3
+        else:
+            status = 0
+        p=Product.objects.filter().all()
+        for p in p:
+            p_all_id=p.id
+            tp = Out_stock.objects.filter(product_id=p_all_id,voucher_id=vid).order_by('-id').first()
+            if tp:
+                op_product.append(tp)
+        context={
+            'p':tp_product,
+            'op':op_product,
+                }
+        context2={
+            'ps':Out_stock.objects.filter(voucher_id=vid).order_by('product_id')
+                }
+        t = render_to_string('ajax/voucher_out_list.html', context)
+        s = render_to_string('ajax/out_sum_list.html', context2)
+    return JsonResponse({'status': status,'t':t,'s':s,'p_name':p_name})

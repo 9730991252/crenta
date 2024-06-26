@@ -20,6 +20,8 @@ def index(request):
     #Batch.objects.all().delete()
     #Qr_code.objects.all().delete()
     #In_stock.objects.all().delete()
+    #Out_stock.objects.all().delete()
+    #Voucher_name.objects.all().delete()
     
     return render(request,'index.html')
 

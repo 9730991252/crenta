@@ -1,7 +1,7 @@
 {% extends 'office/base.html' %}
 {% block title %} Admin Dashboard{% endblock title %}
 {% block content %}
-{% load stock_tag %}
+{% load qr_tag %}
 <style>
 *{
   margin: 0;
@@ -43,305 +43,40 @@ text-align: center;
     position: fixed;
     top: 0;
 }
-
-
-
-
-.pending_product_head{
-  display: grid;
-  grid-template-columns: 3fr 1fr 1fr 1fr;
-}
-.pending_product_list{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  align-items: center;
-  gap: 1rem;
-  text-align: center;
-
-}
-
-
-
-.menu_btn{
+.in{
+  background-color: rgb(208, 255, 194);
+  padding: 10px;
+  font-weight: 700;
+  border-radius: 10px;
   display: flex;
-  margin-top: 50px;
-  justify-content: space-evenly;
-}
-.all_stock_list{
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  gap: 30px;
   margin-bottom: 10px;
-  background-color: rgb(249, 223, 255);
-  font-weight: 500;
-
 }
-
 </style>
 
-<div class="container">
 
-<div class='refresh_btn'>
-<a href="/crenta_admin/crenta_admin_dashboard" class="btn btn-info my-1">Refresh</a>
-</div>
+  <div class='refresh_btn'>
+    <a href="/crenta_admin/crenta_admin_dashboard" class="btn btn-info my-1">Refresh</a>
+  </div>
+  <br>
 <br>
-<div class="menu_btn">
-   
-  <div><a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#StockModal">All Stock List </a></div>
-  <div><a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Production Status </a></div>
-  <div><a href="/crenta_admin/sell_product_report_crenta_admin/"   class="btn btn-success " >Search Sell Product </a></div>
+  <div class="in_stock">
+    <h6 class="text-center">Stock list</h6>
+    {% for p in pe %}
+    <div class="in">
+      <div>{{p.product.product_name}}</div>
+      <div>Stock {% total_stock_qty p.product_id %}</div>
+    </div>
+    {% endfor %}
 
-  
+  </div>
+<br>
+
+  <div>
+    <a href="/crenta_admin/crenta_admin_logout" class="btn btn-danger my-1">Logout</a>
   </div>
 
 
 
 
-
-
-
-
-  <div class="container">
-    <p class="mt-1"></p>
-    <form method="GET" action="">
-      <a></a>
-    <input type="text" class="form-control" name="search_product"  placeholder="Search Stock Product" value="{{search_product}}">
-    <button type="submit" class="btn btn-primary my-2" name="Search">Search</button>
-  </form>
-  </div>
-
-
-
-  <div class="container" >
-    {% for p in product %}
-    <div style="display: none;"><strong class="forl">{{forloop.counter}}</strong></div>  
-    <form action="" method="POST">
-        {% csrf_token %}
-<div class="border text-center my-5" >
-    <input type="hidden" name="product_id" value="{{p.id}}">
-    <div class="my-1"><h2 > {{p.product_name}} </h2></div>
-
-      <div class="row">
-      <div class="col-4 ">Stock<h6 class="text-success stock_qty"> {% call_stock p.id %}</h6></div>
-      <div class="col-4 ">Run Order<h6 class="text-danger order_qty"> {% order_qty p.id %}</h6></div>
-      <div class="col-4">status<h6 id="set{{forloop.counter}}"></h6></div> 
-    </div>
-    <div style="display: flex; align-items: center; justify-content: center;" class="text-center ">
-      <div class="m-1 text-bg-secondary" style="width: 200px; display: flex; justify-content: center ; border-radius: 20px;">1 April To 30 April </div>
-    </div>
-
-    <div style="display: flex; align-items: center; justify-content: center;" class="text-center " >
-    <div class="m-1 text-bg-primary" style="  padding: 5px; width: auto; display: flex; justify-content: center ; border-radius: 10px; ">Total Sell Rs. <strong class="">&nbsp; {% sell_product_total p.id %}</strong></div>
-    <div class="m-1 text-bg-success" style=" padding: 5px; width: auto; display: flex; justify-content: center ; border-radius: 10px;"> Qty <strong class=""> &nbsp;{% sell_product_qty p.id %}</strong></div>
-  </div>
-    <div class="row ">
-      <div class="col-4">Avrg Rate Rs.<strong >{% sell_product_average p.id %}</strong></div>
-      <div class="col-4 ">Max Rate Rs.<strong class="text-success ">{% sell_product_max p.id %}</strong></div>
-      <div class="col-4 ">Mini Rate Rs.<strong class="text-danger ">{% sell_product_min p.id %}</strong></div>
-    </div>
-
-    <br>
-
-</div>
-</form>
-{% endfor %}
-  </div>
-
-
-
-
-<div class="main_box">
-    <div class="box_headline">Production & Sell </div>
-    <div class="box_items">
-    <li>Today Production - {{today_add_product}} </li>
-    <li>Today Sell Products - {{today_sell_product}} </li>
-</div>
-</div>
-
-
-<div class="main_box">
-    <div class="box_headline">Total Amount </div>
-    <div class="box_items">
-        <li >Pending Order Amount Rs.<strong class="text-danger"> {% pending_order_amount %} </strong> </li>
-
-        <li >Accepted Order Amount Rs.<strong class="text-success"> {% accepted_order_amount %} </strong> </li>
-</div>
-</div>
-
-
-
-
-
-<div class="main_box">
-    <div class="box_headline">Orders </div>
-    <div class="box_items">
-        <li>Total Accepted -<strong class="text-success"> {{Accepted}}</strong> </li>
-        <li>Total Pending - <strong class="text-danger">{{Pending}} </strong></li>
-        <li>Total Delivered - {{Delivered}} </li>
-        <li>Total On The Way - {{On_The_Way}} </li>
-        <li>Total Cancel - {{Cancel}} </li>
-</div>
-</div>
-
-
-
-
-<div>
-<a href="/crenta_admin/crenta_admin_logout" class="btn btn-danger my-1">Logout</a>
-</div>
-
-
-</div>
-
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Productin Status List</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-    <div class="pending_product_head">
-      <div>Name</div>
-      <div>Order</div>
-      <div>Stock</div>
-      <div>Status</div>
-    </div>
-    <div class="pending_product_list">
-      {% for p in pe %}
-      <strong class="forl_modal" style="display: none;">{{forloop.counter}}</strong>
-      <div>{{p.product_name}}</div>
-      <div>Order<div class="text-bg-danger order_qty_modal">{% order_qty p.product_id %}</div></div>
-      <div>Stock<div class="text-bg-success stock_qty_modal">{% call_stock p.product_id %}</div></div>
-      <div>Status<div><strong id="set_modal{{forloop.counter}}"></strong></div></div>
-      {% endfor %}
-    </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-<!-- Modal All Stock List -->
-<div class="modal fade" id="StockModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">All Stock List</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-  <div class="row">
-    <div class="col">Name</div>
-    <div class="col">Stock</div>
-  </div >
-  {% for p in stock %}
-  {% call_stock p.product_id as n %}
-  
-  {% if n < 2 %}
-
-  {% else %}
-
-  <div class="stock_list{% call_stock p.product_id %}">
-  <div class="all_stock_list"  >
-   
-    <div >{{p.product.product_name}}</div>
-    <div class="text-bg-success stock_qty_modal">Stock &nbsp;&nbsp;{% call_stock p.product_id %}</div>
-  
-</div>
-</div>
-  {% endif %}
-  {% endfor %}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-  {% block script %}
-  <script>
-
-
-
-
-
-const order_qty=document.querySelectorAll('.order_qty');
-  const sqty=document.querySelectorAll('.stock_qty');
-  const forl=document.querySelectorAll('.forl');
-  //console.log(forl)
-  
-  stock(order_qty,sqty,forl)
-  function stock(order_qty,sqty,forl){
-    for (var key=0; key<order_qty.length; key++){
-      stock_qty = sqty[key].innerText;
-      o_qty = order_qty[key].innerText;
-      fr = forl[key].innerText;
-      console.log(stock_qty)
-      document.getElementById('set'+ fr).innerHTML=`<h6 class="text-danger">${stock_qty - o_qty}</h6>`
-
-
-  
-  
-    }
-  
-  }
-  
-
-
-
-
-
-const order_qty_m=document.querySelectorAll('.order_qty_modal');
-  const sqty_m=document.querySelectorAll('.stock_qty_modal');
-  const forl_m=document.querySelectorAll('.forl_modal');
-  //console.log(forl)
-  
-  stock_modal(order_qty_m,sqty_m,forl_m)
-  function stock_modal(order_qty_m,sqty_m,forl_m){
-    for (var key=0; key<order_qty_m.length; key++){
-      stock_qty_m = sqty_m[key].innerText;
-      o_qty_m = order_qty_m[key].innerText;
-      fr_m = forl_m[key].innerText;
-      console.log(stock_qty_m)
-      document.getElementById('set_modal'+ fr_m).innerHTML=`<h5 class="text-danger">${stock_qty_m - o_qty_m}</h5>`
-
-
-  
-  
-    }
-  
-  }
-  
-
-
-function check_zero_stock(id){
-  //const zero=document.getElementsByClassName('stock_list'+0);
-
-    console.log('hi')
-
-  
-  
-}
-
-
-
-
-
-
-
-
-
-  </script>
-  {% endblock script %}
 {% endblock content %}

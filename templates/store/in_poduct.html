@@ -60,6 +60,16 @@
     width: 100%;
     height: 100%;
      }
+.tag_ruselt{
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    background-color: rgb(231, 255, 198);
+    .name{
+        font-weight: 600;
+    }
+}
+
 </style>
 
 
@@ -68,11 +78,8 @@
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
     <input type="hidden" id="e_id" value="{{e.id}}">
     <input type="hidden" id="e_name" value="{{e.employee_name}}">
-    {% if messages %}    
-    {% for message in messages %}
-    <div class="alert alert-success text-center mb-3">{{message}}</div>
-    {% endfor %}
-    {% endif %}
+    {% include 'include/alert.html' %}
+
 </div>
 <div>
   {% include 'include/store_menu.html' %}
@@ -86,6 +93,20 @@
     <video  id="preview"></video>
 </div>
 
+{% if qr %}
+<div class="tag_ruselt">
+    <div class="name">{{qr.product.product_name}}</div>
+    <div class="tb" style="display: flex;justify-content: center;gap: 20px;">
+        <div class="tag_number">{{qr.product.type}}</div>
+        <div class="tag_number">Tag {{qr.tag_number}}</div>
+    </div>
+    <form method="POST"> {% csrf_token %}
+        <input type="hidden" name="tag_id" value="{{qr.id}}">
+        <input type="hidden" name="em_id" value="{{e.id}}">
+        <button class="btn btn-success btn-sm my-1" name="Add_Production">Add Production</button>
+    </form>
+</div>
+{% endif %}
 <div id="last_ruselt" class="text-center"></div>
 
 <div>
@@ -100,6 +121,7 @@
         {% endfor %}
     </div>
 </div>
+
 
 
 <!--// end content //-->
@@ -117,11 +139,10 @@
 
 <!--* sticky *-->
 <div class="sticky_foot" >
-    <form method="POST" style="display: flex;align-items: center;gap: 15px;">
-        <div><input placeholder="Enter Tag Number" type="text" name="tag_number" class="form-control"></div>
-        <div><button class="btn btn-primary btn-sm" name="">Search</button></div>
+    <form method="POST" style="display: flex;align-items: center;gap: 15px;">{% csrf_token %}
+        <div><input placeholder="Enter Tag Number" type="number" name="tag_number" class="form-control" required></div>
+        <div><button class="btn btn-primary btn-sm" name="Tag_search">Search</button></div>
     </form>
-    <div><button class="btn btn-transparent btn-sm sc_btn"><i class="fa fa-qrcode" style="font-size:20px"></i></button></div>
 </div>
 <!--// end sticky //-->
 
@@ -157,14 +178,14 @@
                 //speak code
          
                 const msg = new SpeechSynthesisUtterance;
-                msg.text=`${res.p_name} Production Added Success mister ${e_name} `;
+                msg.text=`Success`;
                 msg.voice=speechSynthesis.getVoices()[1];
                 speechSynthesis.speak(msg);
             }
             else if (res.status == 0){
                 //fele_audio()
                 const msg = new SpeechSynthesisUtterance;
-                msg.text=`mister ${e_name} ${res.p_name} Rong Qr Code Plese Chack and try again`;
+                msg.text=`  Rong Qr Code ${res.p_name} mister ${e_name} Plese Chack and try again`;
                 msg.voice=speechSynthesis.getVoices()[1];
                 speechSynthesis.speak(msg);
                 alert('Rong Qr Code')

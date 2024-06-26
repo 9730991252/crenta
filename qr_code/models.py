@@ -12,10 +12,12 @@ class Qr_code(models.Model):
     generate_date = models.DateTimeField(auto_now_add=True)
     date = models.DateField(auto_now_add=True)
 
-class Voucher_num(models.Model):
+class Voucher_name(models.Model):
     creted_by = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
     name = models.CharField(max_length=200)
-
+    verify_by = models.CharField(max_length=100,null=True)
+    verify_status = models.IntegerField(null=True)
+    verify_date = models.DateTimeField(null=True)
 
 INSTOCK_CHOICE=(
     ('1','Production'),
@@ -30,3 +32,16 @@ class In_stock(models.Model):
     status = models.CharField(choices=INSTOCK_CHOICE,max_length=50)
     generate_date = models.DateTimeField(auto_now_add=True)
     date = models.DateField(auto_now_add=True)
+
+
+class Out_stock(models.Model):
+    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
+    qr_code = models.ForeignKey(Qr_code,on_delete=models.PROTECT,default=True,null=True)
+    product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
+    voucher = models.ForeignKey(Voucher_name,on_delete=models.PROTECT,default=True)
+    tag_number = models.IntegerField(unique=True ,null=True)
+    generate_date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
+    verify_status = models.IntegerField(null=True,default=0)
+    verify_date = models.DateTimeField(null=True)
+    verify_by = models.CharField(max_length=100,null=True)
