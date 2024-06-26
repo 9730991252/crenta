@@ -3,95 +3,100 @@
 {% block content %}
 {% load stock_tag %}
 <style>
-*{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-  .search_product{
-  display: flex;
-  background-color: rgb(171, 194, 252);
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  .search_input{
-    width: 50%;
-  }
-    }
-    .product{
-        border:1px solid rgba(0, 0, 0, 0.2);
-        margin-top: 10px;
-        font-weight: 600;
-        padding: 10px;
-        text-align: center;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        .product_foot{
-            display: flex;
-            justify-content: center;
-            gap: 20px;
+    *{
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
         }
-        h6{
-            font-size: 20px;
+        
+      .search_product{
+      display: flex;
+      background-color: rgb(171, 194, 252);
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      .search_input{
+        width: 50%;
+      }
+        }
+        .product{
+            border:1px solid rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
             font-weight: 600;
-        }
-    }
-    .sel_pro{
-        h6{
-            font-weight: 700;
-            font-size: 18px;
-        }
-    }
-    .batch{
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        margin-bottom: 10px;
-        border-radius: 10px;
-        width: 400px;
-        padding: 10px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .tag_box{
-        text-align: center;
-        border: 2px solid black;
-        width: 100mm;
-        height: 50mm;
-        display: flex;
-        justify-content: space-between;
-        .product_name{
-            font-weight: 700;
-        }
-
-        .Qr_box{
-            width: 50mm;
-            height: 50mm;
-            display: flex;
-            align-items: center;
-            img{
-                width: 45mm;
-                height: 45mm;
+            padding: 10px;
+            text-align: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            .product_foot{
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+            }
+            h6{
+                font-size: 20px;
+                font-weight: 600;
             }
         }
-        #tag_nummber{
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 1px;
+        .sel_pro{
+            h6{
+                font-weight: 700;
+                font-size: 18px;
+            }
         }
+        .batch{
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            border-radius: 10px;
+            width: 400px;
+            padding: 10px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .tag_box{
+            text-align: center;
+            border: 2px solid black;
+            width: 4in;
+            height: 2in;
+            display: flex;
+            justify-content: space-between;
+            .product_name{
+                font-weight: 700;
+            }
+    
+            .Qr_box{
+                display: flex;
+                align-items: center;
+            }
+            #tag_nummber{
+                font-size: 20px;
+                font-weight: 700;
+                letter-spacing: 1px;
+            }
+        }
+        #img{
+            height: 35mm;
+            width: 35mm;
+            margin-right: 10px;
+        }
+    </style>
+    <style media="print">
+      @page{
+      margin: 0in;
+      padding: 0in;
+      size: 4in 2in;
+      
     }
-</style>
-<style media="print">
-  @page{
-  margin: 0in;
-  padding: 0in;
-}
-.office_menu,.employee_name,.search_product,.tb,.table{
-    display: none;
-}
-.tag_box{
+    .office_menu,.employee_name,.search_product,.tb,.table{
+        display: none;
+    }
+    .tb_box{
+        size: 4in 2in;
+        padding-bottom: 100cm;
+    }
+    .tag_box{
         border:none;
-}
-</style>
+    }
+    </style>
 <div class="container employee_name">
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
     <input type="hidden" value="{{e.id}}" id="eid" class="form-control" required>
