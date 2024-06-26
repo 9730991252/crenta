@@ -22,7 +22,6 @@ def index(request):
     #In_stock.objects.all().delete()
     #Out_stock.objects.all().delete()
     #Voucher_name.objects.all().delete()
-    
     return render(request,'index.html')
 
 # sunil code 

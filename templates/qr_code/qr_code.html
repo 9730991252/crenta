@@ -54,40 +54,44 @@
     }
     .tag_box{
         text-align: center;
-        padding: 20px;
         border: 2px solid black;
-        width: 6in;
-        height: 3in;
+        width: 100mm;
+        height: 50mm;
+        display: flex;
+        justify-content: space-between;
         .product_name{
             font-weight: 700;
         }
-        .box_heade{
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-        }
-        .box_foot{
-            width: 100%;
-        }
+
         .Qr_box{
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            height: fit-content;
+            width: 50mm;
+            height: 50mm;
+            display: flex;
+            align-items: center;
+            img{
+                width: 45mm;
+                height: 45mm;
+            }
+        }
+        #tag_nummber{
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
     }
 </style>
 <style media="print">
   @page{
-  size: 4in 6in;
+  size: 100mm 50mm;
   margin: 0in;
   padding: 0in;
 }
 .office_menu,.employee_name,.search_product,.tb,.table{
     display: none;
 }
-
 .tag_box{
-    transform: rotate(90deg);
-    margin-top: 1.5in;  
-}
+        border:none;
+        }
 </style>
 <div class="container employee_name">
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
@@ -144,31 +148,15 @@
         {% if ba %}
         <div class="tb_box">
         <div class="tag_box">
-
-            <div class="box_heade">
                 <div>
-                    <div class="product_name mt-4 mb-2">{{pr.product_name}}</div>
-                    <div style="display: flex;justify-content: center;gap: 10px;">
-                        <div>{{pr.category}}</div>
-                        <div>{{ba.batch_name}}</div>
-                    </div>
+                    <div class="product_name mt-4 mb-2" style="margin-left: 15px;">{{pr.product_name}}</div>
+                    <div>{{ba.batch_name}}</div><br>
+                    <div style="display: flex; justify-content: center; gap: 10px;">Tag <h6 id="tag_nummber"></h6></div>
                     <input type="hidden" value="{{ba.id}}" id="batch_id">
-                    <div class="mt-4 mb-3"><strong>CRENTA CHEMICAL</strong></div>
-                    <div><p>Plot No. A-07/C-6/2f MIDC Tembhurni	
-                        Tal : Madha, Dist ; Solapur Mo.9637960777	
-                        </p></div>
                 </div>
                 <div class="Qr_box">
                     <div><img id="img" src="" ></div>
-                    <div><h6 id="tag_nummber"></h6></div>
                 </div>
-            </div>
-            <div class="box_foot">
-                <p>UDYAM Reg No. : UDYAM-MH-32-0013027 (Small)	E-Mail : crenta7@gmail.com	GSTIN/UIN: 27AAOPY1370R1ZN	</p>
-            </div>
-
-
-
         </div>
     </div>
 
@@ -249,7 +237,7 @@
             
         },
             success: function(res){
-                img.src=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${res.tag}`
+                img.src=`https://api.qrserver.com/v1/create-qr-code/?data=${res.tag}`
                 $("#tag_nummber").html(res.tag);
                 $("#tag_list").html(res.t);
                 if (res.status == 1){
@@ -263,7 +251,7 @@
 
 function re_print(tag_number){
     img = document.getElementById('img');
-    img.src=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${tag_number}`
+    img.src=`https://api.qrserver.com/v1/create-qr-code/?data=${tag_number}`
     $("#tag_nummber").html(tag_number);
 }
 
