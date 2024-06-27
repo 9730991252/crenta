@@ -239,7 +239,8 @@
             
         },
             success: function(res){
-                img.src="https://api.qrserver.com/v1/create-qr-code/?size=151x151&data=${res.tag}"
+                
+                img.src=`https://api.qrserver.com/v1/create-qr-code/?size=151x151&data=${res.tag}`
                 $("#tag_nummber").html(res.tag);
                 $("#tag_list").html(res.t);
                 if (res.status == 1){
@@ -253,7 +254,7 @@
 
 function re_print(tag_number){
     img = document.getElementById('img');
-    img.src="https://api.qrserver.com/v1/create-qr-code/?size=151x151&data=${tag_number}"
+    img.src=`https://api.qrserver.com/v1/create-qr-code/?size=151x151&data=${tag_number}`
     $("#tag_nummber").html(tag_number);
 }
 
