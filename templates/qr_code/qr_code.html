@@ -3,100 +3,98 @@
 {% block content %}
 {% load stock_tag %}
 <style>
-    *{
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-        
-      .search_product{
-      display: flex;
-      background-color: rgb(171, 194, 252);
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      .search_input{
-        width: 50%;
-      }
-        }
-        .product{
-            border:1px solid rgba(0, 0, 0, 0.2);
-            margin-top: 10px;
-            font-weight: 600;
-            padding: 10px;
-            text-align: center;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            .product_foot{
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-            }
-            h6{
-                font-size: 20px;
-                font-weight: 600;
-            }
-        }
-        .sel_pro{
-            h6{
-                font-weight: 700;
-                font-size: 18px;
-            }
-        }
-        .batch{
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            margin-bottom: 10px;
-            border-radius: 10px;
-            width: 400px;
-            padding: 10px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .tag_box{
-            text-align: center;
-            border: 2px solid black;
-            width: 4in;
-            height: 2in;
-            display: flex;
-            justify-content: space-between;
-            .product_name{
-                font-weight: 700;
-            }
+*{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     
-            .Qr_box{
-                display: flex;
-                align-items: center;
-            }
-            #tag_nummber{
-                font-size: 20px;
-                font-weight: 700;
-                letter-spacing: 1px;
-            }
-        }
-        #img{
-            height: 35mm;
-            width: 35mm;
-            margin-right: 10px;
-        }
-    </style>
-    <style media="print">
-      @page{
-      margin: 0in;
-      padding: 0in;
-      size: 4in 2in;
-      
+  .search_product{
+  display: flex;
+  background-color: rgb(171, 194, 252);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  .search_input{
+    width: 50%;
+  }
     }
-    .office_menu,.employee_name,.search_product,.tb,.table{
-        display: none;
+    .product{
+        border:1px solid rgba(0, 0, 0, 0.2);
+        margin-top: 10px;
+        font-weight: 600;
+        padding: 10px;
+        text-align: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        .product_foot{
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        h6{
+            font-size: 20px;
+            font-weight: 600;
+        }
     }
-    .tb_box{
-        size: 4in 2in;
-        padding-bottom: 100cm;
+    .sel_pro{
+        h6{
+            font-weight: 700;
+            font-size: 18px;
+        }
+    }
+    .batch{
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+        border-radius: 10px;
+        width: 400px;
+        padding: 10px;
+        margin-left: auto;
+        margin-right: auto;
     }
     .tag_box{
-        border:none;
+        text-align: center;
+        border: 2px solid black;
+        width: 4in;
+        height: 2in;
+        display: flex;
+        justify-content: space-between;
+        .product_name{
+            font-weight: 700;
+        }
+
+        .Qr_box{
+            display: flex;
+            align-items: center;
+        }
+        #tag_nummber{
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
     }
-    </style>
+    #img{
+        margin-right: 15px;
+    }
+</style>
+<style media="print">
+  @page{
+  margin: 0in;
+  padding: 0in;
+  size: 3.93 1.96in;
+  page:1;
+}
+.office_menu,.employee_name,.search_product,.tb,.table{
+    display: none;
+}
+.tb_box{
+    size: 3.93 1.96in;
+}
+.tag_box{
+    border:none;
+    margin-top: -0.21in;
+}
+</style>
 <div class="container employee_name">
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
     <input type="hidden" value="{{e.id}}" id="eid" class="form-control" required>
@@ -241,7 +239,7 @@
             
         },
             success: function(res){
-                img.src=`https://api.qrserver.com/v1/create-qr-code/?data=${res.tag}`
+                img.src="https://api.qrserver.com/v1/create-qr-code/?size=151x151&data=${res.tag}"
                 $("#tag_nummber").html(res.tag);
                 $("#tag_list").html(res.t);
                 if (res.status == 1){
@@ -255,7 +253,7 @@
 
 function re_print(tag_number){
     img = document.getElementById('img');
-    img.src=`https://api.qrserver.com/v1/create-qr-code/?data=${tag_number}`
+    img.src="https://api.qrserver.com/v1/create-qr-code/?size=151x151&data=${tag_number}"
     $("#tag_nummber").html(tag_number);
 }
 
