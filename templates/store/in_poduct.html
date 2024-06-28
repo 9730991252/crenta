@@ -55,11 +55,37 @@
     width: 200px;
     margin-left: auto;
     margin-right: auto;
- }
- #preview{
+}
+#preview{
     width: 100%;
     height: 100%;
-     }
+}
+.red_alert{  
+    background-color: red;  
+}
+.scan_box{  
+    animation: scan_border 3s 1;
+    animation-direction: reverse;
+}
+@keyframes scan_border {
+  0%   {
+
+  }
+  25%  {
+    background-color: green;  
+}
+50%  {
+      background-color: green;  
+      
+    }
+    75%  {
+      background-color: green;  
+    
+  }
+  100% {
+
+  }
+}
 .tag_ruselt{
     text-align: center;
     margin: 10px;
@@ -88,11 +114,11 @@
 
 <!--* content *-->
 
-
-<div class="video_scan">
-    <video  id="preview"></video>
+<div id="scan_border">
+    <div class="video_scan">
+        <video  id="preview"></video>
+    </div>
 </div>
-
 {% if qr %}
 <div class="tag_ruselt">
     <div class="name">{{qr.product.product_name}}</div>
@@ -176,7 +202,11 @@
                 $("#todays_production").html(res.t);
                 //success_audio()
                 //speak code
-         
+
+                $("#scan_border").addClass('scan_box');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('scan_box');
+                }, 4000);
                 const msg = new SpeechSynthesisUtterance;
                 msg.text=`Success`;
                 msg.voice=speechSynthesis.getVoices()[1];
@@ -184,6 +214,11 @@
             }
             else if (res.status == 0){
                 //fele_audio()
+                $("#scan_border").addClass('red_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('red_alert');
+                }, 5000);
+                
                 const msg = new SpeechSynthesisUtterance;
                 msg.text=`  Rong Qr Code ${res.p_name} mister ${e_name} Plese Chack and try again`;
                 msg.voice=speechSynthesis.getVoices()[1];
@@ -191,6 +226,11 @@
                 alert('Rong Qr Code')
             }
             else if (res.status == 2){
+                $("#scan_border").addClass('red_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('red_alert');
+                }, 5000);
+
                 const msg = new SpeechSynthesisUtterance;
                 msg.text=` Qr Code Already Scaned Plese Chack and try again ${res.p_name} mister ${e_name} `;
                 msg.voice=speechSynthesis.getVoices()[1];

@@ -166,7 +166,7 @@
 
         <div class="form-control my-3 text-center tb">
             <a onclick="create_tage()" id="create_btn" class="btn btn-success" >Create Tage</a>
-            <button class="btn btn-primary" id="print_btn" onclick="window.print()" >Print</button>
+            <button class="btn btn-primary" id="print_btn" onclick="print_tag()" >Print</button>
         </div>
 
 
@@ -179,6 +179,7 @@
                     <th scope="col">Tag Number</th>
                     <th scope="col">Generate Date</th>
                     <th scope="col">Generate By</th>
+                    <th scope="col">Used & Unused</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -189,6 +190,7 @@
                     <td>{{qr.tag_number}}</td>
                     <td>{{qr.generate_date}}</td>
                     <td>{{qr.employee.employee_name}}</td>
+                    <td> {% if qr.in_status == 1 %} <h6 class="text-success">Used</h6> {% else %}  <h6 class="text-danger">Un Used</h6> {% endif %}</td>
                     <td><a class="btn btn-info" onclick="re_print('{{qr.tag_number}}')">Re Generate</a></td>
                   </tr>
                   {% endfor %}
@@ -230,6 +232,7 @@
         batch_id = document.getElementById('batch_id').value;
         eid = document.getElementById('eid').value;
         img = document.getElementById('img');
+        img.src=''
         $.ajax({
         url: "{% url 'create_tage' %}",
         method: "GET",
@@ -254,10 +257,16 @@
 
 function re_print(tag_number){
     img = document.getElementById('img');
+    img.src=''
     img.src=`https://api.qrserver.com/v1/create-qr-code/?size=151x151&data=${tag_number}`
     $("#tag_nummber").html(tag_number);
 }
 
+function print_tag(){
+    window.print()
+    img = document.getElementById('img');
+    img.src=''
+}
 
 </script>
 {% endblock content %}

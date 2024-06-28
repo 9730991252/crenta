@@ -131,3 +131,9 @@ def sell_product_min(id):
     a=(p.aggregate(a=Min('price')))
     #print(a['a'])
     return a['a']
+
+
+
+
+
+
