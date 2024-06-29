@@ -23,7 +23,7 @@
 <!--* content *-->
 <form method="POST">{% csrf_token %}
     <input type="hidden" name="e_id" value="{{e.id}}">
-    <input type="text" class="form-control my-2" name="voucher_name" placeholder="Voucher Name">
+    <input type="text" class="form-control my-2" name="voucher_name" placeholder="Voucher Name" required>
     <button name="Add_voucher" class="btn btn-info my-2">Add</button>
 </form>
 <!--// end content //-->

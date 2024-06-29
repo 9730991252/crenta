@@ -52,6 +52,25 @@ text-align: center;
   gap: 30px;
   margin-bottom: 10px;
 }
+.todays_production_box{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+ }
+ .todays_production{
+    background-color: rgb(222, 255, 253);
+    width: fit-content;
+    padding: 5px;
+    border-radius: 10px;
+ }
+ .product_main_box{
+    margin-bottom: 50px;
+ }
+ .product_box{
+    background-color: rgb(242, 217, 255);
+    margin-bottom: 10px;
+    padding: 5px;
+ }
 </style>
 
 
@@ -59,6 +78,22 @@ text-align: center;
     <a href="/crenta_admin/crenta_admin_dashboard" class="btn btn-info my-1">Refresh</a>
   </div>
   <br>
+<br>
+
+<div>
+  <div class="todays_production_box">
+      <h6 class="todays_production">Todays Production </h6>
+  </div>
+  <div class="product_main_box" id="todays_production">
+      {% for p in pe %}
+      <div class="product_box">
+          <div><strong>{{p.product.product_name}}</strong>&nbsp&nbsp&nbsp{% today_production p.product_id %}</div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+
 <br>
   <div class="in_stock">
     <h6 class="text-center">Stock list</h6>

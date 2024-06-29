@@ -28,7 +28,7 @@
     .sc_btn{
         border-radius: 50%;
     }
- }
+ } 
  .todays_production_box{
     width: 100%;
     display: flex;
@@ -62,6 +62,9 @@
 }
 .red_alert{  
     background-color: red;  
+}
+.warning_alert{  
+    background-color: rgb(255, 247, 0);  
 }
 .scan_box{  
     animation: scan_border 3s 1;
@@ -226,9 +229,9 @@
                 alert('Rong Qr Code')
             }
             else if (res.status == 2){
-                $("#scan_border").addClass('red_alert');
+                $("#scan_border").addClass('warning_alert');
                 setTimeout(function() {
-                    $("#scan_border").removeClass('red_alert');
+                    $("#scan_border").removeClass('warning_alert');
                 }, 5000);
 
                 const msg = new SpeechSynthesisUtterance;
@@ -236,7 +239,6 @@
                 msg.voice=speechSynthesis.getVoices()[1];
                 speechSynthesis.speak(msg);
                 //fele_audio()
-                alert('Already Scaned')
             }
 
         }
