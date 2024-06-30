@@ -8,6 +8,16 @@
   padding: 0;
   box-sizing: border-box;
 }
+.search_footer{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1212121;
+  input{
+    width: 100%;
+  }
+}
 body{
   height: 100%;
   width: 100%;
@@ -42,6 +52,8 @@ text-align: center;
     text-align: center;
     position: fixed;
     top: 0;
+    background-color: white;
+    width: 100%;
 }
 .in{
   background-color: rgb(208, 255, 194);
@@ -71,6 +83,23 @@ text-align: center;
     margin-bottom: 10px;
     padding: 5px;
  }
+ .search_batch{
+  background-color: rgb(193, 255, 255);
+  margin-bottom: 10px;
+  padding: 5px;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: 500;
+ }
+ .batch_name{
+  background-color: rgb(255, 211, 237);
+  width: fit-content;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 10px;
+ }
 </style>
 
 
@@ -79,37 +108,85 @@ text-align: center;
   </div>
   <br>
 <br>
+<div id="batch_result">
+  <div id="product_result">
 
-<div>
-  <div class="todays_production_box">
+
+
+
+  <div>
+    <div class="todays_production_box">
       <h6 class="todays_production">Todays Production </h6>
-  </div>
-  <div class="product_main_box" id="todays_production">
+    </div>
+    
+    <div class="product_main_box" id="todays_production">
+      {% if today_p|length == 0 %}No Production Added Today{% endif %}
+      {% for p in today_p %}
+        <div class="product_box">
+            <div><strong>{{p.product.product_name}}</strong>&nbsp&nbsp&nbsp{% today_production p.product_id %}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+
+    <div class="in_stock">
+      <h6 class="text-center">Stock list</h6>
       {% for p in pe %}
-      <div class="product_box">
-          <div><strong>{{p.product.product_name}}</strong>&nbsp&nbsp&nbsp{% today_production p.product_id %}</div>
+      <div class="in">
+        <div>{{p.product.product_name}}</div>
+        <div>Stock {% total_stock_qty p.product_id %}</div>
       </div>
       {% endfor %}
+
+    </div>
+  <br>
   </div>
+</div>
+  <div>
+    <a href="/crenta_admin/crenta_admin_logout" class="btn btn-danger my-1" >Logout</a>
+  </div>
+
+
+<div class="search_footer">
+  <input type="text" oninput="search_product_admin()" id="search_product_input" class="form-control" placeholder="Search Product" >
 </div>
 
 
-<br>
-  <div class="in_stock">
-    <h6 class="text-center">Stock list</h6>
-    {% for p in pe %}
-    <div class="in">
-      <div>{{p.product.product_name}}</div>
-      <div>Stock {% total_stock_qty p.product_id %}</div>
-    </div>
-    {% endfor %}
 
-  </div>
-<br>
+<script>
 
-  <div>
-    <a href="/crenta_admin/crenta_admin_logout" class="btn btn-danger my-1">Logout</a>
-  </div>
+function search_product_admin(){
+  search_product_input = document.getElementById('search_product_input').value;
+  $.ajax({
+  url: "{% url 'search_product_admin' %}",
+  method: "GET",
+  data:{
+    words:search_product_input
+        },
+      success: function(res){
+        $("#product_result").html(res.t);
+      }
+   })
+  }
+  
+  function fetch_batch_admin(id){
+  $.ajax({
+  url: "{% url 'fetch_batch_admin' %}",
+  method: "GET",
+  data:{
+    pid:id
+      },
+      success: function(res){
+        $("#batch_result").html(res.t);
+      }
+   })
+}
+
+
+
+</script>
+
 
 
 

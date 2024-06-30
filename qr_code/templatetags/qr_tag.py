@@ -4,6 +4,7 @@ from qr_code.models import *
 from django.db.models import Avg, Sum, Min, Max
 from math import *
 from datetime import date
+from django.utils.safestring import mark_safe
 register = template.Library()
 
 @register.simple_tag
@@ -22,3 +23,20 @@ def out_voucher_qty(id,v_id):
 def total_stock_qty(id):
     qty = In_stock.objects.filter(product_id=id,status=1).count()
     return qty
+
+
+@register.simple_tag
+def used_tag_emp(tag):
+    eid = ''
+    emp = In_stock.objects.filter(tag_number=tag).first()
+    if emp:
+        eid =emp.employee.employee_name
+    return eid
+
+@register.simple_tag
+def out_tag_emp(tag):
+    eid = ''
+    emp = Out_stock.objects.filter(tag_number=tag).first()
+    if emp:
+        eid =emp.employee.employee_name
+    return eid

@@ -189,3 +189,45 @@ def out_stock(request):
         t = render_to_string('ajax/voucher_out_list.html', context)
         s = render_to_string('ajax/out_sum_list.html', context2)
     return JsonResponse({'status': status,'t':t,'s':s,'p_name':p_name})
+
+def search_product_admin(request):
+    if request.method == 'GET':
+        words = request.GET['words']
+        p=Product.objects.filter(product_name__icontains=words)
+        context={
+            'pro':p
+        }
+        t = render_to_string('ajax/search_product_admin.html', context)
+    return JsonResponse({'t': t})
+
+
+def fetch_batch_admin(request):
+    if request.method == 'GET':
+        pid = request.GET['pid']
+        pro = Product.objects.get(id=pid)
+        ba = Batch.objects.filter(product_id=pid)
+        context={
+            'pro':pro,
+            'ba':ba
+        }
+        t = render_to_string('ajax/fetch_batch_admin.html', context)
+    return JsonResponse({'t': t})
+
+def admin_batch_detail(request):
+    if request.method == 'GET':
+        bid = request.GET['bid']
+        ba = Batch.objects.get(id=bid)
+        un_used = Qr_code.objects.filter(batch_id=bid,in_status=0).count()
+        in_stock = Qr_code.objects.filter(batch_id=bid,in_status=1,out_status=0).count()
+        out_stock = Qr_code.objects.filter(batch_id=bid,in_status=1,out_status=1).count()
+        qr_code = Qr_code.objects.filter(batch_id=bid).order_by('in_status')
+
+        context={
+            'ba':ba,
+            'un_used':un_used,
+            'in_stock':in_stock,
+            'out_stock':out_stock,
+            'qr_code':qr_code
+            }
+        t = render_to_string('ajax/admin_batch_detail.html', context)
+    return JsonResponse({'t': t})
