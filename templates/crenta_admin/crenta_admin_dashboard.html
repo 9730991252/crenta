@@ -108,8 +108,8 @@ text-align: center;
   </div>
   <br>
 <br>
-<div id="batch_result">
-  <div id="product_result">
+<div id="batch_result"></div><br><br>
+<div id="product_result">
 
 
 
@@ -142,9 +142,9 @@ text-align: center;
     </div>
   <br>
   </div>
-</div>
+
   <div>
-    <a href="/crenta_admin/crenta_admin_logout" class="btn btn-danger my-1" >Logout</a>
+    <a href="/crenta_admin/crenta_admin_logout" class="btn btn-danger my-1 mb-5" >Logout</a>
   </div>
 
 
@@ -166,6 +166,7 @@ function search_product_admin(){
         },
       success: function(res){
         $("#product_result").html(res.t);
+        $("#batch_result").empty();
       }
    })
   }

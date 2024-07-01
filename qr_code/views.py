@@ -217,7 +217,7 @@ def accepted_verify_qr_code(request):
     else:
         return redirect('login')
     
-
+ 
 
 def pending_view_voucher(request,id):
     if request.session.has_key('office_mobile'):
