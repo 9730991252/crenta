@@ -15,11 +15,12 @@ def crenta_admin_dashboard(request):
             for p in p:
                 pid=p.id
                 k=In_stock.objects.filter(product_id=pid,status=1).order_by('-id').first()
-                tp = In_stock.objects.filter(product_id=pid,status=1,date__gte=date.today(),date__lte=date.today()).order_by('-id').first()
                 if k:
                     pe.append(k)
+                tp = In_stock.objects.filter(product_id=pid,date__gte=date.today(),date__lte=date.today()).order_by('-id').first()
                 if tp:
                     today_p.append(tp)
+                    #print(today_p)
 
         context={
             'pe':pe,
