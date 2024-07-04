@@ -122,7 +122,7 @@ text-align: center;
     <div class="product_main_box" id="todays_production">
       {% if today_p|length == 0 %}No Production Added Today{% endif %}
       {% for p in today_p %}
-        <div class="product_box">
+        <div class="product_box"onclick="fetch_batch_admin('{{p.product_id}}')" >
             <div><strong>{{p.product.product_name}}</strong>&nbsp&nbsp&nbsp{% today_production p.product_id %}</div>
         </div>
         {% endfor %}
