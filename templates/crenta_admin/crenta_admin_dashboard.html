@@ -133,7 +133,7 @@ text-align: center;
     <div class="in_stock">
       <h6 class="text-center">Stock list</h6>
       {% for p in pe %}
-      <div class="in">
+      <div class="in"onclick="fetch_batch_admin('{{p.product_id}}')" >
         <div>{{p.product.product_name}}</div>
         <div>Stock {% total_stock_qty p.product_id %}</div>
       </div>

@@ -65,33 +65,7 @@ body{
   {% include 'include/store_menu.html' %}
 </div>
 
-<div class="container">
-    <h6 class="text-center"> Today Add Product </h6>
-    <table class="table">
-        <thead>
-          <tr>
-            <div class="row">
-            <div class="col-2"><th>Name</th></div>
-            <div class="col-2"><th>type</th></div>
-            <div class="col-2"><th>Add qty</th></div>
-            <div class="col-2"><th>Stock </th></div>
-            </div>
-        </tr>
-        </thead>
-        <tbody>{% for p in today_add_product %}
-          <tr>
-            <div class="row">
-            <div class="col-2"> <td>{{p.product.product_name}}</td></div>
-            <div class="col-2"><td>{{p.type}}</td></div>
-            <div class="col-2"><td>add {{p.qty}}</td></div>
-            <div class="col-2"><td>stock <strong class="text-success">{% call_stock p.product_id %}</strong></td></div>
-            </div>
-          </tr>
-     
-        {% endfor %}
-        </tbody>
-      </table>
-</div>
+
 <div>
   <form method="GET" action="" class="search_product">
   <div class="search_product_input"><input type="text" class="form-control" name="search_product"  placeholder="Search Product"></div>
@@ -133,7 +107,7 @@ body{
 </form>
 {% endfor %}
   </div>
-  <a href="/store_logout" class="btn btn-danger my-1">Logout</a>
+  <a href="/store_logout" class="btn btn-danger my-1 mt-5">Logout</a>
 </div>
 
 
