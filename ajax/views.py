@@ -220,7 +220,7 @@ def admin_batch_detail(request):
         un_used = Qr_code.objects.filter(batch_id=bid,in_status=0).count()
         in_stock = Qr_code.objects.filter(batch_id=bid,in_status=1,out_status=0).count()
         out_stock = Qr_code.objects.filter(batch_id=bid,in_status=1,out_status=1).count()
-        qr_code = Qr_code.objects.filter(batch_id=bid).order_by('in_status')
+        qr_code = Qr_code.objects.filter(batch_id=bid).order_by('out_status')
 
         context={
             'ba':ba,
