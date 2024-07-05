@@ -21,7 +21,8 @@ def out_voucher_qty(id,v_id):
 
 @register.simple_tag
 def total_stock_qty(id):
-    qty = In_stock.objects.filter(product_id=id,status=1).count()
+    qty = Qr_code.objects.filter(product_id=id,in_status=1,out_status=0).count()
+    #qty = In_stock.objects.filter(product_id=id,status=1).count()
     return qty
 
 
