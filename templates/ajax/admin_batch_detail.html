@@ -86,7 +86,7 @@
             {% elif q.in_status == 0 and q.out_status == 0 %} 
                 <strong class="text-bg-danger" style="border-radius: 10px; padding: 5px; line-height: 5px;">Pending</strong>
             {% elif q.in_status == 1 and q.out_status == 0 %}
-                <strong class="text-bg-success" style="border-radius: 10px; padding: 5px; line-height: 5px;">In Stock</strong>
+                <strong class="text-bg-success" style="border-radius: 10px; padding: 5px; line-height: 5px;">In Stock</strong> {% production_date q.tag_number %} Days Ago
             {% endif %}
         </div>
     </div>

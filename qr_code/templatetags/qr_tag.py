@@ -40,3 +40,14 @@ def out_tag_emp(tag):
     if emp:
         eid =emp.employee.employee_name
     return eid
+
+
+
+@register.simple_tag
+def production_date(tag):
+    i = In_stock.objects.get(tag_number=tag)
+    fromdate = i.date
+    todate = date.today()
+    day = todate - fromdate 
+    return day.days
+
