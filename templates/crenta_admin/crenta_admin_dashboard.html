@@ -180,6 +180,7 @@ function search_product_admin(){
       },
       success: function(res){
         $("#batch_result").html(res.t);
+        $("html, body").animate({ scrollTop: 0 }, "fast");
       }
    })
 }
