@@ -209,9 +209,16 @@ def accepted_verify_qr_code(request):
         e=Employee.objects.filter(employee_mobile=office_mobile).first()
         if e:
             e=Employee.objects.get(employee_mobile=office_mobile)
+        v = Voucher_name.objects.filter(verify_status=1)
+        paginator = Paginator(v,10) 
+        page_number = request.GET.get('page')
+        v = paginator.get_page(page_number)
+        total_pages = v.paginator.num_pages
         context={
             'e':e,
-            'v':Voucher_name.objects.filter(verify_status=1)
+            'v': v,
+            'last_page':total_pages,
+            'total_page_list':[n+1 for n in range(total_pages)][0:3]
         }
         return render(request,'qr_code/accepted_verify_qr_code.html',context=context)        
     else:

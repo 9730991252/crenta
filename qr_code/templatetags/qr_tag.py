@@ -52,3 +52,16 @@ def production_date(tag):
     day = todate - fromdate 
     return day.days
 
+@register.simple_tag
+def out_date(tag):
+    i = Out_stock.objects.get(tag_number=tag)
+    fromdate = i.date
+    todate = date.today()
+    day = todate - fromdate 
+    return day.days
+
+@register.simple_tag
+def out_voucher(tag):
+    i = Out_stock.objects.get(tag_number=tag)
+    print(i)
+    return i.voucher.name

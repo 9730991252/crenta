@@ -82,11 +82,11 @@
         </div>
         <div class="text-center" style="margin-bottom:10px;">
             Stock Status {% if q.in_status == 1 and q.out_status == 1 %}
-                <strong class="text-bg-warning" style="border-radius: 10px; padding: 5px; line-height: 5px;">Out Success</strong>
+                <strong class="text-bg-warning" style="border-radius: 10px; padding: 5px; line-height: 5px;">Out Success</strong> {% out_date q.tag_number %} Days Ago <br> Voucher Name {% out_voucher q.tag_number %}
             {% elif q.in_status == 0 and q.out_status == 0 %} 
                 <strong class="text-bg-danger" style="border-radius: 10px; padding: 5px; line-height: 5px;">Pending</strong>
             {% elif q.in_status == 1 and q.out_status == 0 %}
-                <strong class="text-bg-success" style="border-radius: 10px; padding: 5px; line-height: 5px;">In Stock</strong> {% production_date q.tag_number %} Days Ago
+                <strong class="text-bg-success" style="border-radius: 10px; padding: 5px; line-height: 5px;">In Stock</strong> {% production_date q.tag_number %} Days Ago 
             {% endif %}
         </div>
     </div>
