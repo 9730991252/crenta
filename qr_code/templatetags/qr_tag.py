@@ -26,21 +26,28 @@ def total_stock_qty(id):
     return qty
 
 
-@register.simple_tag
-def used_tag_emp(tag):
-    eid = ''
-    emp = In_stock.objects.filter(tag_number=tag).first()
-    if emp:
-        eid =emp.employee.employee_name
-    return eid
 
-@register.simple_tag
-def out_tag_emp(tag):
-    eid = ''
-    emp = Out_stock.objects.filter(tag_number=tag).first()
-    if emp:
-        eid =emp.employee.employee_name
-    return eid
+
+
+@register.inclusion_tag('tag/in_stock_detail.html')
+def in_stock_detail(tag):
+    ins = In_stock.objects.filter(tag_number=tag).first()
+    return {
+        'ins':ins
+    } 
+
+
+
+
+
+
+@register.inclusion_tag('tag/out_stock_detail.html')
+def out_stock_detail(tag):
+    outs = Out_stock.objects.filter(tag_number=tag).first()
+    return {
+        'outs':outs
+    } 
+
 
 
 
@@ -60,8 +67,18 @@ def out_date(tag):
     day = todate - fromdate 
     return day.days
 
+
+
 @register.simple_tag
 def out_voucher(tag):
     i = Out_stock.objects.get(tag_number=tag)
     print(i)
     return i.voucher.name
+
+
+@register.inclusion_tag('tag/out_voucher_detail.html')
+def out_voucher_detail(tag):
+    outs = Out_stock.objects.filter(tag_number=tag).first()
+    return {
+        'outs':outs
+    } 
