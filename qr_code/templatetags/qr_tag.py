@@ -82,3 +82,21 @@ def out_voucher_detail(tag):
     return {
         'outs':outs
     } 
+
+@register.simple_tag
+def old_in_stock(d,pid):
+    t = In_stock.objects.filter(date__lte=d,status=1,product_id=pid).count()
+    return t
+
+@register.simple_tag
+def old_out_stock(d,pid):
+    t = In_stock.objects.filter(date__lte=d,status=0,product_id=pid).count()
+    return t
+
+
+
+
+
+
+
+

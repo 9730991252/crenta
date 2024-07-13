@@ -8,7 +8,7 @@ from django.db.models import Sum
 from django.db.models import Q
 from office.models import *
 from qr_code.models import *
-
+from datetime import timedelta, date
 # Create your views here.
 def search_batch_product(request):
     if request.method == 'GET':
@@ -230,4 +230,11 @@ def admin_batch_detail(request):
             'qr_code':qr_code
             }
         t = render_to_string('ajax/admin_batch_detail.html', context)
+    return JsonResponse({'t': t}) 
+
+def select_days(request):
+    if request.method == 'GET':
+        day = request.GET['days']
+
+        t = render_to_string('ajax/admin/old_stock.html', context)
     return JsonResponse({'t': t})

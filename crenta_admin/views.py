@@ -2,8 +2,8 @@ from django.shortcuts import render,redirect
 from office.models import *
 from order.models import *
 from qr_code.models import *
-from datetime import date
-
+from datetime import timedelta, date
+ 
 # Create your views here.
 
 def crenta_admin_dashboard(request):
@@ -35,3 +35,23 @@ def crenta_admin_logout (request):
     del request.session['crenta_admin_mobile']
     return redirect('/')
 
+def old_stock(request):
+    if request.session.has_key('crenta_admin_mobile'):
+        context={}
+        t=''
+        d=''
+        if 'Days'in request.POST:
+            day = request.POST.get('day')
+            if day == '0':
+                pass
+            else:
+                d = (date.today() - timedelta(days=int(day)))
+                t = In_stock.objects.filter(date__lte=d,status=1).order_by('product_id')
+            context={
+                't':t,
+                'd':d,
+                'day':day,
+            }
+        return render(request,'crenta_admin/old_stock.html',context)
+    else:
+        return render(request,'login.html')

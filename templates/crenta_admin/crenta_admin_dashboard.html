@@ -2,6 +2,7 @@
 {% block title %} Admin Dashboard{% endblock title %}
 {% block content %}
 {% load qr_tag %}
+{% include 'include/admin_menu.html' %}
 <style>
 *{
   margin: 0;
@@ -47,14 +48,6 @@ text-align: center;
     margin: 10px;
 }
 
-.refresh_btn{
-    margin-top: 3px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    background-color: white;
-    width: 100%;
-}
 .in{
   background-color: rgb(208, 255, 194);
   padding: 10px;
@@ -103,9 +96,6 @@ text-align: center;
 </style>
 
 
-  <div class='refresh_btn'>
-    <a href="/crenta_admin/crenta_admin_dashboard" class="btn btn-info my-1">Refresh</a>
-  </div>
   <br>
 <br>
 <div id="batch_result"></div><br><br>
