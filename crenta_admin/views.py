@@ -46,7 +46,7 @@ def old_stock(request):
                 pass
             else:
                 d = (date.today() - timedelta(days=int(day)))
-                t = In_stock.objects.filter(date__lte=d,status=1).order_by('product_id')[0:100]
+                t = In_stock.objects.filter(date__lte=d,status=1).order_by('date','product_id')[0:100]
             context={
                 't':t,
                 'd':d,

@@ -15,10 +15,12 @@
         margin-top: 10px;
         font-weight: 700;
         padding: 5px;
+        *{
+            margin-top: 5px;
+        }
     }
     .in_stock{
-        background-color: rgb(206, 255, 206);
-        border: 1px solid rgb(120, 255, 120);
+        background-color: rgb(120, 255, 120);
         border-radius: 5px;
         padding: 5px;
     }
@@ -26,6 +28,7 @@
         background-color: rgb(255, 255, 31);
         border-radius: 5px;
         padding: 5px;
+
     }
 </style>
 <div class="container mt-5">
@@ -52,7 +55,7 @@
                 Last {{day}} Day<div class="in_stock"> In Stock {% old_in_stock d t.product_id %}</div>
                 <div class="out_stock">Out Stock {% old_out_stock d t.product_id %}</div>
             </div>
-            <div>Production {% production_date t.tag_number %} Days Ago</div>
+            <div>Production {% production_date t.tag_number %} Days Ago <br> {{t.generate_date}}</div>
         </div>
     {% endfor %}
 </div>
