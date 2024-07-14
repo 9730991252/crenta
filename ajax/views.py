@@ -232,9 +232,3 @@ def admin_batch_detail(request):
         t = render_to_string('ajax/admin_batch_detail.html', context)
     return JsonResponse({'t': t}) 
 
-def select_days(request):
-    if request.method == 'GET':
-        day = request.GET['days']
-
-        t = render_to_string('ajax/admin/old_stock.html', context)
-    return JsonResponse({'t': t})

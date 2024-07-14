@@ -5,6 +5,8 @@ from django.db.models import Avg, Sum, Min, Max
 from math import *
 from datetime import date
 from django.utils.safestring import mark_safe
+from django.db.models import Q
+from datetime import timedelta, date
 register = template.Library()
 
 @register.simple_tag
@@ -85,15 +87,17 @@ def out_voucher_detail(tag):
 
 @register.simple_tag
 def old_in_stock(d,pid):
-    t = In_stock.objects.filter(date__lte=d,status=1,product_id=pid).count()
+    t = In_stock.objects.filter(status=1,date__lte=d,product_id=pid).count()
     return t
+
+#,product_id=pid
 
 @register.simple_tag
 def old_out_stock(d,pid):
-    t = In_stock.objects.filter(date__lte=d,status=0,product_id=pid).count()
+    t = Out_stock.objects.filter(date__gte=d,date__lte=date.today(),product_id=pid).count()
     return t
 
-
+#,product_id=pid 
 
 
 

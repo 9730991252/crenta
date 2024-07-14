@@ -3,7 +3,7 @@ from office.models import *
 from order.models import *
 from qr_code.models import *
 from datetime import timedelta, date
- 
+from django.db.models import Q
 # Create your views here.
 
 def crenta_admin_dashboard(request):
@@ -46,7 +46,7 @@ def old_stock(request):
                 pass
             else:
                 d = (date.today() - timedelta(days=int(day)))
-                t = In_stock.objects.filter(date__lte=d,status=1).order_by('date','product_id')[0:100]
+                t = In_stock.objects.filter(status=1,date__lte=d).order_by('product_id')
             context={
                 't':t,
                 'd':d,
@@ -55,3 +55,6 @@ def old_stock(request):
         return render(request,'crenta_admin/old_stock.html',context)
     else:
         return render(request,'login.html')
+    
+
+

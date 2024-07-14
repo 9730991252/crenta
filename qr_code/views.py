@@ -161,6 +161,9 @@ def voucher_add_stock(request, id):
                     ).save()
                 q.out_status=1
                 q.save()
+                ins = In_stock.objects.get(qr_code_id = qid)
+                ins.status = 0
+                ins.save()
                 return redirect(f'/qr_code/voucher_add_stock/{v_id}')
         context={
             'e':e,

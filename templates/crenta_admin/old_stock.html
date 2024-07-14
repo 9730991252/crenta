@@ -52,8 +52,10 @@
             <div>Tag {{t.tag_number}}</div>
             <div>{{t.product.product_name}}</div>
             <div style="display: flex;justify-content: space-evenly;">
-                Last {{day}} Day<div class="in_stock"> In Stock {% old_in_stock d t.product_id %}</div>
-                <div class="out_stock">Out Stock {% old_out_stock d t.product_id %}</div>
+                Last {{day}} Days Ago Pending<div class="in_stock"> In Stock {% old_in_stock d t.product_id %}</div>
+            </div>
+            <div style="display: flex;justify-content: space-evenly;">
+                Last {{day}} Days<div class="out_stock"> Out Stock {% old_out_stock d t.product_id %}</div>
             </div>
             <div>Production {% production_date t.tag_number %} Days Ago <br> {{t.generate_date}}</div>
         </div>

@@ -650,15 +650,17 @@ def view_stock(request,id):
 
 
 def test(request):
-    #m.status='Pending'
-    #m.save()
-    #o=Order_detail.objects.get(id=)
-    #o.stock_status =0
-    #o.save()
-    
-
-
-    return HttpResponse('hi')
+    qr = Qr_code.objects.filter(out_status=1)
+    if qr :
+        for q in qr:
+            tag = q.tag_number
+            if tag:
+                t = In_stock.objects.filter(tag_number=tag)
+                if t:
+                    for t in t:
+                        t.status = 0
+                        t
+    return HttpResponse(t)
                 
 
 
