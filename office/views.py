@@ -659,7 +659,7 @@ def test(request):
                 if t:
                     for t in t:
                         t.status = 0
-                        t.save()
+                        t
     return HttpResponse(t)
                 
 
