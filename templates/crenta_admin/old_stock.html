@@ -52,14 +52,22 @@
             <div>Tag {{t.tag_number}}</div>
             <div>{{t.product.product_name}}</div>
             <div style="display: flex;justify-content: space-evenly;">
-                Last {{day}} Days Ago Pending<div class="in_stock"> In Stock {% old_in_stock d t.product_id %}</div>
+                Last {{day}} Days Ago Pending<div class="in_stock"> In Stock {% old_in_stock d t.product_id as old_in_stock %}{{old_in_stock}}</div>
             </div>
             <div style="display: flex;justify-content: space-evenly;">
-                Last {{day}} Days<div class="out_stock"> Out Stock {% old_out_stock d t.product_id %}</div>
+                Last {{day}} Days<div class="out_stock"> Out Stock {% old_out_stock d t.product_id as old_out_stock %}{{old_out_stock}}</div>
             </div>
             <div>Production {% production_date t.tag_number %} Days Ago <br> {{t.generate_date}}</div>
+            {% if old_out_stock > old_in_stock %}
+             <div style="width: 100%;display: flex;justify-content: center;" ><h6 style="width: 50%;line-height: 5px;" class="alert alert-danger">Check This Tag</h6></div>
+            {% else %}
+            {% endif %}
         </div>
     {% endfor %}
 </div>
+
+
+
+
 
 {% endblock content %}
