@@ -1,0 +1,25 @@
+<style>
+    .tag_number{
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+            }
+    .box{
+        display: flex;
+    }
+</style>
+<style media="print">
+    .tag_number{
+        display: grid;
+        grid-template-columns: auto auto auto auto auto auto;
+        row-gap: 5px;
+    }
+</style>
+
+<div class="tag_number">
+{% for q in q %}
+    <div class="box">
+        <div><b>{{q.tag_number}}</b></div><div style="margin-top: 7px;margin-left:2px; border: 1px solid black;height: 15px;width: 15px; "></div>
+    </div>
+{% endfor %}
+</div>

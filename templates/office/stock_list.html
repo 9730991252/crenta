@@ -1,0 +1,69 @@
+{% extends 'office/base.html' %}
+{% block title %} View Stock {% endblock title %}
+{% load qr_tag %}
+{% block content %}
+
+<style>
+    .product{
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+        padding: 10px;
+        .name{
+            font-weight: 700;
+        }
+    }
+</style>
+<style media="print">
+      @page{
+        margin: 0in;
+        size: A4;
+    }
+    .product{
+        margin-left: -1in;
+        width: 9in;
+    }
+    .hi{
+        display: none;
+    }
+</style>
+<div class="container hi">
+    <div class=""><h>Welcome - {{e.employee_name}}</h></div>
+</div>
+
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 hi ">
+            {% include 'include/office_menu.html' %}  
+           </div>
+           <div class="col-10">
+            <div style="display: flex; justify-content: center;gap: 10px;"><h6>Stock List</h6><p id="date"></p></div>
+            <p>Check By Name ---------------------------------------------------------------</p>
+            <div class="text-center">
+                {% for q in qr_code %}
+                    <div class="product">
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <div class="name">{{q.product.product_name}}</div> 
+                            <div>Stock {% total_stock_qty q.product_id %}</div>
+                            
+                        </div>
+                        <div>{% stock_list_tag q.product_id %}</div>
+                        <div>आहेत ----------  नाहीत ---------  एकूण {% total_stock_qty q.product_id %}</div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <button onclick="window.print()" class="btn btn-success hi">Print</button>
+            </div>
+
+    </div>
+</div>
+
+<script>
+    n =  new Date();
+y = n.getFullYear();
+m = n.getMonth() + 1;
+d = n.getDate();
+document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+</script>
+          {% endblock content %}

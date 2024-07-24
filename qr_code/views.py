@@ -294,4 +294,26 @@ def accepted_view_voucher(request,id):
         return redirect('login')
 
 
+def stock_list(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        qr_code = []
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            p = Product.objects.all()
+            if p :
+                for p in p:
+                    pid = p.id
+                    qr = Qr_code.objects.filter(product_id=pid).first()
+                    if qr:
+                        qr_code.append(qr)
+        context={
+            'e':e,
+            'qr_code':qr_code,
+        }
+        return render(request,'office/stock_list.html',context=context)        
+    else:
+        return redirect('login')
+
 

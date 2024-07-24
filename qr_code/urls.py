@@ -8,6 +8,7 @@ urlpatterns = [
     path('pending_view_voucher/<int:id>', views.pending_view_voucher,name='pending_view_voucher'),
     path('accepted_view_voucher/<int:id>', views.accepted_view_voucher,name='accepted_view_voucher'),
     path('in_product', views.in_product,name='in_product'),
-    path('out_product', views.out_product,name='out_product'),
     path('voucher_add_stock/<int:id>', views.voucher_add_stock,name='voucher_add_stock'),
+    path('out_product', views.out_product,name='out_product'),
+    path('stock_list', views.stock_list,name='stock_list'),
     ]

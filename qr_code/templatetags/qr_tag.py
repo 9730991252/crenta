@@ -99,6 +99,14 @@ def old_out_stock(d,pid):
 
 #,product_id=pid 
 
+@register.inclusion_tag('inclusion_tag/stock_list_tag.html')
+def stock_list_tag(pid):
+    q = Qr_code.objects.filter(product_id=pid,in_status=1,out_status=0)
+    if q:
+        return {
+            'q':q
+        } 
+
 
 
 
