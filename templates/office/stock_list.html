@@ -12,6 +12,10 @@
             font-weight: 700;
         }
     }
+
+.hide{
+    display: none;
+}
 </style>
 <style media="print">
       @page{
@@ -40,14 +44,14 @@
             <p>Check By Name ---------------------------------------------------------------</p>
             <div class="text-center">
                 {% for q in qr_code %}
-                    <div class="product">
+                <div class="{% total_stock_qty q.product_id as total_stock_qty %}{% if total_stock_qty == 0 %}hide{% else %}product{% endif %}">
                         <div style="display: flex; gap: 10px; justify-content: center;">
                             <div class="name">{{q.product.product_name}}</div> 
-                            <div>Stock {% total_stock_qty q.product_id %}</div>
+                            <div>Stock {% total_stock_qty q.product_id as total_stock_qty %}{{total_stock_qty}}</div>
                             
                         </div>
                         <div>{% stock_list_tag q.product_id %}</div>
-                        <div>आहेत ----------  नाहीत ---------  एकूण {% total_stock_qty q.product_id %}</div>
+                        <div>आहेत ----------  नाहीत ---------  एकूण  {{total_stock_qty}}</div>
                     </div>
                 {% endfor %}
             </div>
