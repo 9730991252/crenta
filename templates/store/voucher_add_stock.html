@@ -200,7 +200,11 @@
     </form>
 </div>
 <!--// end sticky //-->
-
+<div style="display: none;">
+    <audio  id="audio" controls>
+		<source src="{% static 'audio/suc.mp3' %}" type="audio/mp3">
+	</audio>
+</div>
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
     /*let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
@@ -318,10 +322,11 @@
                     $("#scan_border").removeClass('scan_box');
                 }, 4000);
 
-                    const msg = new SpeechSynthesisUtterance;
-                    msg.text=`Out`;
-                    msg.voice=speechSynthesis.getVoices()[1];
-                    speechSynthesis.speak(msg);
+                    //const msg = new SpeechSynthesisUtterance;
+                    //msg.text=`Out`;
+                    //msg.voice=speechSynthesis.getVoices()[1];
+                    //speechSynthesis.speak(msg);
+                    success_audio()
                 }
                 else if (res.status == 0){
                     $("#scan_border").addClass('red_alert');
@@ -375,6 +380,12 @@
     var html5QrcodeScanner = new Html5QrcodeScanner(
         "reader", { fps: 10, qrbox: 250,showTorchButtonIfSupported:true});
         html5QrcodeScanner.render(onScanSuccess, onScanError);
+
+
+        function success_audio(){
+            var audio = document.getElementById('audio');
+            audio.play();
+        }
 </script>
 
 
