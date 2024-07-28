@@ -4,9 +4,6 @@
 {% load qr_tag %}
 {% block head %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js" ></script>
 {% endblock head %}
 {% block content %}
 <style>
@@ -48,18 +45,10 @@
     }
 
     .video_scan{
-    transform: rotate(0deg);
-    transform: scaleX(-1);
-    height: 200px;
-    width: 200px;
-    margin-left: auto;
-    margin-right: auto;
+        width: 100%;
+        display: flex;
+        justify-content: center;
  }
- #preview{
-    width: 100%;
-    height: 100%;
-     }
-
 .red_alert{  
     background-color: red;  
 }
@@ -141,7 +130,7 @@
 <!--* content *-->
     <div id="scan_border">
         <div class="video_scan">
-            <video  id="preview"></video>
+            <div  style="width:300px;" id="reader"></div>
         </div>
     </div>
     <div id="last_ruselt" class="text-center mt-3"></div>
@@ -206,9 +195,9 @@
 </div>
 <!--// end sticky //-->
 
-
+<script src="https://unpkg.com/html5-qrcode"></script>
 <script>
-    let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+    /*let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         let e_name = document.getElementById('e_name').value;
         Instascan.Camera.getCameras().then(function(cameras){
             if(cameras.length > 0){
@@ -290,7 +279,96 @@
 
             }
     })
-        })
+        })*/
+
+
+    var count_ruselt = 0;
+    var last_ruselt = 0;
+    let e_name = document.getElementById('e_name').value;
+    function onScanSuccess(c){
+    if(c !== last_ruselt){
+        ++count_ruselt;
+        last_ruselt = c;
+
+
+        $.ajax({
+                url: "{% url 'out_stock' %}",
+                method: "GET",
+                data:{
+                    tag_num:c,
+                    e_id:document.getElementById('e_id').value,
+                    vid:document.getElementById('vid').value,
+            },
+            success: function(res){
+                document.getElementById('last_ruselt').innerHTML=`${res.p_name}&nbsp&nbspTag&nbsp${c}`
+                //$("#last_ruselt").html(res.p_name),(c);
+                $("#op_list").html(res.t);
+                $("#summary_list").html(res.s);
+                if(res.status == 1){
+                    //success_audio()
+                    //speak code
+                    $("#scan_border").addClass('scan_box');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('scan_box');
+                }, 4000);
+
+                    const msg = new SpeechSynthesisUtterance;
+                    msg.text=`Out`;
+                    msg.voice=speechSynthesis.getVoices()[1];
+                    speechSynthesis.speak(msg);
+                }
+                else if (res.status == 0){
+                    $("#scan_border").addClass('red_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('red_alert');
+                }, 5000);
+
+
+                    //fele_audio()
+                    const msg = new SpeechSynthesisUtterance;
+                    msg.text=`Rong Qr Code mister ${e_name} Plese Chack and try againn`;
+                    msg.voice=speechSynthesis.getVoices()[1];
+                    speechSynthesis.speak(msg);
+                    alert('Rong Qr Code')
+                }
+                else if (res.status == 2){
+                    $("#scan_border").addClass('warning_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('warning_alert');
+                }, 5000);
+
+                    const msg = new SpeechSynthesisUtterance;
+                    msg.text=` Qr Code Already Scaned Plese Chack and try again ${res.p_name} mister ${e_name} `;
+                    msg.voice=speechSynthesis.getVoices()[1];
+                    speechSynthesis.speak(msg);
+                    //fele_audio()
+                }
+                else if (res.status == 3){
+                    $("#scan_border").addClass('red_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('red_alert');
+                }, 5000);
+
+                    const msg = new SpeechSynthesisUtterance;
+                    msg.text=` Qr Code Not Added In Production Plese Add and try again ${res.p_name} mister ${e_name} `;
+                    msg.voice=speechSynthesis.getVoices()[1];
+                    speechSynthesis.speak(msg);
+                    //fele_audio()
+                    alert('Qr Code Not Added In Production')
+                }
+
+            }
+    })
+
+
+    }
+    
+    }
+    function onScanError(errorMessage){
+    }
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 10, qrbox: 250,showTorchButtonIfSupported:true});
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
 </script>
 
 
