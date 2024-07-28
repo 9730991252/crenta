@@ -15,6 +15,17 @@ def today_production(id):
     return qty
 
 
+@register.inclusion_tag('inclusion_tag/today_production_tag.html')
+def today_production_tag(id):
+    tag = In_stock.objects.filter(product_id=id,date__gte=date.today(),date__lte=date.today()).order_by('tag_number')
+    return {
+        'tag':tag
+    } 
+
+
+
+
+
 @register.simple_tag
 def out_voucher_qty(id,v_id):
     qty = Out_stock.objects.filter(product_id=id,voucher_id=v_id).count()

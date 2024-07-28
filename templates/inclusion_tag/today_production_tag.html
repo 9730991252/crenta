@@ -1,0 +1,14 @@
+<style>
+    .gride{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 5px;
+    }
+</style>
+
+<div class="gride">
+    {% for tag  in tag  %}
+        <div>{{tag.tag_number}}     ,</div>
+    {% endfor %}
+</div>
