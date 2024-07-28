@@ -122,9 +122,15 @@
     <div class=""><h>Welcome - {{e.employee_name}}</h></div>
     <input type="hidden" id="e_id" value="{{e.id}}">
     <input type="hidden" id="e_name" value="{{e.employee_name}}">
+    <div>
+        {% include 'include/store_menu.html' %}
+      </div>
     {% include 'include/alert.html' %}
 
 </div>
+
+
+
 
 
 <!--* content *-->
