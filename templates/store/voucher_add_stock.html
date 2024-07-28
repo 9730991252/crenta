@@ -315,7 +315,7 @@
                 $("#op_list").html(res.t);
                 $("#summary_list").html(res.s);
                 if(res.status == 1){
-                    //success_audio()
+                    success_audio()
                     //speak code
                     $("#scan_border").addClass('scan_box');
                 setTimeout(function() {
@@ -326,7 +326,6 @@
                     //msg.text=`Out`;
                     //msg.voice=speechSynthesis.getVoices()[1];
                     //speechSynthesis.speak(msg);
-                    success_audio()
                 }
                 else if (res.status == 0){
                     $("#scan_border").addClass('red_alert');

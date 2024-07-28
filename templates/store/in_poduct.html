@@ -267,7 +267,7 @@ function onScanSuccess(c){
             //$("#last_ruselt").html(res.p_name),(c);
             if(res.status == 1){
                 $("#todays_production").html(res.t);
-                //success_audio()
+                success_audio()
                 //speak code
 
                 $("#scan_border").addClass('scan_box');
@@ -278,7 +278,6 @@ function onScanSuccess(c){
                 //msg.text=`Success`;
                 //msg.voice=speechSynthesis.getVoices()[1];
                 //speechSynthesis.speak(msg);
-                success_audio()
             }
             else if (res.status == 0){
                 //fele_audio()
