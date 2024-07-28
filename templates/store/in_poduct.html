@@ -149,8 +149,8 @@
 <!--// end content //-->
 
 <div style="display: none;">
-    <audio id="audio" controls>
-		<source src="{% static 'audio/sucss.mp3' %}" type="audio/mp3">
+    <audio  id="audio" controls>
+		<source src="{% static 'audio/1.mp3' %}" type="audio/mp3">
 	</audio>
 </div>
 <div style="display: none;">
@@ -274,10 +274,11 @@ function onScanSuccess(c){
                 setTimeout(function() {
                     $("#scan_border").removeClass('scan_box');
                 }, 4000);
-                const msg = new SpeechSynthesisUtterance;
-                msg.text=`Success`;
-                msg.voice=speechSynthesis.getVoices()[1];
-                speechSynthesis.speak(msg);
+                //const msg = new SpeechSynthesisUtterance;
+                //msg.text=`Success`;
+                //msg.voice=speechSynthesis.getVoices()[1];
+                //speechSynthesis.speak(msg);
+                success_audio()
             }
             else if (res.status == 0){
                 //fele_audio()
@@ -321,6 +322,13 @@ var html5QrcodeScanner = new Html5QrcodeScanner(
 
 
 
+
+
+
+    function success_audio(){
+        var audio = document.getElementById('audio');
+        audio.play();
+        }
 
 
 

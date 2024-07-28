@@ -21,6 +21,7 @@
       @page{
         margin: 0in;
         size: A4;
+        
     }
     .product{
         margin-left: -1in;
@@ -51,7 +52,7 @@
                             
                         </div>
                         <div>{% stock_list_tag q.product_id %}</div>
-                        <div>आहेत ----------  नाहीत ---------  एकूण  {{total_stock_qty}}</div>
+                        <div>एकूण आहेत ----------  एकूण नाहीत ---------  एकूण  {{total_stock_qty}}</div>
                     </div>
                 {% endfor %}
             </div>
