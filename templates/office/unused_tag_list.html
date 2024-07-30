@@ -38,7 +38,10 @@
                     {% for p in pr %}
                         <div class="box">
                             <div>{{p.product.product_name}}</div>
-                            <div style="display: flex;margin-bottom: -15px;">Un Used Tag &nbsp;{% unused_tag_list p.product_id as un %}<p {% if un < 11 %} style="color: red;" {% endif %}>{{un}}</p></div>
+                            <div style="display: flex; gap: 10px;font-weight: 400;">
+                                <div style="display: flex;margin-bottom: -15px;">Un Used Tag &nbsp;{% unused_tag_list p.product_id as un %}<p {% if un < 11 %} style="font-weight: 700; color: red;" {% endif %}>{{un}}</p></div>
+                                <div style="display: flex;margin-bottom: -15px;">Used &nbsp;{% used_tag_list p.product_id as un %}<p style="font-weight: 700; color: green;">{{un}}</p></div>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
