@@ -126,8 +126,10 @@ def unused_tag_list(pid):
 
 @register.simple_tag
 def used_tag_list(pid):
-    t = Qr_code.objects.filter(in_status=1,product_id=pid).count()
-    return t
+    t1 = Qr_code.objects.filter(out_status=1,product_id=pid).count()
+    t2 = Qr_code.objects.filter(in_status=1,product_id=pid).count()
+    t = t1 + t2
+    return t 
 
 
 
