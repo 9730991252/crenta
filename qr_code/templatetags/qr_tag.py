@@ -119,6 +119,10 @@ def stock_list_tag(pid):
         } 
 
 
+@register.simple_tag
+def unused_tag_list(pid):
+    t = Qr_code.objects.filter(in_status=0,product_id=pid).count()
+    return t
 
 
 

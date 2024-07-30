@@ -37,7 +37,7 @@ def qr_code(request):
             'b':b,
             'pr':pr,
             'ba':ba,
-            'qr':qr
+            'qr':qr,
         }
         return render(request,'qr_code/qr_code.html',context=context)        
     else:
@@ -312,8 +312,30 @@ def stock_list(request):
             'e':e,
             'qr_code':qr_code,
         }
-        return render(request,'office/stock_list.html',context=context)        
+        return render(request,'office/stock_list.html',context)        
     else:
         return redirect('login')
 
 
+def unused_tag_list(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']        
+        e=Employee.objects.filter(employee_mobile=office_mobile).first()
+        product_name = []
+        if e:
+            e=Employee.objects.get(employee_mobile=office_mobile)
+            p = Product.objects.all()
+            if p:
+                for p in p:
+                    pro = Qr_code.objects.filter(product_id=p.id).first()
+                    if pro:
+                        product_name.append(pro)
+                        
+
+        context={
+            'e':e,
+            'pr':product_name
+        }
+        return render(request,'office/unused_tag_list.html',context)        
+    else:
+        return redirect('login')

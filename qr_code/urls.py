@@ -11,4 +11,5 @@ urlpatterns = [
     path('voucher_add_stock/<int:id>', views.voucher_add_stock,name='voucher_add_stock'),
     path('out_product', views.out_product,name='out_product'),
     path('stock_list', views.stock_list,name='stock_list'),
+    path('unused_tag_list', views.unused_tag_list,name='unused_tag_list'),
     ]
