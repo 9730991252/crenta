@@ -73,7 +73,7 @@
     <div class="qr_box">
         <div class="tag_number">Tag {{q.tag_number}}</div>
         <div  class="dis_felx inout">
-            <div><p>In Status</p> {% if q.in_status == 0 %} <strong class="text-danger">Un Used</strong> {% elif q.in_status == 1 %} <strong class="text-success">Used</strong> {% endif %}
+            <div><p>In Status</p> {% if q.in_status == 0 %} <strong class="text-danger">Un Used</strong> {% elif q.in_status == 1 %} <strong class="text-success">Success</strong> {% endif %}
                 <br><br>{% in_stock_detail q.tag_number %}
             </div>
             <div><p>Out Status</p> {% if q.out_status == 0 %} <strong class="text-danger">Pending</strong> {% elif q.out_status == 1 %} <strong class="text-success">Success</strong> {% endif %}
