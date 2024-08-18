@@ -1,0 +1,25 @@
+{% extends 'home/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+<style>
+</style>
+</style>
+<div class="container employee_name">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    <input type="hidden" value="{{e.id}}" id="eid" class="form-control" required>
+</div>
+<div class="container my-3">
+    <div class="row">
+        <div class="col-2 office_menu">
+            {% include 'include/office/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            {% include 'include/office/verify_menu.html' %}  
+            <!--* content -->
+            <!--// end content //-->
+        </div>
+    </div>
+</div>
+<script>
+</script>
+{% endblock content %}

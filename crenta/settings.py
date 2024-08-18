@@ -38,10 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'home',
+    'sunil',
     'office',
-    'order',
-    'crenta_admin',
-    'qr_code'
+    'ajax',
+    'store'
 ]
 
 MIDDLEWARE = [

@@ -1,219 +1,298 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from office.models import *
 from django.template.loader import render_to_string
 from django.http import *
-from datetime import date
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib import messages 
-from django.db.models import Sum
-from django.db.models import Q
 from office.models import *
-from qr_code.models import *
-from datetime import timedelta, date
+from store.views import *
 # Create your views here.
-def search_batch_product(request):
+def generate_tag(request):
     if request.method == 'GET':
-        words = request.GET['words']
-        p=Product.objects.filter(product_name__icontains=words)
-        context={
-                's_p':p
-        }
-        t = render_to_string('ajax/search_batch_product.html', context)
-    return JsonResponse({'data': t})
-
-
-
-def add_new_batch(request):
-    if request.method == 'GET':
-        batch_name = request.GET['batch_name']
+        tag_qty = request.GET['qty']
         eid = request.GET['eid']
-        pid = request.GET['pid']
-        sr = Batch.objects.filter(product_id=pid).count()
-        sr += 1
-        if batch_name == '':
-            pass
-        else:
-            Batch(
-                batch_name=batch_name,
+        qr = Qr_code.objects.all().count()
+        qr += 1
+        for i in range (int(tag_qty)):
+            Qr_code(
                 employee_id=eid,
-                product_id=pid,
-                sr_num=sr,
-            ).save()
-        b = Batch.objects.filter(product_id=pid)
-
-        context={
-            'b':b
-        }
-        t = render_to_string('ajax/batch_history.html', context)
-    return JsonResponse({'data': t}) 
-
-
-
-def search_qr_product(request):
-    if request.method == 'GET':
-        words = request.GET['words']
-        p=Product.objects.filter(product_name__icontains=words)
-        context={
-                's_p':p
-        }
-        t = render_to_string('ajax/search_qr_product.html', context)
-    return JsonResponse({'data': t})
-
-
-
-def create_tage(request):
-    if request.method == 'GET':
-        f=''
-        status = 0
-        batch_id = request.GET['batch_id']
-        eid = request.GET['eid']
-        if batch_id:
-            b = Batch.objects.get(id=batch_id)
-            t = Qr_code.objects.filter(batch_id=batch_id,product_id=b.product_id).count()
-            t += 1
-            p_id = b.product_id
-            f = f'{p_id}{batch_id}{t}'
-            if int(t) < 1001:
-                Qr_code(
-                    product_id=b.product_id,
-                    employee_id=eid,
-                    batch_id=b.id,
-                    tag_number=f,
-                    sr_num=t
-                    ).save()
-            else:
-                status = 1
-            tag = Qr_code.objects.filter(batch_id=batch_id,product_id=b.product_id).last()
-            qr = Qr_code.objects.filter(batch_id=batch_id).order_by('-id')
-            if tag:
-                tag = tag.tag_number
-        context={
-            'qr':qr
-        }
-        t = render_to_string('ajax/tag_list.html', context)
-    return JsonResponse({'tag': tag,'status':status,'t':t}) 
-
-
-
-def in_stock(request):
-    if request.method == 'GET':
-        tp_product=[]
-        status = ''
-        p_name = ''
-        tag_num = request.GET['tag_num']
-        em_id = request.GET['e_id']
-        qr_id = Qr_code.objects.filter(tag_number=tag_num).first()
-        if qr_id:
-            qn = Qr_code.objects.get(id=qr_id.id)
-            p_name = qn.product.product_name
-            in_sta = qn.in_status
-            if in_sta == 0:
-                In_stock(
-                    employee_id=em_id,
-                    qr_code_id=qn.id,
-                    product_id=qn.product_id,
-                    tag_number=qn.tag_number,
-                    status=1
-                    ).save()
-                qri = Qr_code.objects.get(id=qr_id.id)
-                qri.in_status=1
-                qri.save()
-            p=Product.objects.filter().all()
-            for p in p:
-                p_all_id=p.id
-                tp = In_stock.objects.filter(product_id=p_all_id,date__gte=date.today(),date__lte=date.today()).order_by('-id').first()
-                if tp:
-                    tp_product.append(tp)
-                status = 1
-            if in_sta == 1:
-                status = 2
-        else:
-            status = 0
-        context={
-            'p':tp_product
-                }
-        t = render_to_string('ajax/today_production.html', context)
-    return JsonResponse({'status': status,'t':t,'p_name':p_name})
-
-
-
-def out_stock(request):
-    if request.method == 'GET':
-        tp_product=[]
-        status = ''
-        p_name = ''
-        ps = ''
-        tag_num = request.GET['tag_num']
-        em_id = request.GET['e_id']
-        vid = request.GET['vid']
-        op_product=[]
-        qr_id = Qr_code.objects.filter(tag_number=tag_num).first()
-        if qr_id:
-            qn = Qr_code.objects.get(id=qr_id.id)
-            p_name = qn.product.product_name
-            out_sta = qn.out_status
-            in_sta = qn.in_status
-            if in_sta == 1 and out_sta == 0:
-                Out_stock(
-                    employee_id=em_id,
-                    qr_code_id=qn.id,
-                    product_id=qn.product_id,
-                    voucher_id=vid,
-                    tag_number=qn.tag_number,
-                    ).save()
-                qri = Qr_code.objects.get(id=qr_id.id)
-                qri.out_status=1
-                qri.save()
-                ins = In_stock.objects.get(qr_code_id = qr_id.id)
-                ins.status = 0
-                ins.save()
-                status = 1
-            if in_sta == 1 and out_sta == 1:
-                status = 2
-            if in_sta == 0 and out_sta == 0:
-                status = 3
-        else:
-            status = 0
-        p=Product.objects.filter().all()
-        for p in p:
-            p_all_id=p.id
-            tp = Out_stock.objects.filter(product_id=p_all_id,voucher_id=vid).order_by('-id').first()
-            if tp:
-                op_product.append(tp)
-        context={
-            'p':tp_product,
-            'op':op_product,
-                }
+                tag_number=qr,
+                ).save() 
+            qr += 1
+        tag = Qr_code.objects.filter().order_by('-id')[0:int(tag_qty)]
         context2={
-            'ps':Out_stock.objects.filter(voucher_id=vid).order_by('product_id')
-                }
-        t = render_to_string('ajax/voucher_out_list.html', context)
-        s = render_to_string('ajax/out_sum_list.html', context2)
-    return JsonResponse({'status': status,'t':t,'s':s,'p_name':p_name})
+            'tag_list':Qr_code.objects.filter().order_by('-id')[0:1000]
+        }
+        tag_list = render_to_string('ajax/office/tag_list.html', context2)
+        context={
+            'tag':tag
+        }
+        t = render_to_string('ajax/office/generate_tag.html', context)
+    return JsonResponse({'t': t,'tag_list':tag_list})
 
-def search_product_admin(request):
+
+
+def set_item_sr_num(request):
+    if request.method == 'GET':
+        num = request.GET['num']
+        Item_id = request.GET['item_id']
+        print(num)
+        if num:
+            item = Item.objects.get(id=Item_id)
+            item.sr_num = num
+            item.save()
+    return JsonResponse({'t': 't'})
+
+
+
+def search_in_item_ajax(request):
     if request.method == 'GET':
         words = request.GET['words']
-        p=Product.objects.filter(product_name__icontains=words)
+        p = ''
+        if words:
+            p=Item.objects.filter(name__icontains=words)[0:10]
         context={
             'pro':p
         }
-        t = render_to_string('ajax/search_product_admin.html', context)
+        t = render_to_string('ajax/store/search_in_item_ajax.html', context)
     return JsonResponse({'t': t})
 
 
-def fetch_batch_admin(request):
+
+def in_item(request):
+    if request.method == 'GET':
+        tag_number = request.GET['tag_num']
+        employee_id = request.GET['e_id']
+        batch_id = request.GET['b_id']
+        item_id = request.GET['item_id']
+        qr = Qr_code.objects.filter(tag_number=tag_number).first()
+        if qr:
+            qr_count = Qr_code.objects.filter(batch_id=batch_id).count()
+            if qr_count < 1000:
+                if qr.in_status == 0 and qr.out_status == 0:
+                    #* success
+                    in_item_save(tag_number,employee_id,item_id,batch_id,qr_count,scan_type=1)
+                    status = 1
+                if qr.in_status == 1:
+                    #*Qr Code Already Scaned
+                    status = 2
+            else:
+                #* create batch
+                batch_save(item_id,employee_id)
+                #* location reload
+                status = 3
+        else:
+            #* Rong Qr Code
+            status = 0
+        item = Item.objects.get(id=item_id)
+        i_name = item.name
+        context={
+            'i':item,
+            'e':employee_id
+                }
+        t = render_to_string('ajax/store/today_production.html', context)
+    return JsonResponse({'t':t, 'status':status, 'i_name':i_name}) 
+
+
+
+
+def in_item_manual(request):
+    if request.method == 'GET':
+        tag_number = request.GET['tag_num']
+        employee_id = request.GET['e_id']
+        batch_id = request.GET['b_id']
+        item_id = request.GET['item_id']
+        qr = Qr_code.objects.filter(tag_number=tag_number).first()
+        if qr:
+            qr_count = Qr_code.objects.filter(batch_id=batch_id).count()
+            if qr_count < 1000:
+                if qr.in_status == 0 and qr.out_status == 0:
+                    #* success
+                    in_item_save(tag_number,employee_id,item_id,batch_id,qr_count,scan_type=0)
+                    status = 1
+                if qr.in_status == 1:
+                    #*Qr Code Already Scaned
+                    status = 2
+            else:
+                #* create batch
+                batch_save(item_id,employee_id)
+                #* location reload
+                status = 3
+        else:
+            #* Rong Qr Code
+            status = 0
+        item = Item.objects.get(id=item_id)
+        i_name = item.name
+        context={
+            'i':item,
+            'e':employee_id
+                }
+        t = render_to_string('ajax/store/today_production.html', context)
+    return JsonResponse({'t':t, 'status':status, 'i_name':i_name})
+
+
+def in_item_save(tag_number,employee_id,item_id,batch_id,sr_num,scan_type):
+    #print('tag_num = ',tag_number,  'eid = ',employee_id, 'item_id =', item_id,  'scan_type = ', scan_type)
+    qr = Qr_code.objects.filter(tag_number=tag_number).first()
+    sr_num += 1
+    In_item(
+        store_employee_id=employee_id,
+        qr_code_id=qr.id,
+        item_id=item_id,
+        tag_number=tag_number,
+        status=1,
+        scan_type=scan_type,
+    ).save()
+    qr.in_status =1
+    qr.batch_id = batch_id
+    qr.item_id = item_id
+    qr.sr_num = sr_num
+    qr.save()
+
+def search_tag(request):
+    if request.method == 'GET':
+        tag_num = request.GET['tag_num']
+        item = ''
+        i = Qr_code.objects.filter(tag_number=tag_num).first()
+        if i:
+            item = Qr_code.objects.filter(tag_number=tag_num).first()
+        context={
+            'i':item
+               }
+        t = render_to_string('ajax/store/serch_in_tag_result.html', context)
+    return JsonResponse({'t':t}) 
+
+
+
+def search_out_tag(request):
+    if request.method == 'GET':
+        tag_num = request.GET['tag_num']
+        item = ''
+        i = Qr_code.objects.filter(tag_number=tag_num).first()
+        if i:
+            item = Qr_code.objects.filter(tag_number=tag_num).first()
+        context={
+            'i':item
+               }
+        t = render_to_string('ajax/store/serch_out_tag_result.html', context)
+    return JsonResponse({'t':t}) 
+
+
+
+def out_item(request):
+    if request.method == 'GET':
+        status = ''
+        i_name = ''
+        vi_item = []
+        tag_num = request.GET['tag_num']
+        em_id = request.GET['e_id']
+        v_id = request.GET['vid']
+        if tag_num:
+            qr = Qr_code.objects.filter(tag_number=tag_num).first()
+            if qr:
+                i_name = qr.item.name
+                if qr.in_status == 1 and qr.out_status == 0:
+                    #Out sucess
+                    out_item_save(tag_num,em_id,v_id,scan_type=1)
+                    it = Item.objects.all()
+                    for i in it:
+                        vi = Out_item.objects.filter(voucher_id=v_id,item_id=i.id).first()
+                        if vi:
+                            vi_item.append(vi)
+                    status = 1
+                if qr.in_status == 0:
+                    #First Add Production
+                    status = 2
+                if qr.in_status == 1 and qr.out_status == 1:
+                    #Already scaned
+                    status = 3
+            else:
+                #Rong Qrcode
+                status = 0
+            context={
+                'vi_item':vi_item
+            }
+        t = render_to_string('ajax/store/out_tag_list.html', context)
+    return JsonResponse({'t':t,'status':status,'i_name':i_name}) 
+
+
+def out_item_save(tag_num,em_id,v_id,scan_type):
+    qr = Qr_code.objects.filter(tag_number=tag_num).first()
+    if qr:
+        Out_item(
+            store_employee_id=em_id,
+            qr_code_id=qr.id,
+            item_id=qr.item_id,
+            voucher_id=v_id,
+            tag_number=tag_num,
+            scan_type=scan_type,
+        ).save()
+        qr.out_status = 1
+        qr.save()
+        ins = In_item.objects.get(tag_number=tag_num)
+        ins.status = 0
+        ins.save()
+
+def out_item_manual(request):
+    if request.method == 'GET':
+        status = ''
+        i_name = ''
+        vi_item = []
+        tag_num = request.GET['tag_num']
+        em_id = request.GET['e_id']
+        v_id = request.GET['vid']
+        if tag_num:
+            qr = Qr_code.objects.filter(tag_number=tag_num).first()
+            if qr:
+                if qr.in_status == 1 and qr.out_status == 0:
+                    i_name = qr.item.name
+                    #Out sucess
+                    out_item_save(tag_num,em_id,v_id,scan_type=0)
+                    it = Item.objects.all()
+                    for i in it:
+                        vi = Out_item.objects.filter(voucher_id=v_id,item_id=i.id).first()
+                        if vi:
+                            vi_item.append(vi)
+                    status = 1
+                if qr.in_status == 0:
+                    #First Add Production
+                    status = 2
+                if qr.in_status == 1 and qr.out_status == 1:
+                    #Already scaned
+                    status = 3
+            else:
+                #Rong Qrcode
+                status = 0
+            context={
+                'vi_item':vi_item
+            }
+        t = render_to_string('ajax/store/out_tag_list.html', context)
+    return JsonResponse({'t':t,'status':status,'i_name':i_name}) 
+
+
+def search_item(request):
+    if request.method == 'GET':
+        words = request.GET['words']
+        p = ''
+        if len(words) > 2:
+            p=Item.objects.filter(name__icontains=words)[0:10]
+        context={
+            'pro':p
+        }
+        t = render_to_string('ajax/office/search_item.html', context)
+    return JsonResponse({'t': t})
+
+def fetch_batch(request):
     if request.method == 'GET':
         pid = request.GET['pid']
-        pro = Product.objects.get(id=pid)
-        ba = Batch.objects.filter(product_id=pid)
+        pro = Item.objects.get(id=pid)
+        ba = Batch.objects.filter(item_id=pid)
         context={
             'pro':pro,
             'ba':ba
         }
-        t = render_to_string('ajax/fetch_batch_admin.html', context)
+        t = render_to_string('ajax/office/fetch_batch.html', context)
     return JsonResponse({'t': t})
 
-def admin_batch_detail(request):
+def batch_detail(request):
     if request.method == 'GET':
         bid = request.GET['bid']
         ba = Batch.objects.get(id=bid)
@@ -229,6 +308,5 @@ def admin_batch_detail(request):
             'out_stock':out_stock,
             'qr_code':qr_code
             }
-        t = render_to_string('ajax/admin_batch_detail.html', context)
+        t = render_to_string('ajax/office/batch_detail.html', context)
     return JsonResponse({'t': t}) 
-

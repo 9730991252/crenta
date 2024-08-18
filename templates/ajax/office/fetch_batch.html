@@ -1,0 +1,24 @@
+<style>
+    .batch{
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+    .batch_p_box{
+        background-color: rgba(185, 255, 230, 0.858);
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid rgb(140, 255, 215);
+    }
+</style>
+<div  id="batch_detail_result">
+    <div class="batch_p_box"> 
+        <div class="text-center"><h6>{{pro.name}}</h6></div>    
+        <div class="batch">
+            {% for b in ba %}
+            <a style="width: fit-content;" onclick="batch_detail('{{b.id}}')" class="btn btn-success btn-sm">Batch {{b.batch_name}}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<br>

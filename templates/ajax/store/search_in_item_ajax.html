@@ -1,0 +1,19 @@
+<style>
+    .search_batch{
+      text-align: center;
+      background-color: rgb(211, 255, 255);
+      border-radius: 10px;
+      padding: 5px;
+      margin-left: 10px ;
+      margin-right: 10px ;
+      font-weight: 700 ;
+      margin-bottom: 10px;
+  }
+  </style>
+  
+  {% for i in pro %}
+  <div class="search_batch">
+    <div>{{i.name}}</div>
+    <a href="/store/item_in/{{i.id}}" class="btn btn-primary">select</a>
+  </div>
+  {% endfor %}

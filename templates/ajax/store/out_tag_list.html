@@ -1,0 +1,8 @@
+{% load store_tag %}
+
+{% for v in vi_item %}
+<div class="tag_summary">
+    <div><b>{{v.item.name}}</b> &nbsp;&nbsp;&nbsp; Total {% out_item_total v.voucher_id v.item_id %}</div>
+    <div>{% out_tag_list v.voucher_id v.item_id %}</div>
+</div>
+{% endfor %}

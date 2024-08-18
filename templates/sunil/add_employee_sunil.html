@@ -1,0 +1,67 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% include 'include/alert.html' %}
+<div class="container mt-2"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_employee">Add Employee</button></div>
+
+<div class="container mt-3">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Mobile</th>
+        <th scope="col">Pin</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for e in e %}
+            <tr>
+              <th scope="row">1</th>
+              <td>{{e.name}}</td>
+              <td>{{e.mobile}}</td>
+              <td>{{e.pin}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+  <div class="modal fade" id="add_employee" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Employee</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST">{% csrf_token %}
+                <div class="mb-3">
+                  <label class="form-label">Name</label>
+                  <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Mobile</label>
+                  <input type="number" name="mobile" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Pin</label>
+                  <input type="password" name="pin" class="form-control">
+                </div>
+                <button type="submit" name="add_employee" class="btn btn-primary">Add</button>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+{% endblock content %}

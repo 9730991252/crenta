@@ -1,0 +1,28 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% include 'include/alert.html' %}
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    <input type="hidden" id="e_id" value="{{e.id}}">
+    <input type="hidden" id="e_name" value="{{e.name}}">
+    {% include 'include/alert.html' %}
+
+</div>
+{% include 'include/store/store_menu.html' %}
+<!--* content *-->
+
+<div class="container">
+    <form method="POST">{% csrf_token %}
+        <div class="form-group">
+          <label class="mb-2">Voucher Name</label>
+          <input type="tex" class="form-control" name="voucher_name" placeholder="Voucher Name">
+        </div><br>
+        <button name="Add_voucher" type="submit" class="btn btn-primary">Add</button>
+      </form>
+</div>
+
+
+<!--* end content *-->
+{% endblock content %}

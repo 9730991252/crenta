@@ -1,0 +1,136 @@
+{% extends 'home/base.html' %}
+{% block content %}
+<style>
+*{
+  margin: 0;
+  padding: 0;
+
+}
+.form-control{
+  border: 1px solid black;
+}
+@media only screen and (max-width: 500px) {
+
+}
+</style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+</div>
+<div class="container my-3">
+    <div class="row">
+    <div class="col-2 ">
+        {% include 'include/office/office_menu.html' %}  
+    </div>
+
+        
+    <div class="col-10">
+      <div class="container mt-2"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_item">Add Item</button></div><br>
+      {% include 'include/alert.html' %}
+
+<div class="container mt-3">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Sr_num</th>
+        <th scope="col">Status</th>
+        <th scope="col">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for p in p %}
+            <tr >
+              <td>{{forloop.counter}}</td>
+              <td>{{p.name}}</td>
+              <th><input style="width: 50px;" id="sr_num{{p.id}}" type="number" value="{{p.sr_num}}"><i onclick="set_item_sr_num('{{p.id}}')">&#10004;</i></th>
+              <td><form class="" method="POST">{% csrf_token %}{% if p.status == 1 %}<button class="btn btn-success" type="submit" name="Active">Active<input type="hidden" name="id" value="{{p.id}}"></button>{% else %}<button class="btn btn-danger" type="submit" name="Deactive">Deactive<input type="hidden" name="id" value="{{p.id}}"></button>{% endif %}</form></td>
+              <td><a href="" class="text-bg-info p-2"data-bs-toggle="modal" data-bs-target="#Edit_item_Modal_{{p.id}}" >Edit</a></td>
+            </tr>
+            <!-- Edit item Modal -->
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="modal fade" id="Edit_item_Modal_{{p.id}}" tabindex="-1" aria-labelledby="Edit_empolyee_Modal_{{e.id}}" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="Edit_empolyee_Modal_{{e.id}}">Edit Employee</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <input type="hidden" name="id" value="{{p.id}}">
+                      
+                      <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{p.name}}">
+                      </div>
+            
+                
+                
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" name="Edit">Submit</button>
+                    </div>
+                    </div>
+                  </div>
+                  </div>
+                </form>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+<!--* Add item *-->
+  <div class="modal fade" id="add_item" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Item</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST">{% csrf_token %}
+                <div class="mb-3">
+                  <label class="form-label">Name</label>
+                  <input type="text" name="name" class="form-control" style="border: 1px solid black;" required>
+                </div>
+                <button type="submit" name="add_item" class="btn btn-primary">Add</button>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    </div>
+
+  
+</div>
+
+<script>
+  function set_item_sr_num(item_id){
+    num = document.getElementById('sr_num'+ item_id).value;
+    if (num){
+      console.log(num)
+      $.ajax({
+            url: "{% url 'set_item_sr_num' %}",
+            method: "GET",
+            data:{
+                num:num,
+                item_id:item_id
+            
+            },
+             success: function(res){
+              location.reload()
+             }
+        })
+    }
+
+  }
+</script>
+
+{% endblock content %}

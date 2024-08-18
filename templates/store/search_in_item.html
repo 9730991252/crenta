@@ -1,0 +1,104 @@
+{% extends 'home/base.html' %}
+{% block head %}
+
+<style>
+    .search_footer{
+        position: fixed;
+        z-index: 2323;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        padding: 5px;
+        background-color: rgb(229, 229, 229);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        input{
+            width: 300px;
+        }
+    }
+    .in_stock_list{
+        background-color: rgb(246, 216, 252);
+        border-radius: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 5px;
+        font-weight: 600;
+        text-align: center;
+    }
+    .item_all_list{
+          text-align: center;
+          background-color: rgb(255, 210, 210);
+          border-radius: 10px;
+          padding: 5px;
+          margin-left: 10px ;
+          margin-right: 10px ;
+          font-weight: 700 ;
+          margin-bottom: 10px;
+      }
+      a{
+        text-decoration: none;
+        color: black;
+      }
+</style>
+{% endblock head %}
+{% block content %}
+{% include 'include/alert.html' %}
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    <input type="hidden" id="e_id" value="{{e.id}}">
+    <input type="hidden" id="e_name" value="{{e.name}}">
+    {% include 'include/alert.html' %}
+</div>
+{% include 'include/store/store_menu.html' %}
+<!--* content *-->
+<br>
+<div id="item_result">
+</div>
+    {% if in_stock_list %} 
+    <div class="text-center my-2"><h6><b>Today's production</b></h6></div>
+    {% endif %}
+    {% for i in in_stock_list %}
+    <div class="in_stock_list mb-2">
+       <div> {{i.item.name}} &nbsp;&nbsp;  </div>
+       <a href="/store/item_in/{{i.item_id}}" class="btn btn-primary btn-sm">Add More</a>
+    </div>
+    {% endfor %}
+
+
+
+
+      {% for i in item %}
+      <a href="/store/item_in/{{i.id}}">
+      <div class="item_all_list my-2" >
+        <div>{{i.name}}</div>
+        
+      </div>
+    </a>
+      {% endfor %}
+
+<br><br><br>
+<div class="search_footer">
+    <input oninput="search_in_item()" id="search_input" type="text" class="form-control" name="voucher_name" placeholder="Search Item">
+</div>
+
+
+<!--* end content *-->
+
+<script>
+    function search_in_item(){
+        search_input = document.getElementById('search_input').value;
+        $.ajax({
+            url: "{% url 'search_in_item_ajax' %}",
+            method: "GET",
+            data:{
+                words:search_input,            
+            },
+             success: function(res){
+                $("#item_result").html(res.t);
+                $("html, body").animate({ scrollTop: 0 }, "fast");
+             }
+        })
+    }
+</script>
+{% endblock content %}

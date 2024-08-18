@@ -1,0 +1,22 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Tag Number</th>
+        <th scope="col">Generate Date</th>
+        <th scope="col">Generate By</th>
+        <th scope="col">Used & Unused</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for qr in tag_list %}
+      <tr>
+        <td>{{qr.tag_number}}</td>
+        <td>{{qr.generate_date}}</td>
+        <td>{{qr.employee.name}}</td>
+        <td> {% if qr.in_status == 1 %} <h6 class="text-success">Used</h6> {% else %}  <h6 class="text-danger">Un Used</h6> {% endif %}</td>
+        <td><a class="btn btn-info" onclick="re_print('{{qr.tag_number}}','{{qr.product.product_name}}')">Re Generate</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>

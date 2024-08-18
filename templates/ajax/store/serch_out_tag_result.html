@@ -1,0 +1,29 @@
+<br>
+{% if i.out_status == 1 %}
+    <div class="container"><div class="alert alert-danger">This Tag Already Used</div></div>
+{% else %}
+    {% if i %}
+        <style>
+            .main_box{
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                border-radius: 10px;
+                width: 300px;
+                padding: 10px;
+                margin-left: auto;
+                margin-right: auto;
+                font-weight: 700;
+
+            }
+        </style>
+
+        <div class="text-center main_box">
+            {{i.item.name}}
+            <div style="display: flex; justify-content: space-evenly;">
+                <div>{{i.tag_number}}</div>
+                <div><button onclick="out_item('{{i.tag_number}}')" class="btn btn-info">Out</button></div>
+            </div>
+        </div>    
+    {% else %}
+        <div class="container"><div class="alert alert-danger">Rong Qr Code</div></div>
+    {% endif %}
+{% endif %}

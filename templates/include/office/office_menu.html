@@ -1,0 +1,19 @@
+<style>
+    a{
+            width: 100%;
+        }
+    @media only screen and (max-width: 500px) {
+        .but{
+            display: none;
+        }
+    }
+</style>
+
+<div class="but">
+    <a  href="/office/office_home/" class="my-1 {% if request.path == '/office/office_home/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Home</a>
+      <a  href="/office/generate_qr_code/" class="my-1 {% if request.path == '/office/generate_qr_code/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Generate Qr Code</a>
+      <a  href="/office/item/" class="my-1 {% if request.path == '/office/item/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Item</a>
+      <a  href="/office/verify_qr_code" class=" my-1 {% if request.path == '/office/verify_qr_code' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Verify QR Code</a>
+      <a  href="/office/employee/" class="my-1 {% if request.path == '/office/employee/' %}btn btn-warning{% elif request.path == '/office/office_employee/' %}btn btn-warning{% elif request.path == '/office/store_employee/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Employee</a>
+    <a href="/office_logout/" class="btn btn-danger my-1">Logout</a>
+</div>

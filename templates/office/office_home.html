@@ -1,0 +1,139 @@
+{% extends 'home/base.html' %}
+{% block title %} Report{% endblock title %}
+{% block content %}
+{% load store_tag %}
+{% load office_tag %}
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .Todays_Production{
+    background-color: rgb(212, 255, 255);
+    border-radius: 10px;
+    width: fit-content;
+    padding: 5px;
+    font-weight: 700;
+    margin-left: auto;
+    margin-right: auto;
+}
+.search_footer{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1212121;
+  background-color: rgb(214, 214, 214);
+  padding: 5px;
+  input{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto
+  }
+}
+    @media only screen and (max-width: 500px) {
+    .Todays_Production{
+        background-color: rgb(212, 255, 255);
+        border-radius: 10px;
+        width: fit-content;
+        padding: 5px;
+        font-weight: 700;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
+    .col-2{
+        display: none;
+    }
+    .col-10{
+        width: 100%;
+    }
+}
+</style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    
+    <div class="row">
+        <div class="col-2">
+            {% include 'include/office/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            <div id="item_result"></div>
+            <div id="batch_result"></div>
+            <div class="text-center">
+            <!--* Todays_Production *-->
+            <div class="Todays_Production">Todays Production</div>
+            {% if t|length == 0 %}No Production Added Today{% endif %}
+            {% for t in t %}
+            <div onclick="fetch_batch('{{t.item_id}}')" >
+                <div class="text-center" style="margin: 10px;border-radius: 10px; background-color: rgb(255, 202, 231);"><strong>{{t.item.name}}</strong> &nbsp;&nbsp;&nbsp; {% today_production t.item_id %}</div>
+            </div>
+            {% endfor %}
+            <!--// end Todays_Production //-->
+        </div>
+        <div class="text-center">
+            <!--* Stock list *-->
+            <div class="Todays_Production">Stock list</div>
+            {% for s in all_stock_list %}
+            <div onclick="fetch_batch('{{s.item_id}}')" >
+                <div class="text-center" style="margin: 10px;border-radius: 10px; padding: 10px; background-color: rgb(202, 255, 205);"><strong>{{s.item.name}}</strong>&nbsp;&nbsp;&nbsp; {% all_stock_count s.item_id %}</div>
+            </div>
+                {% endfor %}
+                <!--// end Stock list //-->
+            </div>
+            <br><br>
+                <div class="search_footer">
+                    <input type="text" oninput="search_item()" id="search_item_input" class="form-control" placeholder="Search Product" >
+                  </div>
+    </div>
+</div>
+
+
+<script>
+    
+    function search_item(){
+        search_item_input = document.getElementById('search_item_input').value;
+        $.ajax({
+        url: "{% url 'search_item' %}",
+        method: "GET",
+        data:{
+          words:search_item_input
+              },
+            success: function(res){
+              $("#item_result").html(res.t);
+              $("#batch_result").empty();
+            }
+         })
+        }
+      function fetch_batch(id){
+             $.ajax({
+             url: "{% url 'fetch_batch' %}",
+             method: "GET",
+             data:{
+               pid:id
+                 },
+                 success: function(res){
+                    $("#item_result").empty();
+                   $("#batch_result").html(res.t);
+                   $("html, body").animate({ scrollTop: 0 }, "fast");
+                 }
+              })
+            }
+
+
+    function batch_detail(id){
+            $.ajax({
+                url: "{% url 'batch_detail' %}",
+                method: "GET",
+                data:{
+                    bid:id
+                    },
+                    success: function(res){
+                        console.log(res)
+                        $("#batch_detail_result").html(res.t);
+                    }
+            })
+            }
+</script>
+{% endblock content %}

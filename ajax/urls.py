@@ -1,13 +1,16 @@
 from django.urls import path
 from ajax import views
 urlpatterns = [
-    path('search_batch_product', views.search_batch_product,name='search_batch_product'),
-    path('add_new_batch', views.add_new_batch,name='add_new_batch'),
-    path('search_qr_product', views.search_qr_product,name='search_qr_product'),
-    path('in_stock', views.in_stock,name='in_stock'),
-    path('out_stock', views.out_stock,name='out_stock'),
-    path('create_tage', views.create_tage,name='create_tage'),
-    path('search_product_admin', views.search_product_admin,name='search_product_admin'),
-    path('fetch_batch_admin', views.fetch_batch_admin,name='fetch_batch_admin'),
-    path('admin_batch_detail', views.admin_batch_detail,name='admin_batch_detail'),
-    ]
+    path('generate_tag', views.generate_tag,name='generate_tag'),
+    path('set_item_sr_num', views.set_item_sr_num,name='set_item_sr_num'),
+    path('search_in_item_ajax', views.search_in_item_ajax,name='search_in_item_ajax'),
+    path('in_item', views.in_item,name='in_item'),
+    path('in_item_manual', views.in_item_manual,name='in_item_manual'),
+    path('search_tag', views.search_tag,name='search_tag'),
+    path('out_item', views.out_item,name='out_item'),
+    path('search_out_tag', views.search_out_tag,name='search_out_tag'),
+    path('out_item_manual', views.out_item_manual,name='out_item_manual'),
+    path('search_item', views.search_item,name='search_item'),
+    path('fetch_batch', views.fetch_batch,name='fetch_batch'),
+    path('batch_detail', views.batch_detail,name='batch_detail'),
+]

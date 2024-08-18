@@ -1,0 +1,187 @@
+{% extends 'home/base.html' %}
+{% block title %} Office Dashboard{% endblock title %}
+{% block content %}
+<style>
+      *{
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+      }
+
+    .sticky_footer{
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        background-color: rgb(197, 197, 197);
+        padding: 5px;
+        border-radius: 10px;
+        input{
+            width: 200px;
+        }
+    }
+    .tag_box{
+      height: 1.95in;
+         width: 1.95in;
+         border: 1px solid rgb(0, 0, 0);
+         margin-bottom: 3mm;
+         margin-left: auto;
+         margin-right: auto;
+         text-align: center;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+      }
+        #tag_nummber{
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+    img{
+        height: 140px;
+    }
+</style>
+<style media="print">
+        @page{
+      margin: 0in;
+      padding: 0in;
+      size: 1.5 1.95in;
+    }
+  .hide{
+    display: none;
+  }
+  .tag_box{
+    border: none;
+  }
+  </style>
+<div class="container employee_name hide">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    <input type="hidden" value="{{e.id}}" id="eid" class="form-control" required>
+</div>
+<div id="tag_result"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-2 office_menu hide">
+            {% include 'include/office/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            
+            <br class="hide">
+            <!--* content -->
+
+            <div class="container hide">
+                <div id="tag_list">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Tag Number</th>
+                        <th scope="col">Generate Date</th>
+                        <th scope="col">Generate By</th>
+                        <th scope="col">Used & Unused</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for qr in tag_list %}
+                      <tr>
+                        <td>{{qr.tag_number}}</td>
+                        <td>{{qr.generate_date}}</td>
+                        <td>{{qr.employee.name}}</td>
+                        <td> {% if qr.in_status == 1 %} <h6 class="text-success">Used</h6> {% else %}  <h6 class="text-danger">Un Used</h6> {% endif %}</td>
+                        <td><a class="btn btn-info" onclick="re_print('{{qr.tag_number}}')">Re Generate</a></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+            <nav aria-label="..." class="hide">
+                <ul class="pagination">
+                  {% if tag_list.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="/office/generate_qr_code?page=1" tabindex="-1">First</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="/office/generate_qr_code?page={{tag_list.previous_page_number}}" tabindex="-1">Previous</a>
+                  </li>
+                  {% endif %}
+  
+                  {% for n in total_page_list %}
+                  <li class="page-item"><a class="page-link" href="/office/generate_qr_code?page={{n}}">{{n}}</a></li>
+                  {% endfor %}
+  
+                  {% if tag_list.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="/office/generate_qr_code?page={{tag_list.next_page_number}}">Next</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="/office/generate_qr_code?page={{last_page}}">Last</a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </nav>
+    <br class="hide"><br class="hide">
+
+            <div class="sticky_footer hide">
+                <input type="number" oninput="tag_limit()" id="tag_qty" class="form-control" placeholder="Tag Qty">
+                <button class="btn btn-success" onclick="generate_tag()" >Generate Tag</button>
+                <button class="btn btn-primary" onclick="print_tag()">Print</button>
+            </div>
+            <!--// end content -->
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    function tag_limit(){
+        tag_qty = document.getElementById('tag_qty').value;
+        if( tag_qty > 100){
+            document.getElementById('tag_qty').value='';
+        }
+    }
+    function generate_tag(){
+        tag_qty = document.getElementById('tag_qty').value;
+        if (tag_qty == ''){
+          alert('Please Enter Value')
+        }
+        eid = document.getElementById('eid').value;
+        $.ajax({
+            url: "{% url 'generate_tag' %}",
+            method: "GET",
+            data:{
+                qty:tag_qty,
+                eid:eid
+            
+            },
+             success: function(res){
+                document.getElementById('tag_qty').value='';
+                $("#tag_result").html(res.t);
+                $("#tag_list").html(res.tag_list);
+                $("html, body").animate({ scrollTop: 0 }, "fast");
+             }
+        })
+    }
+    function print_tag(){
+        window.print()
+        location.reload()
+        img = document.getElementById('img');
+        img.src=''
+    }
+
+
+    function re_print(tag_number){
+      $("#tag_result").empty();
+      temp = `    <div class="tag_box">
+        <div>
+          <div style="display: flex; justify-content: center; gap: 10px;">Tag <h6 id="tag_nummber">${tag_number}</h6></div>
+            <div><img src="https://api.qrserver.com/v1/create-qr-code/?size=151x151&data=${tag_number}" ></div>
+        </div>
+    </div> `
+      $("#tag_result").html(temp);
+  }
+
+</script>
+{% endblock content %}

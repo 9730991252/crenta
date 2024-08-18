@@ -1,0 +1,16 @@
+<style>
+    .buttons{
+        display: flex;
+        gap: 10px;
+        overflow: scroll;
+    }
+</style>
+<div class="container buttons">
+    <div><a  href="/store/store_home/" class="my-1 {% if request.path == '/store/store_home/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Home</a></div>
+    <div><a  href="/store/search_in_item/" class="my-1 {% if request.path == '/store/search_in_item/' %}btn btn-warning {% elif request.path == url_in %}btn btn-warning {% else %}btn btn-primary{% endif %}">Item In</a></div>
+    <div><a  href="/store/add_voucher/" class="my-1 {% if request.path == '/store/add_voucher/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Item Out</a></div>
+    <div><a  href="/store_logout/" class="my-1 btn btn-danger">Logout</a></div>
+</div>
+
+
+ 

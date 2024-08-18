@@ -1,0 +1,8 @@
+{% for t in tag reversed %}
+    <div class="tag_box">
+        <div>
+            <div style="display: flex; justify-content: center; gap: 10px;"><h6 id="tag_nummber">{{t.tag_number}}</h6></div>
+            <div><img src="https://api.qrserver.com/v1/create-qr-code/?size=151x151&data={{t.tag_number}}" ></div>
+        </div>
+    </div>
+{% endfor %}

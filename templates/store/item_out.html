@@ -1,0 +1,349 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% load store_tag %}
+{% load static %}
+{% block content %}
+{% include 'include/alert.html' %}
+<style>
+        #reader{
+            overflow: hidden;
+        border-radius: 10px;
+        font-weight: 600;
+        button{
+            background-color: rgb(0, 149, 255);
+            color: white;
+            border-radius: 5px;
+        }
+        select{
+            width: 90%;
+            margin-bottom: 10px;
+        }
+        video{
+            border-radius: 10px;
+        }
+    }
+.video_scan{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.red_alert{  
+    background-color: red;  
+}
+.warning_alert{  
+    background-color: rgb(255, 247, 0);  
+}
+.scan_box{  
+    animation: scan_border 2s 1;
+    animation-direction: reverse;
+}
+@keyframes scan_border {
+  0%   {
+
+  }result
+  25%  {
+    background-color: green;  
+}
+50%  {
+      background-color: green;  
+      
+    }
+    75%  {
+      background-color: green;  
+    
+  }
+  100% {
+
+  }
+}
+.todays_production_box{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+ }
+ .todays_production{
+    background-color: rgb(222, 255, 253);
+    width: fit-content;
+    padding: 5px;
+    border-radius: 10px;
+ }
+ .product_main_box{
+    margin-bottom: 50px;
+}
+.product_box{
+     border-radius: 10px;
+    background-color: rgb(242, 217, 255);
+    margin-bottom: 10px;
+    padding: 5px;
+    text-align: center;
+ }
+ div.sticky {
+    width: 100%;
+  position: -webkit-sticky;
+  position: fixed;
+  bottom: 0;
+  padding: 5px;
+  background-color: rgb(228, 228, 228);
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+}
+.voucher_name{
+        background-color: rgb(205, 252, 255);
+        border-radius: 10px;
+        border: 2px solid rgb(138, 244, 252);
+        width: fit-content;
+        height: fit-content;
+        padding: 10px;
+        padding-top: 2px;
+        padding-bottom: 1px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+    }
+    .tag_summary{
+        gap: 10px;
+        background-color: rgb(255, 232, 205);
+        border-radius: 10px;
+        border: 2px solid rgb(255, 205, 113);
+        width: 90%;
+        height: fit-content;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom:5px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+    }
+</style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    <input type="hidden" id="e_id" value="{{e.id}}">
+    <input type="hidden" id="e_name" value="{{e.name}}">
+    {% include 'include/alert.html' %}
+    
+</div>
+{% include 'include/store/store_menu.html' %}
+
+
+
+
+
+<!--* content *-->
+
+<div id="scan_border">
+    <div class="video_scan">
+        <div  style="width:300px;" id="reader"></div>
+    </div>
+</div>
+
+<div id="tag_result"></div>
+<br>
+<div id="last_ruselt" class="text-center"></div>
+
+
+<div class="voucher_name">
+    <h6>Voucher Name {{v.name}}</h6>
+    <input type="hidden" value="{{v.id}}" id="vid">
+</div>
+
+
+
+<div class="text-center">
+    <h6>Tag summary</h6>
+    <div id="tag_summary">
+        {% for v in vi_item %}
+        <div class="tag_summary" >
+            <div><b>{{v.item.name}}</b> &nbsp;&nbsp;&nbsp; Total {% out_item_total v.voucher_id v.item_id %}</div>
+            <div>{% out_tag_list v.voucher_id v.item_id %}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<br><br>
+
+<div style="display: none;">
+    <audio id="audio" controls>
+        <source src="{% static 'audio/1.mp3' %}" type="audio/mp3">
+	</audio>
+</div>
+
+
+
+
+
+<!--* end content *-->
+<div class="sticky"><div class="container"><input type="number" id="tag_num" placeholder="Enter Tag Number" class="form-control"> </div><div class="container"><button class="btn btn-primary" onclick="search_out_tag()">Search</button></div></div>
+
+
+
+
+
+
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+
+var count_ruselt = 0;
+var last_ruselt = 0;
+let e_name = document.getElementById('e_name').value;
+function onScanSuccess(c){
+
+    if(c !== last_ruselt){
+        ++count_ruselt;
+        last_ruselt = c;
+        $.ajax({
+            url: "{% url 'out_item' %}",
+            method: "GET",
+            data:{
+                tag_num:c,
+                e_id:document.getElementById('e_id').value,
+                vid:document.getElementById('vid').value,
+        },
+        success: function(res){
+            document.getElementById('last_ruselt').innerHTML=`${res.i_name}&nbsp&nbspTag&nbsp${c}`
+            if(res.status == 1){
+                console.log(res.t)
+                $("#tag_summary").html(res.t);
+                success_audio()
+                $("#scan_border").addClass('scan_box');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('scan_box');
+                }, 2000);
+            }
+            else if(res.status == 0){
+                $("#scan_border").addClass('red_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('red_alert');
+                }, 5000);
+                
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=`Rong Qr Code mister ${e_name} Plese Chack and try again`;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
+                alert('Rong Qr Code')
+            }
+            else if (res.status == 3){
+                $("#scan_border").addClass('warning_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('warning_alert');
+                }, 5000);
+                
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=`Already scaned Plese Chack and try again ${res.i_name} mister ${e_name} `;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
+                //fele_audio()
+            }
+            else if (res.status == 2){
+                $("#scan_border").addClass('warning_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('warning_alert');
+                }, 5000);
+                
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=`First Add Production Plese Chack and try again ${res.i_name} mister ${e_name} `;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
+                //fele_audio()
+            }
+        }
+            })
+    }
+    
+    
+}
+
+function onScanError(errorMessage){
+}
+var html5QrcodeScanner = new Html5QrcodeScanner(
+    "reader", { fps: 10, qrbox: 250,showTorchButtonIfSupported:true});
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+    
+    
+    function success_audio(){
+        var audio = document.getElementById('audio');
+        audio.play();
+    }
+    function search_out_tag(){
+        tag_num = document.getElementById('tag_num').value;
+        $.ajax({
+            url: "{% url 'search_out_tag' %}",
+            method: "GET",
+            data:{
+                tag_num:tag_num,
+            },
+            success: function(res){
+                $("#tag_result").html(res.t);
+            }
+        })
+    }
+    function out_item(c){
+        $.ajax({
+            url: "{% url 'out_item_manual' %}",
+            method: "GET",
+            data:{
+                tag_num:c,
+                e_id:document.getElementById('e_id').value,
+                vid:document.getElementById('vid').value,
+        },
+        success: function(res){
+            document.getElementById('last_ruselt').innerHTML=`${res.i_name}&nbsp&nbspTag&nbsp${c}`
+            if(res.status == 1){
+                console.log(res.t)
+                $("#tag_summary").html(res.t);
+                success_audio()
+                $("#scan_border").addClass('scan_box');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('scan_box');
+                }, 2000);
+
+                $("#tag_result").empty();
+                document.getElementById('tag_num').value='';
+            }
+            else if(res.status == 0){
+                $("#scan_border").addClass('red_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('red_alert');
+                }, 5000);
+                
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=`Rong Qr Code mister ${e_name} Plese Chack and try again`;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
+                alert('Rong Qr Code')
+            }
+            else if (res.status == 2){
+                $("#scan_border").addClass('warning_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('warning_alert');
+                }, 5000);
+                
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=`First Add Production Plese Chack and try again ${res.i_name} mister ${e_name} `;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
+                //fele_audio()
+            }
+            else if (res.status == 3){
+                $("#scan_border").addClass('warning_alert');
+                setTimeout(function() {
+                    $("#scan_border").removeClass('warning_alert');
+                }, 5000);
+                
+                const msg = new SpeechSynthesisUtterance;
+                msg.text=` Qr Code Already Scaned Plese Chack and try again ${res.i_name} mister ${e_name} `;
+                msg.voice=speechSynthesis.getVoices()[1];
+                speechSynthesis.speak(msg);
+                //fele_audio()
+            }
+        }
+            })
+    }
+    
+</script>
+
+
+
+{% endblock content %}

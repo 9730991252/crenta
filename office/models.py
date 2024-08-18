@@ -1,130 +1,41 @@
 from django.db import models
 
 # Create your models here.
-
-
-class Admin (models.Model):
-    admin_name = models.CharField(max_length=100)
-    address=models.CharField(max_length=100)
-    admin_mobile=models.IntegerField(default=True,unique=True)
+class Office_employee(models.Model):
+    name = models.CharField(max_length=200)
+    mobile = models.IntegerField()
     pin = models.IntegerField()
-    added_date = models.DateTimeField(auto_now_add=True, null=True)
     status = models.IntegerField(default=1)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
 
-class Employee (models.Model):
-    employee_name = models.CharField(max_length=100)
-    employee_address=models.CharField(max_length=100)
-    employee_mobile=models.IntegerField(default=True,unique=True)
+class Store_employee(models.Model):
+    name = models.CharField(max_length=200)
+    mobile = models.IntegerField()
     pin = models.IntegerField()
-    department=models.CharField(max_length=50,default=True)
-    added_by = models.CharField(max_length=50, default=True)
+    status = models.IntegerField(default=1)
     added_date = models.DateTimeField(auto_now_add=True, null=True)
-    status = models.IntegerField(default=1)
 
 
-class Product(models.Model):
-    product_name=models.CharField(max_length=100)
-    category=models.CharField(max_length=100,null=True,blank=True)
-    type = models.CharField(max_length=100,null=True,blank=True)
-    added_by=models.CharField(max_length=100)
-    added_date=models.DateTimeField(auto_now_add=True,null=True)
-    status = models.IntegerField(default=1)
-
-class Dealer(models.Model):
-    dealer_shope_name = models.CharField(max_length=100)
-    dealer_name = models.CharField(max_length=100)
-    dealer_mobile = models.IntegerField(null=True,blank=True)
-    dealer_address = models.CharField(max_length=100)
-    location = models.CharField(max_length=100,null=True,blank=True)
-    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,null=True,blank=True)
-    added_date = models.DateTimeField(auto_now_add=True, null=True)
-    date=models.DateField(auto_now_add=True,null=True)
-    status = models.IntegerField(default=1)
-
-class Add_Product(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
-    type = models.CharField(max_length=100,null=True,blank=True)
-    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
-    qty = models.IntegerField(default=0)
-    ordered_date = models.DateTimeField(auto_now_add=True,null=True)
-    date=models.DateField(auto_now_add=True,null=True)
-    
-    def save(self, *args,**kwargs):
-        super(Add_Product,self).save(*args,**kwargs)
-
-        stock=Stock_Product.objects.filter(product=self.product).order_by('-id').first()
-        if stock:
-            q=stock.stock_qty
-            z=self.qty
-            z=int(z)
-            stock_qty = q+z
-            
-        else:
-            stock_qty=self.qty
-
-        Stock_Product.objects.create(
-            product=self.product,
-            employee=self.employee,
-            add_qty=self.qty,
-            stock_qty=stock_qty,
-            type=self.type
-
-        )
-
-
-
-
-class Sell_Product(models.Model):
-    dealer = models.ForeignKey(Dealer,on_delete=models.PROTECT,null=True,blank=True)
-    bach_number = models.CharField(max_length=100,null=True,default=1)
-    product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
-    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
-    qty = models.IntegerField(default=0)
-    ordered_date = models.DateTimeField(auto_now_add=True,null=True)
-    date=models.DateField(auto_now_add=True,null=True)
-    
-    def save(self, *args,**kwargs):
-        super(Sell_Product,self).save(*args,**kwargs)
-
-        stock=Stock_Product.objects.filter(product=self.product).order_by('-id').first()
-        if stock:
-            q=stock.stock_qty
-            z=self.qty
-            z=int(z)
-            stock_qty = q-z
-            
-        else:
-            stock_qty=self.qty
-
-        Stock_Product.objects.create(
-            product=self.product,
-            employee=self.employee,
-            sell_qty=self.qty,
-            stock_qty=stock_qty
-
-
-        )
-
-
-
-class Stock_Product(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
-    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
-    add_qty = models.IntegerField(default=0)
-    sell_qty = models.IntegerField(default=0)
-    stock_qty = models.IntegerField(default=0)
-    type = models.CharField(max_length=100,null=True,blank=True)
+class Item(models.Model):
+    name = models.CharField(max_length=100)
+    sr_num = models.IntegerField(null=True)
+    employee = models.ForeignKey(Office_employee,on_delete=models.PROTECT,null=True,blank=True)
     added_date = models.DateTimeField(auto_now_add=True,null=True)
-    date=models.DateField(auto_now_add=True,null=True)
-
-
-
-
-
+    status = models.IntegerField(default=1)
 
 class Batch(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.PROTECT,default=True)
-    employee = models.ForeignKey(Employee,on_delete=models.PROTECT,default=True,null=True)
+    item = models.ForeignKey(Item,on_delete=models.PROTECT,default=True)
+    in_employee = models.ForeignKey(Store_employee,on_delete=models.PROTECT,default=True,null=True)
     sr_num = models.IntegerField()
     batch_name = models.CharField(max_length=200)
+    date = models.DateField(auto_now_add=True)
+
+class Qr_code(models.Model):
+    item = models.ForeignKey(Item,on_delete=models.PROTECT,null=True)
+    employee = models.ForeignKey(Office_employee,on_delete=models.PROTECT,null=True)
+    batch = models.ForeignKey(Batch,on_delete=models.PROTECT,null=True)
+    tag_number = models.IntegerField(unique=True)
+    in_status = models.IntegerField(default=0)
+    out_status = models.IntegerField(default=0)
+    generate_date = models.DateTimeField(auto_now_add=True)
     date = models.DateField(auto_now_add=True)

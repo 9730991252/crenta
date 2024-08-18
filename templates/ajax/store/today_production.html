@@ -1,0 +1,5 @@
+{% load store_tag %}
+<div class="product_main_box container" id="todays_production">
+    <div class="text-center"><b>{{i.name}} &nbsp;&nbsp;&nbsp; {% today_production_employee i.id %}</b></div>
+    <div>{% today_production_in_tag i.id %}</div>
+</div>
