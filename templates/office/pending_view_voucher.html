@@ -9,15 +9,24 @@ box-sizing: border-box;
 }
 .item_list_head{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr ;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr ;
     font-weight: 600;
 }
 .item_list_content{
     padding: 5px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr ;
-    border: 1px solid black;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr ;
+    background-color: rgb(232, 215, 255);
+    .item_name{
+        font-weight: 500;
+    }
   
+}
+.tag_list{
+    text-align: center;
+    border-bottom: 1px solid black;
+    margin-bottom: 20px;
+    background-color: rgb(232, 215, 255);
 }
 
 </style>
@@ -56,14 +65,14 @@ box-sizing: border-box;
                 
                 {% for q in q %}
                 <div class="item_list_content">
-                    <div>{{q.item.name}}</div>
+                    <div class="item_name">{{q.item.name}}</div>
                     <div>Total Qty {% out_voucher_qty q.item_id q.voucher_id %}</div>
                     <div>{{q.store_employee.name}}</div>
                     <div>{{q.generate_date}}</div>
                     <div> {% if q.verify_by == None %} {% else %}{{q.verify_by.name}}{% endif %}</div>
                     <div><form class="" method="POST">{% csrf_token %}{% if q.verify_status == 0 %}<input type="hidden" name="item_id" value="{{q.item_id}}"><button class="btn btn-success btn-sm my-1" type="submit" name="Verify">Accepte All</button>{% else %}Accepted{% endif %}</form></div>          
-                    <div>tag{% out_tag_list q.voucher_id q.item_id %}</div>
                 </div>
+                <div class="tag_list">tag{% out_tag_list q.voucher_id q.item_id %}</div>
                 {% endfor %}
            
         </div>
