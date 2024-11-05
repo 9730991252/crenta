@@ -7,7 +7,9 @@
          padding: 0;
          box-sizing: border-box;
       }
-
+      .flex{
+        display: flex;
+      }
     .sticky_footer{
         position: fixed;
         bottom: 0;
@@ -66,7 +68,10 @@
             {% include 'include/office/office_menu.html' %}  
         </div>
         <div class="col-10">
-            
+            <div class="hide flex">
+                <h6 class="text-danger">Un Used Tag &nbsp; </h6> <b>{{un_used_tag}}</b>
+            </div>
+
             <br class="hide">
             <!--* content -->
 
@@ -100,23 +105,23 @@
                 <ul class="pagination">
                   {% if tag_list.has_previous %}
                   <li class="page-item">
-                    <a class="page-link" href="/office/generate_qr_code?page=1" tabindex="-1">First</a>
+                    <a class="page-link" href="/office/generate_qr_code/?page=1" tabindex="-1">First</a>
                   </li>
                   <li class="page-item">
-                    <a class="page-link" href="/office/generate_qr_code?page={{tag_list.previous_page_number}}" tabindex="-1">Previous</a>
+                    <a class="page-link" href="/office/generate_qr_code/?page={{tag_list.previous_page_number}}" tabindex="-1">Previous</a>
                   </li>
                   {% endif %}
   
                   {% for n in total_page_list %}
-                  <li class="page-item"><a class="page-link" href="/office/generate_qr_code?page={{n}}">{{n}}</a></li>
+                  <li class="page-item"><a class="page-link" href="/office/generate_qr_code/?page={{n}}">{{n}}</a></li>
                   {% endfor %}
   
                   {% if tag_list.has_next %}
                   <li class="page-item">
-                    <a class="page-link" href="/office/generate_qr_code?page={{tag_list.next_page_number}}">Next</a>
+                    <a class="page-link" href="/office/generate_qr_code/?page={{tag_list.next_page_number}}">Next</a>
                   </li>
                   <li class="page-item">
-                    <a class="page-link" href="/office/generate_qr_code?page={{last_page}}">Last</a>
+                    <a class="page-link" href="/office/generate_qr_code/?page={{last_page}}">Last</a>
                   </li>
                   {% endif %}
                 </ul>

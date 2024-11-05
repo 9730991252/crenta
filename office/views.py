@@ -173,7 +173,8 @@ def generate_qr_code(request):
             'e':e,
             'tag_list':tag_list,
             'last_page':total_pages,
-            'total_page_list':[n+1 for n in range(total_pages)][0:3]
+            'total_page_list':[n+1 for n in range(total_pages)][0:3],
+            'un_used_tag':Qr_code.objects.filter(in_status=0, out_status=0).count()
         }
         return render(request,'office/generate_qr_code.html',context=context)        
     else:
