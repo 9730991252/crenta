@@ -34,7 +34,6 @@
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Mobile</th>
-                        <th scope="col">Pin</th>
                         <th scope="col">By</th>
                         <th scope="col">Status</th>
                         <th scope="col">Edit</th>
@@ -46,7 +45,6 @@
                             <th scope="row">{{forloop.counter}}</th>
                             <td>{{e.name}}</td>
                             <td>{{e.mobile}}</td>
-                            <td>{{e.pin}}</td>
                             <td>{{e.added_by.name}}</td>
                             <td><form class="" method="POST">{% csrf_token %}{% if e.status == 1 %}<button class="btn btn-success" type="submit" name="Active">Active<input type="hidden" name="id" value="{{e.id}}"></button>{% else %}<button class="btn btn-danger" type="submit" name="Deactive">Deactive<input type="hidden" name="id" value="{{e.id}}"></button>{% endif %}</form></td>
                             <td><a href="" class="text-bg-info p-2"data-bs-toggle="modal" data-bs-target="#Edit_empolyee_Modal_{{e.id}}" >Edit</a></td>
@@ -73,11 +71,6 @@
                                     <div class="mb-3">
                                         <label for="mobile" class="form-label">Mobile</label>
                                         <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10" class="form-control" id="employee_mobile" name="mobile" value="{{e.mobile}}">
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="pin" class="form-label">Secret Pin</label>
-                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="4" class="form-control" id="pin" name="pin" value="{{e.pin}}">
                                     </div>
                                     </div>
                                     <div class="modal-footer">
@@ -111,10 +104,6 @@
                             <div class="mb-3">
                               <label class="form-label">Mobile</label>
                               <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10" name="mobile" value="{{return_mobile}}"  class="form-control">
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label">Pin</label>
-                              <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="4" value="0000" name="pin" class="form-control">
                             </div>
                             <button type="submit" name="add_diller" class="btn btn-primary">Add</button>
                           </form>

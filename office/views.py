@@ -178,7 +178,6 @@ def diller(request):
             if 'add_diller'in request.POST:
                 name=request.POST.get('name')
                 mobile=request.POST.get('mobile')
-                pin=request.POST.get('pin')
                 if name == '':
                     messages.error(request,"Please Enter Name")
                 elif mobile == '':
@@ -190,7 +189,6 @@ def diller(request):
                         added_by_id=e.id,
                         name=name,
                         mobile=mobile,
-                        pin=pin or str('0000'),
                         ).save()
                     messages.success(request,"diller Add Succesfully") 
                     return redirect('diller')
@@ -213,17 +211,15 @@ def diller(request):
                 name=request.POST.get('name')
                 print(name)
                 mobile=request.POST.get('mobile')
-                pin=request.POST.get('pin')
                 #print(id)
                 Diller(
                     id=id,
                     added_by_id=e.id,
                     name=name,
                     mobile=mobile,
-                    pin=pin,
                 ).save()
                 messages.success(request,"diller Edit Succesfully") 
-                return redirect('/office/marketing_employee/')
+                return redirect('/office/diller/')
         context={
             'e':e,
             'Diller':Diller.objects.all(),

@@ -27,7 +27,6 @@ class Diller(models.Model):
     added_by = models.ForeignKey(Office_employee,on_delete=models.PROTECT,null=True)
     name = models.CharField(max_length=200)
     mobile = models.IntegerField()
-    pin = models.CharField(max_length=10)
     status = models.IntegerField(default=1)
     added_date = models.DateTimeField(auto_now_add=True, null=True)
 
