@@ -168,6 +168,72 @@ def marketing_employee(request):
     else:
         return redirect('login')
     
+def diller(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']
+        e=Office_employee.objects.filter(mobile=office_mobile).first()
+        if e:
+            return_name = ''
+            return_mobile = ''
+            if 'add_diller'in request.POST:
+                name=request.POST.get('name')
+                mobile=request.POST.get('mobile')
+                pin=request.POST.get('pin')
+                if name == '':
+                    messages.error(request,"Please Enter Name")
+                elif mobile == '':
+                    messages.error(request,"Please Enter Mobile Number")
+                elif Diller.objects.filter(mobile=mobile).exists():
+                    messages.error(request,"diller Allready Exits")
+                else:
+                    Diller(
+                        added_by_id=e.id,
+                        name=name,
+                        mobile=mobile,
+                        pin=pin or str('0000'),
+                        ).save()
+                    messages.success(request,"diller Add Succesfully") 
+                    return redirect('diller')
+                return_name = request.POST.get('name')
+                return_mobile = request.POST.get('mobile')
+            elif "Active" in request.POST:
+                id=request.POST.get('id')
+                #print(id)
+                ac=Diller.objects.get(id=id)
+                ac.status='0'
+                ac.save()
+            elif "Deactive" in request.POST:
+                id=request.POST.get('id')
+                #print(id)
+                ac=Diller.objects.get(id=id)
+                ac.status='1'
+                ac.save() 
+            elif "Edit" in request.POST:
+                id=request.POST.get('id')
+                name=request.POST.get('name')
+                print(name)
+                mobile=request.POST.get('mobile')
+                pin=request.POST.get('pin')
+                #print(id)
+                Diller(
+                    id=id,
+                    added_by_id=e.id,
+                    name=name,
+                    mobile=mobile,
+                    pin=pin,
+                ).save()
+                messages.success(request,"diller Edit Succesfully") 
+                return redirect('/office/marketing_employee/')
+        context={
+            'e':e,
+            'Diller':Diller.objects.all(),
+            'return_name': return_name,
+            'return_mobile': return_mobile,
+        }
+        return render(request, 'office/diller.html', context)
+    else:
+        return redirect('login')
+    
     
 def store_employee(request):
     if request.session.has_key('office_mobile'):

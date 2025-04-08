@@ -13,5 +13,6 @@ urlpatterns = [
     path('pending_view_voucher/<int:id>', views.pending_view_voucher,name='pending_view_voucher'),
     path('accepted_verify_qr_code', views.accepted_verify_qr_code,name='accepted_verify_qr_code'),
     path('marketing_employee/', views.marketing_employee,name='marketing_employee'),
+    path('diller/', views.diller,name='diller'),
     path('accepted_view_voucher/<int:id>', views.accepted_view_voucher,name='accepted_view_voucher'),
 ]

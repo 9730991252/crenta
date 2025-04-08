@@ -1,0 +1,132 @@
+{% extends 'home/base.html' %}
+{% block title %} {% endblock title %}
+{% block content %}
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+</style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    
+    <div class="row">
+        <div class="col-2">
+            {% include 'include/office/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            <!--* Button trigger modal *-->
+            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#Add_diller">
+                Add Diller
+            </button>
+            {% include 'include/alert.html' %}  
+            <!--// end Button trigger modal //-->
+
+
+
+
+                <div class="container mt-3">
+                <div class="text-center"><h6>Diller</h6></div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Pin</th>
+                        <th scope="col">By</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Edit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in diller %}
+                            <tr >
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{e.name}}</td>
+                            <td>{{e.mobile}}</td>
+                            <td>{{e.pin}}</td>
+                            <td>{{e.added_by.name}}</td>
+                            <td><form class="" method="POST">{% csrf_token %}{% if e.status == 1 %}<button class="btn btn-success" type="submit" name="Active">Active<input type="hidden" name="id" value="{{e.id}}"></button>{% else %}<button class="btn btn-danger" type="submit" name="Deactive">Deactive<input type="hidden" name="id" value="{{e.id}}"></button>{% endif %}</form></td>
+                            <td><a href="" class="text-bg-info p-2"data-bs-toggle="modal" data-bs-target="#Edit_empolyee_Modal_{{e.id}}" >Edit</a></td>
+                            </tr>
+                            <!-- Edit Empolyee Modal -->
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <div class="modal fade" id="Edit_empolyee_Modal_{{e.id}}" tabindex="-1" aria-labelledby="Edit_empolyee_Modal_{{e.id}}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="Edit_empolyee_Modal_{{e.id}}">Edit Diller</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <input type="hidden" name="id" value="{{e.id}}">
+                                    
+                                    <div class="mb-3">
+                                        <label for="employee_name" class="form-label">name</label>
+                                        <input type="text" class="form-control" id="employee_name" name="name" value="{{e.name}}">
+                                    </div>
+                                
+                                
+                                    <div class="mb-3">
+                                        <label for="mobile" class="form-label">Mobile</label>
+                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10" class="form-control" id="employee_mobile" name="mobile" value="{{e.mobile}}">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="pin" class="form-label">Secret Pin</label>
+                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="4" class="form-control" id="pin" name="pin" value="{{e.pin}}">
+                                    </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="Edit">Submit</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                                </form>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+
+
+              <!--* Modal *-->
+              <div class="modal fade" id="Add_diller" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Add Diller</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST">{% csrf_token %}
+                            <div class="mb-3">
+                              <label class="form-label">Name</label>
+                              <input type="text" name="name"  value="{{return_name}}" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Mobile</label>
+                              <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10" name="mobile" value="{{return_mobile}}"  class="form-control">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Pin</label>
+                              <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="4" value="0000" name="pin" class="form-control">
+                            </div>
+                            <button type="submit" name="add_diller" class="btn btn-primary">Add</button>
+                          </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--// endModal //-->
+        </div>
+    </div>
+</div>
+{% endblock content %}
