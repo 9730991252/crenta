@@ -1,21 +1,28 @@
+103.150.136.82
+root
+cd crenta
 git pull
-sudo systemctl daemon-reload
-sudo systemctl restart crenta.in.gunicorn
-exit
-
-*********************************
+source venv/bin/activate
 python3 manage.py makemigrations
 python3 manage.py migrate
+systemctl daemon-reload
+systemctl restart crenta.com.gunicorn
+exit
 
-**********************************
+root
+cd crenta
+git pull
+systemctl daemon-reload
+systemctl restart crenta.com.gunicorn
+exit
 
+git clone https://github.com/9730991252/crenta.git
 
-139.59.31.88
+cd crenta
 
 ********** Create Virtual env *****
 
 virtualenv venv
-
 
 
 ********** Activate Virtual env ****
@@ -23,59 +30,65 @@ virtualenv venv
 source venv/bin/activate
 
 
+****************migrations******
+
+python3 manage.py makemigrations
+
+*********** migrate ********
+
+python3 manage.py migrate
+
+
 
 ***** install django ******
 
 pip install django
-
+pip install pillow
+pip install django-embed-video
+pip install num2words
 
 
 ******** Install Gunicorn ******
  
 pip install gunicorn
 
-
-
 *********** Deactivate Virtualenv *****
 
 deactivate
 
 
-
 ************ Create System Socket File for Gunicorn *******
 
-Example:- sudo nano /etc/systemd/system/crenta.in.gunicorn.socket
+Example:-  nano /etc/systemd/system/crenta.in.gunicorn.socket
 
 cd  /etc/systemd/system/
 
-sudo nano crenta.in.gunicorn.socket
+ nano crenta.com.gunicorn.socket
 
 
 
 [Unit]
-Description=crenta.in.gunicorn socket
+Description=crenta.com.gunicorn socket
 
 [Socket]
-ListenStream=/run/crenta.in.gunicorn.sock
+ListenStream=/run/crenta.com.gunicorn.sock
 
 [Install]
 WantedBy=sockets.target
 
 
-
-
 ************** Create System Service File for Gunicorn ******
-Syntax:- sudo nano /etc/systemd/system/your_domain.gunicorn.service
-Example:- sudo nano /etc/systemd/system/crenta.in.gunicorn.service
+Syntax:-  nano /etc/systemd/system/your_domain.gunicorn.service
+Example:-  nano /etc/systemd/system/crenta.com.gunicorn.service
 
 cd  /etc/systemd/system/
 
-sudo nano crenta.in.gunicorn.service
+ nano crenta.com.gunicorn.service
 
 
 [Unit]
-Description=crenta.in.gunicorn daemon
-Requires=crenta.in.gunicorn.socket
+Description=crenta.com.gunicorn daemon
+Requires=crenta.com.gunicorn.socket
 After=network.target
 
 [Service]
@@ -85,51 +98,46 @@ WorkingDirectory=/root/crenta
 ExecStart=/root/crenta/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
-          --bind unix:/run/crenta.in.gunicorn.sock \
+          --bind unix:/run/crenta.com.gunicorn.sock \
           crenta.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
 
-
 ----------------------------------------------------------------
-sudo systemctl start crenta.in.gunicorn.socket
+systemctl start crenta.com.gunicorn.socket
 
-sudo systemctl start crenta.in.gunicorn.service
+systemctl start crenta.com.gunicorn.service
 
 -----------------------------------------------------------------
 
+systemctl enable crenta.com.gunicorn.socket
 
-
-sudo systemctl enable crenta.in.gunicorn.socket
-
-sudo systemctl enable crenta.in.gunicorn.service
+systemctl enable crenta.com.gunicorn.service
 
 -----------------------------------------------------------------------
 
+systemctl status crenta.com.gunicorn.socket
 
-sudo systemctl status crenta.in.gunicorn.socket
-
-sudo systemctl status crenta.in.gunicorn.service
+systemctl status crenta.com.gunicorn.service
 
 -------------------------------------------
 
-sudo systemctl daemon-reload
-
-sudo systemctl restart crenta.in.gunicorn
+systemctl daemon-reload
+systemctl restart crenta.com.gunicorn
 
 --------------------------------
 
 
 
 ****************** Create Virtual Host File ******
-Syntax:- sudo nano /etc/nginx/sites-available/your_domain
-Example:- sudo nano /etc/nginx/sites-available/crenta.in
+Syntax:-  nano /etc/nginx/sites-available/your_domain
+Example:-  nano /etc/nginx/sites-available/crenta.in
 
 
 cd /etc/nginx/sites-available
 
-sudo nano crenta.in
+ nano crenta.com
 
 
 
@@ -137,7 +145,8 @@ server{
     listen 80;
     listen [::]:80;
 
-    server_name 139.59.31.88;
+    server_name c.tejorder.com www.c.tejorder.com;
+    client_max_body_size 500M;
 
     location = /favicon.ico { access_log off; log_not_found off; }
 
@@ -146,9 +155,10 @@ server{
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass http://unix:/run/crenta.in.gunicorn.sock;
+        proxy_pass http://unix:/run/crenta.com.gunicorn.sock;
     }
 
+    
     
 }
 
@@ -157,24 +167,25 @@ server{
 
 ########## Enable Virtual Host or Create Symbolic Link of Virtual Host File ########
 
-sudo ln -s /etc/nginx/sites-available/crenta.in /etc/nginx/sites-enabled/crenta.in
+ ln -s /etc/nginx/sites-available/crenta.com /etc/nginx/sites-enabled/crenta.com
 
 
 %%%%%%%%%%%%%%%%%%%%% Check Configuration is Correct or Not %%%%%
 
-sudo nginx -t
-
-
+ nginx -t
 
 %%%%%%%%%%%% Restart Nginx %%%%%%%%%
 
-sudo service nginx restart
+ service nginx restart
 -------------------------------------
-
 
 ********** restart ******
 
-sudo systemctl daemon-reload
-sudo systemctl restart crenta.in.gunicorn
-exit
+systemctl daemon-reload
+systemctl restart crenta.com.gunicorn
 
+--------------------------------------- ssl ------------------
+  certbot --nginx
+
+
+ certbot --nginx -d crenta.com -d www.crenta.com
