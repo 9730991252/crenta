@@ -1,7 +1,13 @@
 from django.shortcuts import render, redirect
 from office.models import *
+from store.models import *
 # Create your views here.
 def index(request):
+    In_item.objects.all().delete()
+    Out_item.objects.all().delete()
+    Qr_code.objects.all().delete()
+    Batch.objects.all().delete()
+    Voucher_name.objects.all().delete()
     return render(request, 'home/index.html')
 
 def login(request):
