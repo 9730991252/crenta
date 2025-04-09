@@ -1,0 +1,125 @@
+{% extends 'home/base.html' %}
+{% block title %} {% endblock title %}
+{% block content %}
+{% include 'include/alert.html' %}
+{% include 'include/marketing_menu.html' %}
+<div class=""><h>Welcome - {{m.name}}</h></div>
+<div class="text-center">
+    <br>
+    <b>{{dealer .name}}</b> Mo.{{dealer .mobile}}
+</div>
+<div class="container border">
+    <div id="cart">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Item</th>
+        <th scope="col">Qty</th>
+        <th scope="col">Price</th>
+        <th scope="col">Total</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody id="cart_item" >
+
+      {% for t in cart %}
+      
+      <tr>
+       
+        <td>{{t.item.name}} {{t.note}}</td>
+        <td>{{t.qty}}</td>
+        <td>{{t.price}}</td>
+        <td>{{t.total_amount}}</td>
+        <td>{% if t.cook_status == 'Pendding' %}<h4 class="text-bg-danger text-center">Pending</h4>{% else %}<h4 class="text-bg-success text-center ">{{t.cook_status}}</h4>{% endif %}</td>
+        <td><form action="" method="POST">{% csrf_token %}<input type="hidden" name="cart_id" value="{{t.id}}"><button type="submit" class="btn btn-transparent text-danger btn-sm" name="Delete">X</button></form></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  </div>
+
+
+<style>
+    .search_footer{
+        position: fixed;
+        z-index: 2323;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        padding: 5px;
+        background-color: rgb(229, 229, 229);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        input{
+            width: 300px;
+        }
+    }
+    .item_all_list{
+          text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.5);
+          border-radius: 10px;
+          padding: 10px;
+          margin-left: 10px ;
+          margin-right: 10px ;
+          font-weight: 700 ;
+          margin-bottom: 10px;
+          width: 350px;
+          padding-left: 0px;
+          margin: 0 auto;
+      }
+      a{
+        text-decoration: none;
+        color: black;
+      }
+</style>
+
+<div id="item_result">
+
+    {% for i in items %}
+    <form method="POST">
+        <input type="text" name="item_id" value="{{i.id}}" hidden>
+        {% csrf_token %}
+        <div class="item_all_list my-2" >
+            <div>{{i.name}}</div>
+
+            <div style="display: grid;grid-template-columns: 1fr 2fr;gap: 10px;">
+                <div>Qty</div>
+                <div><input type="number" oninput="document.getElementById('total{{i.id}}').innerText = (document.getElementById('qty{{i.id}}').value * document.getElementById('price{{i.id}}').value)" name="qty" id="qty{{i.id}}" class="form-control" required></div>
+                <div>Price</div>
+                <div><input type="number" oninput="document.getElementById('total{{i.id}}').innerText = (document.getElementById('qty{{i.id}}').value * document.getElementById('price{{i.id}}').value)" name="price" id="price{{i.id}}" class="form-control" required></div>
+                <div id="total{{i.id}}">0</div>
+                <button  type="submit" name="add_item_to_cart" class="btn btn-danger mt-2 form-control">Add</button>
+            </div>
+
+        </div>
+    </form>
+    {% endfor %}
+    
+</div>
+
+<br><br><br>
+<div class="search_footer">
+    <input oninput="search_in_item()" id="search_input" type="text" class="form-control" name="voucher_name" placeholder="Search Item">
+</div>
+
+
+<script>
+    function search_in_item(){
+        search_input = document.getElementById('search_input').value;
+        $.ajax({
+            url: "{% url 'search_marketing_item_ajax' %}",
+            method: "GET",
+            data:{
+                words:search_input,            
+            },
+             success: function(res){
+                $("#item_result").html(res.t);
+                $("html, body").animate({ scrollTop: 0 }, "fast");
+             }
+        })
+    }
+</script>
+
+{% endblock content %}

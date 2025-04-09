@@ -17,8 +17,8 @@
         </div>
         <div class="col-10">
             <!--* Button trigger modal *-->
-            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#Add_diller">
-                Add Diller
+            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#Add_dealer">
+                Add Dealer
             </button>
             {% include 'include/alert.html' %}  
             <!--// end Button trigger modal //-->
@@ -27,25 +27,23 @@
 
 
                 <div class="container mt-3">
-                <div class="text-center"><h6>Diller</h6></div>
+                <div class="text-center"><h6>Dealer</h6></div>
                 <table class="table">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Mobile</th>
                         <th scope="col">By</th>
                         <th scope="col">Status</th>
                         <th scope="col">Edit</th>
                     </tr>
                     </thead>
                     <tbody>
-                        {% for e in diller %}
+                        {% for e in dealer  %}
                             <tr >
                             <th scope="row">{{forloop.counter}}</th>
                             <td>{{e.name}}</td>
-                            <td>{{e.mobile}}</td>
-                            <td>{{e.added_by.name}}</td>
+                            <td>{{e.added_by_office.name}}</td>
                             <td><form class="" method="POST">{% csrf_token %}{% if e.status == 1 %}<button class="btn btn-success" type="submit" name="Active">Active<input type="hidden" name="id" value="{{e.id}}"></button>{% else %}<button class="btn btn-danger" type="submit" name="Deactive">Deactive<input type="hidden" name="id" value="{{e.id}}"></button>{% endif %}</form></td>
                             <td><a href="" class="text-bg-info p-2"data-bs-toggle="modal" data-bs-target="#Edit_empolyee_Modal_{{e.id}}" >Edit</a></td>
                             </tr>
@@ -56,7 +54,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                     <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="Edit_empolyee_Modal_{{e.id}}">Edit Diller</h1>
+                                    <h1 class="modal-title fs-5" id="Edit_empolyee_Modal_{{e.id}}">Edit Dealer</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -65,12 +63,6 @@
                                     <div class="mb-3">
                                         <label for="employee_name" class="form-label">name</label>
                                         <input type="text" class="form-control" id="employee_name" name="name" value="{{e.name}}">
-                                    </div>
-                                
-                                
-                                    <div class="mb-3">
-                                        <label for="mobile" class="form-label">Mobile</label>
-                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10" class="form-control" id="employee_mobile" name="mobile" value="{{e.mobile}}">
                                     </div>
                                     </div>
                                     <div class="modal-footer">
@@ -88,11 +80,11 @@
 
 
               <!--* Modal *-->
-              <div class="modal fade" id="Add_diller" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="Add_dealer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">Add Diller</h1>
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Add Dealer</h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -101,11 +93,7 @@
                               <label class="form-label">Name</label>
                               <input type="text" name="name"  value="{{return_name}}" class="form-control">
                             </div>
-                            <div class="mb-3">
-                              <label class="form-label">Mobile</label>
-                              <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="10" name="mobile" value="{{return_mobile}}"  class="form-control">
-                            </div>
-                            <button type="submit" name="add_diller" class="btn btn-primary">Add</button>
+                            <button type="submit" name="add_dealer" class="btn btn-primary">Add</button>
                           </form>
                     </div>
                     <div class="modal-footer">

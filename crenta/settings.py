@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'sunil',
     'office',
     'ajax',
-    'store'
+    'store',
+    'marketing',
 ]
 
 MIDDLEWARE = [

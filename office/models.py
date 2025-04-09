@@ -23,10 +23,10 @@ class Marketing_employee(models.Model):
     status = models.IntegerField(default=1)
     added_date = models.DateTimeField(auto_now_add=True, null=True)
 
-class Diller(models.Model):
-    added_by = models.ForeignKey(Office_employee,on_delete=models.PROTECT,null=True)
+class Dealer(models.Model):
+    added_by_office = models.ForeignKey(Office_employee,on_delete=models.PROTECT,null=True)
+    added_by_marketing = models.ForeignKey(Marketing_employee,on_delete=models.PROTECT,null=True)
     name = models.CharField(max_length=200)
-    mobile = models.IntegerField()
     status = models.IntegerField(default=1)
     added_date = models.DateTimeField(auto_now_add=True, null=True)
 

@@ -25,4 +25,5 @@ urlpatterns = [
     path('office/', include('office.urls')),
     path('ajax/', include('ajax.urls')),
     path('store/', include('store.urls')),
+    path('marketing/', include('marketing.urls')),
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,19 @@
+{% for i in item %}
+<form method="POST">
+    <input type="text" name="item_id" value="{{i.id}}" hidden>
+    {% csrf_token %}
+    <div class="item_all_list my-2" >
+        <div>{{i.name}}</div>
+
+        <div style="display: grid;grid-template-columns: 1fr 2fr;gap: 10px;">
+            <div>Qty</div>
+            <div><input type="number" oninput="document.getElementById('total{{i.id}}').innerText = (document.getElementById('qty{{i.id}}').value * document.getElementById('price{{i.id}}').value)" name="qty" id="qty{{i.id}}" class="form-control" required></div>
+            <div>Price</div>
+            <div><input type="number" oninput="document.getElementById('total{{i.id}}').innerText = (document.getElementById('qty{{i.id}}').value * document.getElementById('price{{i.id}}').value)" name="price" id="price{{i.id}}" class="form-control" required></div>
+            <div id="total{{i.id}}">0</div>
+            <button  type="submit" name="add_item_to_cart" class="btn btn-danger mt-2 form-control">Add</button>
+        </div>
+
+    </div>
+</form>
+{% endfor %}

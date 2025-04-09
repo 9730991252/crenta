@@ -24,6 +24,19 @@ def login(request):
                 return redirect('store_home')
     return render(request, 'home/login.html')
 
+def marketing_login(request):
+    if request.session.has_key('marketing_mobile'):
+        return redirect('marketing_home')
+    else:
+        if request.method == "POST":
+            number=request.POST ['number']
+            pin=request.POST ['pin']
+            se= Marketing_employee.objects.filter(mobile=number,pin=pin,status=1)
+            if se:
+                request.session['marketing_mobile'] = request.POST["number"]
+                return redirect('marketing_home')
+    return render(request, 'home/login.html')
+
 
 def sunil_login(request):
     if request.method == 'POST':

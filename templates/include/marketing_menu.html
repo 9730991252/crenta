@@ -1,0 +1,14 @@
+<style>
+    .buttons{
+        display: flex;
+        gap: 10px;
+        overflow: scroll;
+    }
+</style>
+<div class="buttons">
+    <div><a  href="/marketing/marketing_home/" class="my-1 {% if request.path == '/marketing/marketing_home/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Home</a></div>
+    <div><a  href="/store_logout/" class="my-1 btn btn-danger">Logout</a></div>
+</div>
+
+
+ 
