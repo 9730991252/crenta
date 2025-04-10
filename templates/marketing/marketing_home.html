@@ -5,15 +5,6 @@
 {% include 'include/marketing_menu.html' %}
 <div class=""><h>Welcome - {{m.name}}</h></div>
 
-<div class="container text-center mt-5">
-    {% for d in dillers %}
-    <div class="dealer  border text-center pb-2" style="width: 350px; margin: 0 auto;">
-        <h6><b>{{d.name}}</b> Mo.{{d.mobile}}</h6>
-        <a href="/marketing/select_diller/{{d.id}}" class="btn btn-info text-light">Select</a>
-    </div>
-    {% endfor %}
-</div>
-
 
 
 {% endblock content %}

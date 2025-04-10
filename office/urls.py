@@ -15,4 +15,6 @@ urlpatterns = [
     path('marketing_employee/', views.marketing_employee,name='marketing_employee'),
     path('dealer/', views.dealer,name='dealer'),
     path('accepted_view_voucher/<int:id>', views.accepted_view_voucher,name='accepted_view_voucher'),
+    path('order/', views.order,name='order'),
+    path('pending_order/', views.pending_order,name='pending_order'),
 ]

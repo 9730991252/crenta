@@ -1,0 +1,8 @@
+{% for d in dealer %}
+<a href="/marketing/select_dealer/{{d.id}}" class="text-dark" style="text-decoration: none;">
+    <div class="dealer text-center p-2" style="width: 350px; margin: 0 auto;">
+        <h6><b>{{d.name}}</b></h6>
+    </div>
+</a>
+<br>
+{% endfor %}

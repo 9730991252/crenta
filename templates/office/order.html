@@ -1,0 +1,24 @@
+{% extends 'home/base.html' %}
+{% block title %} {% endblock title %}
+{% block content %}
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+</style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    
+    <div class="row">
+        <div class="col-2">
+            {% include 'include/office/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            {% include 'include/office/order_menu.html' %}  
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

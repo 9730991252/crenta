@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta, date
 import datetime
 from store.models import *
+from marketing.models import *
 # Create your views here.
 def office_home(request):
     if request.session.has_key('office_mobile'):
@@ -45,6 +46,33 @@ def employee(request):
             'e':e,
         }
         return render(request, 'office/employee/employee.html', context)
+    else:
+        return redirect('login')
+    
+def order(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']
+        e=Office_employee.objects.filter(mobile=office_mobile).first()
+        if e:
+            pass
+        context={
+            'e':e,
+        }
+        return render(request, 'office/order.html', context)
+    else:
+        return redirect('login')
+    
+def pending_order(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']
+        e=Office_employee.objects.filter(mobile=office_mobile).first()
+        if e:
+            pass
+        context={
+            'e':e,
+            'om':Marketing_order_master.objects.filter(status='Pendding'),
+        }
+        return render(request, 'office/pending_order.html', context)
     else:
         return redirect('login')
 

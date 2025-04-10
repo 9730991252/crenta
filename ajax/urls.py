@@ -5,6 +5,7 @@ urlpatterns = [
     path('set_item_sr_num', views.set_item_sr_num,name='set_item_sr_num'),
     path('search_in_item_ajax', views.search_in_item_ajax,name='search_in_item_ajax'),
     path('search_marketing_item_ajax', views.search_marketing_item_ajax,name='search_marketing_item_ajax'),
+    path('search_marketing_dealer_ajax', views.search_marketing_dealer_ajax,name='search_marketing_dealer_ajax'),
     path('in_item', views.in_item,name='in_item'),
     path('in_item_manual', views.in_item_manual,name='in_item_manual'),
     path('search_tag', views.search_tag,name='search_tag'),

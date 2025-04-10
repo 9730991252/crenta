@@ -1,0 +1,89 @@
+{% extends 'home/base.html' %}
+{% block title %} {% endblock title %}
+{% block content %}
+{% include 'include/alert.html' %}
+<div class=""><h>Welcome - {{m.name}}</h></div>
+{% include 'include/marketing_menu.html' %}
+
+<style>
+    .addvertise{
+      display: none;
+    }
+  </style>
+  <style media="print">
+    @page{
+    size: 3in 10in;
+    margin: 0in;
+    padding: 0in;
+  } 
+  
+  #p{
+    display: none;
+  }
+  
+  #t{
+    font-size: 14px;
+  
+  }
+  #order_item_head{
+    line-height: 6px;
+  }
+  #order_item{
+    line-height: 12px;
+  }
+  .addvertise{
+    display: unset;
+    text-align: center;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  #thank_you{
+    font-weight: 500;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: -0.05in;
+  }
+  </style>
+    
+  <div class="container border">
+      <div class="text-center"><p style="font-size: 15px;">{{om.dealer.name}}</p></div>
+  <div class="row">
+    <div class="col-6"> <h6>Bill-{{om.order_filter}}</h6> </div>
+        <h6 class="col-6">Date- {{om.date}}</h6>
+    </div>
+  </div>
+  <div class="container border">
+        
+      <table id="t" class="table mb-0">
+        
+        <thead>
+          <tr>
+            <div class="row">
+            <div class="col-8"><th id="order_item_head">Item </th></div>
+            <div class="col-1"><th id="order_item_head">Qty</th></div>
+            <div class="col-1"><th id="order_item_head">Price</th></div>
+            <div class="col-2"><th id="order_item_head">Price</th></div>
+          </div>
+          </tr>
+        
+        </thead>
+        <tbody>
+          {% for o in od %}
+          <tr>
+            <div class="row">
+            <div class="col-8" ><td id="order_item">{{o.item_name}}</td></div>
+            <div class="col-1" ><td id="order_item">{{o.qty}}</td></div>
+            <div class="col-1" ><td id="order_item">{{o.price}}</td></div>
+            <div class="col-2" ><td id="order_item">{{o.total_price}}</td></div>
+          </div>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <b>Total Rs.{{om.total_price}}</b>
+      
+      <div class="{% if om.status == 'Pendding' %}text-danger{% endif %}">Status: {{om.status}}</div>
+      
+    </div>
+
+{% endblock content %}

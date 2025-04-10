@@ -65,6 +65,15 @@ def search_marketing_item_ajax(request):
         t = render_to_string('ajax/marketing/search_marketing_item_ajax.html', context)
     return JsonResponse({'t': t})
 
+def search_marketing_dealer_ajax(request):
+    if request.method == 'GET':
+        words = request.GET['words']
+        p=Dealer.objects.filter(name__icontains=words)
+        context={
+            'dealer':p
+        }
+        t = render_to_string('ajax/marketing/search_marketing_dealer_ajax.html', context)
+    return JsonResponse({'t': t})
 
 
 def in_item(request):

@@ -6,8 +6,9 @@
 <div class=""><h>Welcome - {{m.name}}</h></div>
 <div class="text-center">
     <br>
-    <b>{{dealer .name}}</b> Mo.{{dealer .mobile}}
+    <b>{{dealer.name}}</b>
 </div>
+<br>
 <div class="container border">
     <div id="cart">
   <table class="table">
@@ -17,7 +18,6 @@
         <th scope="col">Qty</th>
         <th scope="col">Price</th>
         <th scope="col">Total</th>
-        <th scope="col">Status</th>
       </tr>
     </thead>
     <tbody id="cart_item" >
@@ -37,6 +37,11 @@
     </tbody>
   </table>
   </div>
+  <b>Total Rs.{{total}}</b>
+  <form method="POST">
+    <button type="submit" class="btn btn-danger btn-sm" onclick="loader.style.display = 'flex';this.style.display = 'none'"  name="complete_order">Complete Order</button>
+    <div class="spinner-border" id="loader" style="display: none;" role="status"></div>
+  </form>
   </div>
 
 
