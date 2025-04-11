@@ -17,4 +17,7 @@ urlpatterns = [
     path('accepted_view_voucher/<int:id>', views.accepted_view_voucher,name='accepted_view_voucher'),
     path('order/', views.order,name='order'),
     path('pending_order/', views.pending_order,name='pending_order'),
+    path('accepted_order/', views.accepted_order,name='accepted_order'),
+    path('view_pending_order/<id>/', views.view_pending_order,name='view_pending_order'),
+    path('view_accepted_order/<id>/', views.view_accepted_order,name='view_accepted_order'),
 ]

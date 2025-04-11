@@ -7,6 +7,9 @@ from datetime import timedelta, date
 import datetime
 from store.models import *
 from marketing.models import *
+import math
+from django.db.models import Sum
+
 # Create your views here.
 def office_home(request):
     if request.session.has_key('office_mobile'):
@@ -49,6 +52,93 @@ def employee(request):
     else:
         return redirect('login')
     
+@csrf_exempt
+def view_pending_order(request, id):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']
+        e=Office_employee.objects.filter(mobile=office_mobile).first()
+        if e:
+            om = Marketing_order_master.objects.filter(id=id).first()
+            if 'add_item_to_cart'in request.POST:
+                item_id = request.POST.get('item_id')
+                qty = request.POST.get('qty')
+                price = request.POST.get('price')
+                Marketing_order_detail(
+                    order_master=om,
+                    item_id=item_id,
+                    qty=qty,
+                    price=price,
+                    total_price=(int(qty) * int(price)),
+                    order_filter=om.order_filter,
+                    item_name=Item.objects.filter(id=item_id).first().name
+                ).save()
+                om.total_price = Marketing_order_detail.objects.filter(order_master=om).aggregate(Sum('total_price'))['total_price__sum'] or 0
+                om.save()
+                messages.success(request, 'New Item Added successfuly')
+                
+            if 'change_price'in request.POST:
+                t_id = request.POST.get('id')
+                t_price = request.POST.get('price')
+                od = Marketing_order_detail.objects.filter(id=t_id).first()
+                od.price = t_price
+                od.total_price = (int(od.qty) * int(math.floor(float(t_price))))
+                od.save()
+                om.total_price = Marketing_order_detail.objects.filter(order_master=om).aggregate(Sum('total_price'))['total_price__sum'] or 0
+                om.save()
+                messages.success(request, 'Price changed successfuly')
+            if 'change_qty'in request.POST:
+                t_id = request.POST.get('id')
+                t_qty = request.POST.get('qty')
+                od = Marketing_order_detail.objects.filter(id=t_id).first()
+                od.qty = t_qty
+                od.save()
+                om.total_price = (int(od.qty) * int(math.floor(float(od.price))))
+                om.save()
+                messages.success(request, 'Qty changed successfuly')
+            if 'Delete'in request.POST:
+                t_id = request.POST.get('id')
+                o = Marketing_order_detail.objects.filter(id=t_id).first()
+                om.total_price -= o.total_price
+                om.save()
+                o.delete()
+                messages.error(request, 'Item Deleted successfuly')
+                return redirect('view_pending_order', id)
+            if 'Accept'in request.POST:
+                oma = Marketing_order_master.objects.filter(id=id).first()
+                oma.accepted = e
+                oma.status = 'Accepted'
+                oma.save()
+               
+                messages.success(request, 'Order Accepted')
+                return redirect('/office/accepted_order/')
+            if 'Cancle'in request.POST:
+                om.status = 'Cancled'
+                om.save()
+                return redirect('/office/canceld_order/')
+        context={
+            'e':e,
+            'om':om,
+            'od':Marketing_order_detail.objects.filter(order_master=om)
+            }
+        return render(request, 'office/view_pending_order.html', context)
+    else:
+        return redirect('login')
+    
+def view_accepted_order(request, id):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']
+        e=Office_employee.objects.filter(mobile=office_mobile).first()
+        if e:
+            om = Marketing_order_master.objects.filter(id=id).first() or ''
+        context={
+            'e':e,
+            'om':om,
+            'od':Marketing_order_detail.objects.filter(order_master=om)
+            }
+        return render(request, 'office/view_accepted_order.html', context)
+    else:
+        return redirect('login')
+    
 def order(request):
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']
@@ -73,6 +163,20 @@ def pending_order(request):
             'om':Marketing_order_master.objects.filter(status='Pendding'),
         }
         return render(request, 'office/pending_order.html', context)
+    else:
+        return redirect('login')
+    
+def accepted_order(request):
+    if request.session.has_key('office_mobile'):
+        office_mobile = request.session['office_mobile']
+        e=Office_employee.objects.filter(mobile=office_mobile).first()
+        if e:
+            pass
+        context={
+            'e':e,
+            'om':Marketing_order_master.objects.filter(status='Accepted'),
+        }
+        return render(request, 'office/accepted_order.html', context)
     else:
         return redirect('login')
 

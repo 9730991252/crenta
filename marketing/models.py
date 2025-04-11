@@ -8,7 +8,15 @@ class marketing_Cart(models.Model):
     qty = models.IntegerField(null=True, blank=True)
     price = models.FloatField(null=True, blank=True)
     total_amount = models.FloatField(null=True, blank=True)
-    
+
+
+YEAR_IN_SCHOOL_CHOICES = [
+    ("Pendding", "Pendding"),
+    ("Accepted", "Accepted"),
+    ("Cancled", "Cancled"),
+    ("Delivered", "Delivered"),
+]
+  
 class Marketing_order_master(models.Model):
     marketing_employee = models.ForeignKey(Marketing_employee, on_delete=models.CASCADE, null=True, blank=True)
     accepted = models.ForeignKey(Office_employee, on_delete=models.CASCADE, null=True, blank=True)
@@ -17,7 +25,7 @@ class Marketing_order_master(models.Model):
     ordered_date = models.DateTimeField(auto_now_add=True,null=True)
     date = models.DateField(auto_now_add=True,null=True)
     order_filter=models.IntegerField(default=True)
-    status = models.CharField(default='Pendding', max_length=100)
+    status = models.CharField(default='Pendding', max_length=100, null=True)
 
 class Marketing_order_detail(models.Model):
     order_master=models.ForeignKey(Marketing_order_master,on_delete=models.PROTECT,null=True)

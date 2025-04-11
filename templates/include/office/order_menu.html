@@ -1,6 +1,8 @@
 <div style="display: flex;gap: 10px;">
-    <a  style="width: 200px;"  href="/office/pending_order/" class="{% if request.path == '/office/pending_order/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Pending</a>
-    <a  style="width: 200px;"  href="/office/accepted_order/" class="{% if request.path == '/office/accepted_order/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Accepted</a>
-    <a  style="width: 200px;"  href="/office/deliverd_order/" class="{% if request.path == '/office/deliverd_order/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Delivered</a>
+    <a  style="width: 200px;"  href="/office/pending_order/" class="pending_order {% if request.path == '/office/pending_order/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Pending</a>
+    <a  style="width: 200px;"  href="/office/accepted_order/" class="accepted_order {% if request.path == '/office/accepted_order/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Accepted</a>
+    <!-- <a  style="width: 200px;"  href="/office/deliverd_order/" class="{% if request.path == '/office/deliverd_order/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Delivered</a> -->
     <a  style="width: 200px;"  href="/office/canceld_order/" class="{% if request.path == '/office/canceld_order/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Canceled</a>
 </div>
+
+{% include 'include/alert.html' %}  

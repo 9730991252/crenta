@@ -1,0 +1,150 @@
+{% extends 'home/base.html' %}
+{% block title %} {% endblock title %}
+{% block content %}
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .order_btn, .pending_order{
+        background-color: #FFC107;
+        border: 0px;
+        color: black;
+    }
+</style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    
+    <div class="row">
+        <div class="col-2">
+            {% include 'include/office/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            {% include 'include/office/order_menu.html' %}  
+            <div style="text-align: center;font-weight: 700;margin-top: 10px;">{{om.dealer.name}}</div>
+
+            <div class="text-center" style="display: flex;justify-content: space-evenly;">
+                <div>Bill-{{om.order_filter}}</div>
+                <div>By-{{om.marketing_employee.name}}</div>
+                <div>{{om.date}}</div>
+            </div>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="cart_item" >
+            
+                  {% for t in od %}
+                  
+                  <tr>
+                   
+                    <td>{{t.item.name}} {{t.note}}</td>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{t.id}}" >
+                            <input type="number" name="qty" oninput="document.getElementById('change_qty{{t.id}}').style.display = (Number(this.value) !== Number('{{t.qty}}')) ? 'unset' : 'none'" style="width: 100px;" value="{{t.qty}}">
+                            <button style="display: none;" type="submit" name="change_qty" id="change_qty{{t.id}}" class="text-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{t.id}}" >
+                            <input type="number" name="price" oninput="document.getElementById('change_price{{t.id}}').style.display = (Number(this.value) !== Number('{{t.price}}')) ? 'unset' : 'none'" style="width: 100px;" value="{{t.price}}">
+                            <button style="display: none;" type="submit" name="change_price" id="change_price{{t.id}}" class="text-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </form>
+                    </td>
+                    <td>{{t.total_price}}</td>
+                    <td>{% if t.cook_status == 'Pendding' %}<h4 class="text-bg-danger text-center">Pending</h4>{% else %}<h4 class="text-bg-success text-center ">{{t.cook_status}}</h4>{% endif %}</td>
+                    <td><form action="" method="POST">{% csrf_token %}<input type="hidden" name="id" value="{{t.id}}"><button type="submit" class="btn btn-transparent text-danger btn-sm" name="Delete">X</button></form></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="text-start" style="display: flex;justify-content: start;">
+                <div style="display: flex; font-weight: 700;">Total Rs.{{om.total_price}}</div>
+            </div>
+              <div style="display: flex;justify-content: space-evenly;">
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="Accept" class="btn btn-success">Accept</button>
+                </form>
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="Cancle" class="btn btn-danger">Cancle</button>
+                </form>
+              </div>
+                <div id="item_result"></div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    #item_result{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 340px);
+        gap: 20px;
+    }
+  .search_footer{
+      position: fixed;
+      z-index: 2323;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      padding: 5px;
+      background-color: rgb(229, 229, 229);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      input{
+          width: 80%;
+      }
+  }
+  .item_all_list{
+        text-align: center;
+          border: 1px solid rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        padding: 10px;
+        margin-left: 10px ;
+        margin-right: 10px ;
+        font-weight: 700 ;
+        margin-bottom: 10px;
+        width: 340px;
+        padding-left: 0px;
+        margin: 0 auto;
+    }
+    a{
+      text-decoration: none;
+      color: black;
+    }
+</style>
+<br><br><br>
+<div class="search_footer">
+    <input oninput="search_in_item()" id="search_input" type="text" class="form-control" name="voucher_name" placeholder="Search Item">
+</div>
+
+<script>
+  function search_in_item(){
+      search_input = document.getElementById('search_input').value;
+      $.ajax({
+          url: "{% url 'search_marketing_item_ajax' %}",
+          method: "GET",
+          data:{
+              words:search_input,            
+          },
+           success: function(res){
+              $("#item_result").html(res.t);
+              $("html, body").animate({ scrollTop: 0 }, "fast");
+           }
+      })
+  }
+</script>
+{% endblock content %}

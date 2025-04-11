@@ -1,0 +1,60 @@
+{% extends 'home/base.html' %}
+{% block title %} {% endblock title %}
+{% block content %}
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .order_btn, .accepted_order{
+        background-color: #FFC107;
+        border: 0px;
+        color: black;
+    }
+</style>
+<div class="container">
+    <div class=""><h>Welcome - {{e.name}}</h></div>
+    
+    <div class="row">
+        <div class="col-2">
+            {% include 'include/office/office_menu.html' %}  
+        </div>
+        <div class="col-10">
+            {% include 'include/office/order_menu.html' %}  
+            <div style="text-align: center;font-weight: 700;margin-top: 10px;">{{om.dealer.name}}</div>
+
+            <div class="text-center" style="display: flex;justify-content: space-evenly;">
+                <div>Bill-{{om.order_filter}}</div>
+                <div>By-{{om.marketing_employee.name}}</div>
+                <div>{{om.date}}</div>
+            </div>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="cart_item" >
+                  {% for t in od %}
+                  <tr>
+                    <td>{{t.item.name}}</td>
+                    <td>{{t.qty}}</td>
+                    <td>{{t.price}}</td>
+                    <td>{{t.total_price}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="text-start" style="display: flex;justify-content: start;">
+                <div style="display: flex; font-weight: 700;">Total Rs.{{om.total_price}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
