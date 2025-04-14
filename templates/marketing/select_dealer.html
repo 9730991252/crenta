@@ -38,10 +38,6 @@
   </table>
   </div>
   <b>Total Rs.{{total}}</b>
-  <form method="POST">
-    <button type="submit" class="btn btn-danger btn-sm" onclick="loader.style.display = 'flex';this.style.display = 'none'"  name="complete_order">Complete Order</button>
-    <div class="spinner-border" id="loader" style="display: none;" role="status"></div>
-  </form>
   </div>
 
 
@@ -95,7 +91,7 @@
                 <div>Price</div>
                 <div><input type="number" oninput="document.getElementById('total{{i.id}}').innerText = (document.getElementById('qty{{i.id}}').value * document.getElementById('price{{i.id}}').value)" name="price" id="price{{i.id}}" class="form-control" required></div>
                 <div id="total{{i.id}}">0</div>
-                <button  type="submit" name="add_item_to_cart" class="btn btn-danger mt-2 form-control">Add</button>
+                <button  type="submit" name="add_item_to_cart" class="btn btn-danger mt-2 form-control">Send to office</button>
             </div>
 
         </div>

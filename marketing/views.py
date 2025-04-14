@@ -64,9 +64,9 @@ def complate_view_order(request, order_filter):
     else:
         return redirect('marketing_login')
     
-@csrf_exempt
+@csrf_exempt 
 def select_dealer(request, id):
-    if request.session.has_key('marketing_mobile'):
+    if request.session.has_key('marketing_mobile'):        
         marketing_mobile = request.session['marketing_mobile']
         m = Marketing_employee.objects.get(mobile=marketing_mobile)
         if 'add_item_to_cart'in request.POST:
@@ -90,32 +90,6 @@ def select_dealer(request, id):
             messages.success(request, f'{m.item.name} Removed from Cart Successfully')
             m.delete()
             return redirect('select_dealer', id=id)
-        if 'complete_order'in request.POST:
-            t =marketing_Cart.objects.filter(marketing_employee=m, dealer_id=id).aggregate(Sum('total_amount'))['total_amount__sum']
-            order_filter = Marketing_order_master.objects.all().count() + 1
-            
-            Marketing_order_master(
-                marketing_employee=m,
-                dealer_id=id,
-                total_price=t,
-                order_filter=order_filter
-            ).save()
-            om = Marketing_order_master.objects.filter(order_filter=order_filter).first()
-            for i in Item.objects.filter(status=1):
-                c = marketing_Cart.objects.filter(marketing_employee=m, dealer_id=id, item_id=i.id).first()
-                if c:
-                    mc = marketing_Cart.objects.filter(marketing_employee=m, dealer_id=id, item_id=i.id)
-                    Marketing_order_detail(
-                        order_master=om,
-                        item=i,
-                        qty=mc.aggregate(Sum('qty'))['qty__sum'],
-                        price=c.price,
-                        total_price=mc.aggregate(Sum('total_amount'))['total_amount__sum'],
-                        order_filter=order_filter,
-                        item_name=i.name,
-                    ).save()
-            marketing_Cart.objects.filter(marketing_employee=m, dealer_id=id).delete()
-            return redirect(f'/marketing/complate_view_order/{order_filter}')
             
         context= {
             'm': m,

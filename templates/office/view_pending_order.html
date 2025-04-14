@@ -22,13 +22,12 @@
         </div>
         <div class="col-10">
             {% include 'include/office/order_menu.html' %}  
-            <div style="text-align: center;font-weight: 700;margin-top: 10px;">{{om.dealer.name}}</div>
-
             <div class="text-center" style="display: flex;justify-content: space-evenly;">
-                <div>Bill-{{om.order_filter}}</div>
-                <div>By-{{om.marketing_employee.name}}</div>
-                <div>{{om.date}}</div>
+            <div style="text-align: center;font-weight: 700;margin-top: 10px;">{{dealer.name}}</div>
+
+                <div>By-{{marketing_employee.name}}</div>
             </div>
+            <b class="text-success">Accepted Item</b>
             <table class="table">
                 <thead>
                   <tr>
@@ -40,7 +39,7 @@
                 </thead>
                 <tbody id="cart_item" >
             
-                  {% for t in od %}
+                  {% for t in accepted_cart %}
                   
                   <tr>
                    
@@ -57,30 +56,82 @@
                         <form method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="id" value="{{t.id}}" >
-                            <input type="number" name="price" oninput="document.getElementById('change_price{{t.id}}').style.display = (Number(this.value) !== Number('{{t.price}}')) ? 'unset' : 'none'" style="width: 100px;" value="{{t.price}}">
+                            <input type="number" step="any" name="price" oninput="document.getElementById('change_price{{t.id}}').style.display = (Number(this.value) !== Number('{{t.price}}')) ? 'unset' : 'none'" style="width: 100px;" value="{{t.price}}">
                             <button style="display: none;" type="submit" name="change_price" id="change_price{{t.id}}" class="text-success"><i class="fa fa-check" aria-hidden="true"></i></button>
                         </form>
                     </td>
-                    <td>{{t.total_price}}</td>
-                    <td>{% if t.cook_status == 'Pendding' %}<h4 class="text-bg-danger text-center">Pending</h4>{% else %}<h4 class="text-bg-success text-center ">{{t.cook_status}}</h4>{% endif %}</td>
+                    <td>{{t.total_amount}}</td>
                     <td><form action="" method="POST">{% csrf_token %}<input type="hidden" name="id" value="{{t.id}}"><button type="submit" class="btn btn-transparent text-danger btn-sm" name="Delete">X</button></form></td>
+
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
-              <div class="text-start" style="display: flex;justify-content: start;">
-                <div style="display: flex; font-weight: 700;">Total Rs.{{om.total_price}}</div>
+            <div class="text-center" style="display: flex;justify-content: space-evenly;">
+                <div>
+                    {% if accepted_total != None %}
+                   
+                    <form method="POST">
+                        <button type="submit" name="complete_order" class="btn btn-danger" >Complete Order</button>
+                    </form>
+                    {% endif %}
+                </div>
+              <b>Total Rs.{{accepted_total}}</b>
             </div>
-              <div style="display: flex;justify-content: space-evenly;">
-                <form method="POST">
-                    {% csrf_token %}
-                    <button type="submit" name="Accept" class="btn btn-success">Accept</button>
-                </form>
-                <form method="POST">
-                    {% csrf_token %}
-                    <button type="submit" name="Cancle" class="btn btn-danger">Cancle</button>
-                </form>
-              </div>
+              <br>
+              <br>
+              <br>
+              <br>
+              <b class="text-danger">Pending Item</b>
+              <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="cart_item" >
+                    
+                  {% for t in pending_cart %}
+                  
+                  <tr>
+                      
+                      <td>{{t.item.name}} {{t.note}}</td>
+                      <td>
+                          <form method="POST">
+                              {% csrf_token %}
+                            <input type="hidden" name="id" value="{{t.id}}" >
+                            <input type="number" name="qty" oninput="document.getElementById('change_qty{{t.id}}').style.display = (Number(this.value) !== Number('{{t.qty}}')) ? 'unset' : 'none'" style="width: 100px;" value="{{t.qty}}">
+                            <button style="display: none;" type="submit" name="change_qty" id="change_qty{{t.id}}" class="text-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{t.id}}" >
+                            <input type="number" step="any" name="price" oninput="document.getElementById('change_price{{t.id}}').style.display = (Number(this.value) !== Number('{{t.price}}')) ? 'unset' : 'none'" style="width: 100px;" value="{{t.price}}">
+                            <button style="display: none;" type="submit" name="change_price" id="change_price{{t.id}}" class="text-success"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </form>
+                    </td>
+                    <td>{{t.total_amount}}</td>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{t.id}}" >
+                            <button type="submit" name="Accept" class="btn btn-success">Accept</button>
+                        </form>
+                    </td>
+                    <td><form action="" method="POST">{% csrf_token %}<input type="hidden" name="id" value="{{t.id}}"><button type="submit" class="btn btn-transparent text-danger btn-sm" name="Delete">X</button></form></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <b>Total Rs.{{pending_total}}</b>
+        <br>
+        <br>
+        <br>
                 <div id="item_result"></div>
 
         </div>

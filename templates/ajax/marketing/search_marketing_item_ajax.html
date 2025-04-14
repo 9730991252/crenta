@@ -9,7 +9,7 @@
             <div>Qty</div>
             <div><input type="number" oninput="document.getElementById('total{{i.id}}').innerText = (document.getElementById('qty{{i.id}}').value * document.getElementById('price{{i.id}}').value)" name="qty" id="qty{{i.id}}" class="form-control" required></div>
             <div>Price</div>
-            <div><input type="number" oninput="document.getElementById('total{{i.id}}').innerText = (document.getElementById('qty{{i.id}}').value * document.getElementById('price{{i.id}}').value)" name="price" id="price{{i.id}}" class="form-control" required></div>
+            <div><input type="number" step="any" oninput="document.getElementById('total{{i.id}}').innerText = (document.getElementById('qty{{i.id}}').value * document.getElementById('price{{i.id}}').value)" name="price" id="price{{i.id}}" class="form-control" required></div>
             <div id="total{{i.id}}">0</div>
             <button  type="submit" name="add_item_to_cart" class="btn btn-danger mt-2 form-control">Add</button>
         </div>

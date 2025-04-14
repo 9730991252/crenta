@@ -31,23 +31,21 @@
                     <table class="table">
                         <thead>
                           <tr>
-                            <th scope="col">Bill</th>
+                              <th scope="col">Marketing</th>
                             <th scope="col">Date</th>
-                            <th scope="col">Marketing</th>
                             <th scope="col">Dealer Name</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                            {% for o in om %}
-                          <tr>
-                            <td>{{o.order_filter}}</td>
-                            <td>{{o.date}}</td>
-                            <td>{{o.marketing_employee.name}}</td>
-                            <td>{{o.dealer.name}}</td>
-                            <td><a href="/office/view_pending_order/{{o.id}}/"  class="btn btn-success">View</a></td>
-                          </tr>
-                          {% endfor %}
+                            {% for o in m_cart %}
+                                <tr>
+                                    <td>{{o.date}}</td>
+                                    <td>{{o.marketing_employee.name}}</td>
+                                    <td>{{o.dealer.name}}</td>
+                                    <td><a href="/office/view_pending_order/{{o.marketing_employee.id}}/{{o.dealer.id}}/"  class="btn btn-success">View</a></td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                       </table>
                 </div>

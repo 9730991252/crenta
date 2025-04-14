@@ -53,72 +53,130 @@ def employee(request):
         return redirect('login')
     
 @csrf_exempt
-def view_pending_order(request, id):
+def view_pending_order(request, marketing_employee_id, dealer_id):
+
     if request.session.has_key('office_mobile'):
         office_mobile = request.session['office_mobile']
         e=Office_employee.objects.filter(mobile=office_mobile).first()
         if e:
-            om = Marketing_order_master.objects.filter(id=id).first()
+            pass
             if 'add_item_to_cart'in request.POST:
                 item_id = request.POST.get('item_id')
                 qty = request.POST.get('qty')
                 price = request.POST.get('price')
-                Marketing_order_detail(
-                    order_master=om,
+                marketing_Cart(
+                    marketing_employee_id = marketing_employee_id,
+                    accepted_by=e,
+                    dealer_id=dealer_id,
                     item_id=item_id,
                     qty=qty,
-                    price=price,
-                    total_price=(int(qty) * int(price)),
-                    order_filter=om.order_filter,
-                    item_name=Item.objects.filter(id=item_id).first().name
+                    price=float(price),                    
+                    total_amount=(float(qty) * float(price)),
+                    status='Accepted'
                 ).save()
-                om.total_price = Marketing_order_detail.objects.filter(order_master=om).aggregate(Sum('total_price'))['total_price__sum'] or 0
-                om.save()
                 messages.success(request, 'New Item Added successfuly')
-                
+                return redirect('view_pending_order', marketing_employee_id, dealer_id)
+            if 'complete_order' in request.POST:
+                # Aggregate total amount from cart
+                total_price = marketing_Cart.objects.filter(
+                    marketing_employee_id=marketing_employee_id,
+                    dealer_id=dealer_id,
+                    status='Accepted'  # Assuming you only want accepted items
+                ).aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+
+                # Create new order master entry
+                order_filter = Marketing_order_master.objects.count() + 1
+                order_master = Marketing_order_master.objects.create(
+                    marketing_employee_id=marketing_employee_id,
+                    accepted_id=e.id,
+                    dealer_id=dealer_id,
+                    total_price=total_price,
+                    order_filter=order_filter,
+                    status='Accepted'
+                )
+
+                # Loop through all items that are active (status=1)
+                for item in Item.objects.filter(status=1):
+                    # Filter cart entries for this item with 'Accepted' status
+                    cart_items = marketing_Cart.objects.filter(
+                        marketing_employee_id=marketing_employee_id,
+                        dealer_id=dealer_id,
+                        item_id=item.id,
+                        status='Accepted'
+                    )
+
+                    if cart_items.exists():
+                        total_qty = cart_items.aggregate(Sum('qty'))['qty__sum'] or 0
+                        total_item_price = cart_items.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+                        first_cart = cart_items.first()  # To get price info
+
+                        # Create order detail entry
+                        Marketing_order_detail.objects.create(
+                            order_master=order_master,
+                            item=item,
+                            qty=total_qty,
+                            price=first_cart.price,
+                            total_price=total_item_price,
+                            order_filter=order_filter,
+                            item_name=item.name
+                        )
+
+                # Clear accepted items from cart
+                marketing_Cart.objects.filter(
+                    marketing_employee_id=marketing_employee_id,
+                    dealer_id=dealer_id,
+                    status='Accepted'
+                ).delete()
+
+                # Redirect to accepted order view
+                return redirect(f'/office/view_accepted_order/{order_master.id}/')
+
             if 'change_price'in request.POST:
                 t_id = request.POST.get('id')
                 t_price = request.POST.get('price')
-                od = Marketing_order_detail.objects.filter(id=t_id).first()
+                od = marketing_Cart.objects.filter(id=t_id).first()
                 od.price = t_price
-                od.total_price = (int(od.qty) * int(math.floor(float(t_price))))
+                od.total_amount = float(od.qty) * float(t_price)
                 od.save()
-                om.total_price = Marketing_order_detail.objects.filter(order_master=om).aggregate(Sum('total_price'))['total_price__sum'] or 0
-                om.save()
                 messages.success(request, 'Price changed successfuly')
+                return redirect('view_pending_order', marketing_employee_id, dealer_id)
+                
+                
             if 'change_qty'in request.POST:
                 t_id = request.POST.get('id')
                 t_qty = request.POST.get('qty')
-                od = Marketing_order_detail.objects.filter(id=t_id).first()
-                od.qty = t_qty
-                od.save()
-                om.total_price = (int(od.qty) * int(math.floor(float(od.price))))
-                om.save()
+                oc = marketing_Cart.objects.filter(id=t_id).first()
+                oc.qty = t_qty
+                oc.total_amount = float(t_qty) * oc.price
+                oc.save()
                 messages.success(request, 'Qty changed successfuly')
+                return redirect('view_pending_order', marketing_employee_id, dealer_id)
+                
             if 'Delete'in request.POST:
                 t_id = request.POST.get('id')
-                o = Marketing_order_detail.objects.filter(id=t_id).first()
-                om.total_price -= o.total_price
-                om.save()
-                o.delete()
+                o = marketing_Cart.objects.filter(id=t_id).delete()
                 messages.error(request, 'Item Deleted successfuly')
-                return redirect('view_pending_order', id)
+                return redirect('view_pending_order', marketing_employee_id, dealer_id)
+            
             if 'Accept'in request.POST:
-                oma = Marketing_order_master.objects.filter(id=id).first()
-                oma.accepted = e
-                oma.status = 'Accepted'
-                oma.save()
-               
+                id = request.POST.get('id')
+                oc = marketing_Cart.objects.filter(id=id).first()
+                oc.status = 'Accepted'
+                oc.accepted_by = e
+                oc.save()
                 messages.success(request, 'Order Accepted')
-                return redirect('/office/accepted_order/')
-            if 'Cancle'in request.POST:
-                om.status = 'Cancled'
-                om.save()
-                return redirect('/office/canceld_order/')
+                return redirect('view_pending_order', marketing_employee_id, dealer_id)
+            
+            pending_total = marketing_Cart.objects.filter(marketing_employee_id=marketing_employee_id, dealer_id=dealer_id, status='Pendding').aggregate(Sum('total_amount'))['total_amount__sum']
+            accepted_total = marketing_Cart.objects.filter(marketing_employee_id=marketing_employee_id, dealer_id=dealer_id, status='Accepted').aggregate(Sum('total_amount'))['total_amount__sum']
         context={
             'e':e,
-            'om':om,
-            'od':Marketing_order_detail.objects.filter(order_master=om)
+            'dealer':Dealer.objects.filter(id=dealer_id).first(),
+            'marketing_employee':Marketing_employee.objects.filter(id=marketing_employee_id).first(),
+            'pending_cart':marketing_Cart.objects.filter(marketing_employee_id=marketing_employee_id, dealer_id=dealer_id, status='Pendding'),
+            'accepted_cart':marketing_Cart.objects.filter(marketing_employee_id=marketing_employee_id, dealer_id=dealer_id, status='Accepted'),
+            'accepted_total':accepted_total,
+            'pending_total':pending_total
             }
         return render(request, 'office/view_pending_order.html', context)
     else:
@@ -157,10 +215,21 @@ def pending_order(request):
         office_mobile = request.session['office_mobile']
         e=Office_employee.objects.filter(mobile=office_mobile).first()
         if e:
-            pass
+            m_cart = []
+            for em in Marketing_employee.objects.filter(status=1):
+                if marketing_Cart.objects.filter(marketing_employee=em).exists():
+                    for d in Dealer.objects.filter(status=1):
+                        c = marketing_Cart.objects.filter(marketing_employee=em, dealer=d).first()
+                        if c:
+                            m_cart.append({
+                                'marketing_employee':em,
+                                'dealer':c.dealer,
+                                'date':c.date
+                            })
+        m_cart.sort(key=lambda x: x['marketing_employee'].id)
         context={
             'e':e,
-            'om':Marketing_order_master.objects.filter(status='Pendding'),
+            'm_cart':m_cart,
         }
         return render(request, 'office/pending_order.html', context)
     else:
