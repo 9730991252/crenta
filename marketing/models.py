@@ -26,7 +26,7 @@ class Marketing_order_master(models.Model):
     dealer  = models.ForeignKey(Dealer, on_delete=models.CASCADE, null=True, blank=True)
     total_price=models.FloatField(default=0,null=True)
     ordered_date = models.DateTimeField(auto_now_add=True,null=True)
-    date = models.DateField(auto_now_add=True,null=True)
+    date = models.DateField(null=True)
     order_filter=models.IntegerField(default=True)
     status = models.CharField(default='Accepted', max_length=100, null=True)
 

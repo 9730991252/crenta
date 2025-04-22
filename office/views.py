@@ -77,6 +77,7 @@ def view_pending_order(request, marketing_employee_id, dealer_id):
                 messages.success(request, 'New Item Added successfuly')
                 return redirect('view_pending_order', marketing_employee_id, dealer_id)
             if 'complete_order' in request.POST:
+                odate = request.POST.get('date')
                 # Aggregate total amount from cart
                 total_price = marketing_Cart.objects.filter(
                     marketing_employee_id=marketing_employee_id,
@@ -92,7 +93,8 @@ def view_pending_order(request, marketing_employee_id, dealer_id):
                     dealer_id=dealer_id,
                     total_price=total_price,
                     order_filter=order_filter,
-                    status='Accepted'
+                    status='Accepted',
+                    date=odate,
                 )
 
                 # Loop through all items that are active (status=1)

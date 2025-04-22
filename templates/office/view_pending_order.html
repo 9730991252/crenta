@@ -70,9 +70,15 @@
             <div class="text-center" style="display: flex;justify-content: space-evenly;">
                 <div>
                     {% if accepted_total != None %}
-                   
-                    <form method="POST">
-                        <button type="submit" name="complete_order" class="btn btn-danger" >Complete Order</button>
+                    <form method="POST"  style="display:flex;justify-content: space-evenly; gap: 10px;">
+                        <div>
+                            <label for="">Select Date</label>
+                            <input type="date" name="date" onchange="document.getElementById('complete_btn').style.display = 'flex'" style="width: 100px;">
+                        </div>
+                        <button type="submit" id="complete_btn" style="display: none;" name="complete_order" onclick="document.querySelector('.spinner-border').style.display = 'flex'; this.style.display = 'none'" class="btn btn-danger" >Complete Order</button>
+                        <div class="spinner-border" style="display: none;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </form>
                     {% endif %}
                 </div>
