@@ -212,30 +212,50 @@ def order(request):
     else:
         return redirect('login')
     
+from django.db.models import Max
+
 def pending_order(request):
-    if request.session.has_key('office_mobile'):
-        office_mobile = request.session['office_mobile']
-        e=Office_employee.objects.filter(mobile=office_mobile).first()
-        if e:
-            m_cart = []
-            for em in Marketing_employee.objects.filter(status=1):
-                if marketing_Cart.objects.filter(marketing_employee=em).exists():
-                    for d in Dealer.objects.filter(status=1):
-                        c = marketing_Cart.objects.filter(marketing_employee=em, dealer=d).first()
-                        if c:
-                            m_cart.append({
-                                'marketing_employee':em,
-                                'dealer':c.dealer,
-                                'date':c.date
-                            })
-        m_cart.sort(key=lambda x: x['marketing_employee'].id)
-        context={
-            'e':e,
-            'm_cart':m_cart,
-        }
-        return render(request, 'office/pending_order.html', context)
-    else:
+    if not request.session.get('office_mobile'):
         return redirect('login')
+    
+    office_mobile = request.session['office_mobile']
+    e = Office_employee.objects.filter(mobile=office_mobile).first()
+    if not e:
+        return redirect('login')
+    
+    # Get all relevant carts (active marketing employee + active dealers)
+    active_marketers = Marketing_employee.objects.filter(status=1)
+    active_dealers = Dealer.objects.filter(status=1)
+    
+    # Find latest cart entry per (marketing_employee, dealer)
+    latest_carts = (
+        marketing_Cart.objects
+        .filter(marketing_employee__in=active_marketers, dealer__in=active_dealers)
+        .values('marketing_employee', 'dealer')
+        .annotate(latest_date=Max('date'))
+    )
+
+    # Fetch actual cart objects for those latest entries
+    m_cart = []
+    for item in latest_carts:
+        cart = marketing_Cart.objects.filter(
+            marketing_employee_id=item['marketing_employee'],
+            dealer_id=item['dealer'],
+            date=item['latest_date']
+        ).select_related('marketing_employee', 'dealer').first()
+        if cart:
+            m_cart.append({
+                'marketing_employee': cart.marketing_employee,
+                'dealer': cart.dealer,
+                'date': cart.date
+            })
+
+    context = {
+        'e': e,
+        'm_cart': m_cart
+    }
+    return render(request, 'office/pending_order.html', context)
+
     
 def accepted_order(request):
     if request.session.has_key('office_mobile'):
