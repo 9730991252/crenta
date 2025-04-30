@@ -4,9 +4,6 @@ from store.models import *
 from marketing.models import *
 # Create your views here.
 def index(request):
-    marketing_Cart.objects.all().delete()
-    Marketing_order_detail.objects.all().delete()
-    Marketing_order_master.objects.all().delete()
     return render(request, 'home/index.html')
 
 def login(request):
